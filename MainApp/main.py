@@ -1,7 +1,8 @@
-from PyQt5 import QtWidgets
-from MainApp.MainWindow import Ui_MainWindow
 import sys
-from MapGraphics.MapGraphicsScene import MapGraphicsScene
+
+from PyQt5 import QtWidgets
+
+from MainApp.MainWindow import Ui_MainWindow
 
 
 class MyWindow(QtWidgets.QMainWindow):
