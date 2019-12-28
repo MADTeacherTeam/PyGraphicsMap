@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="25f0c6ef-98fc-4b5c-865d-3aa2438f8fb0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/GraphicsMapTransport.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GraphicsMapTransport.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainApp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainApp/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,9 +157,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="20" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1577355517065" />
-    <state x="52" y="0" key="SettingsEditor" timestamp="1577355552624">
+    <state x="52" y="0" key="SettingsEditor" timestamp="1577534949636">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="52" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1577355552624" />
+    <state x="52" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1577534949636" />
   </component>
 </project>
