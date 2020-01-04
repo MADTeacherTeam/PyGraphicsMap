@@ -13,6 +13,7 @@ class MapTileSource(QtCore.QObject):
         DiskAndMemCaching = 2
 
     def __init__(self):
+        super.__init__()
         self.__cacheExpirationsFile = ""
         self.__tempCacheLock = QtCore.QMutex()
         self.__tempCache = {}

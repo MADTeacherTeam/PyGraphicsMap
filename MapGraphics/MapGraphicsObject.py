@@ -9,6 +9,7 @@ class MapGraphicsObject(QtCore.QObject):
         ObjectIsFocusable = 0x04
 
     def __init__(self, sizeIsZoomInvariant=False, parent=None):
+        super.__init__()
         self.__enabled = True
         self.__opacity = 1.0
         self.setParent(parent)
