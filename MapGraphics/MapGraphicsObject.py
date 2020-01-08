@@ -164,3 +164,6 @@ class MapGraphicsObject(QtCore.QObject):
 
     def slot_setConstructed(self):
         self.__constructed = True
+
+    def pos(self):
+        return self.__pos
