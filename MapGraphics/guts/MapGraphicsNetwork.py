@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtNetwork
 
 DEFAULT_USER_AGENT = QtCore.QByteArray(b'MapGraphic')
 
+
 # QHash<QThread *, MapGraphicsNetwork *> MapGraphicsNetwork::_instances = QHash<QThread *, MapGraphicsNetwork*>();
 # QMutex MapGraphicsNetwork::_mutex;
 

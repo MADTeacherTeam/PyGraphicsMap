@@ -5,7 +5,7 @@ from MapGraphics.tileSources.CompositeTileSource import CompositeTileSource
 
 
 class MapTileLayerListModel(QAbstractListModel):
-    def __init__(self, composite, parent = None):
+    def __init__(self, composite, parent=None):
         QAbstractListModel.__init__(self, parent)
         self.__composite = composite
 
@@ -25,8 +25,7 @@ class MapTileLayerListModel(QAbstractListModel):
         #         this,
         #         SLOT(handleCompositeSourcesRemoved(int)));
 
-
-    def rowCount(self, parent = QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         # Q_UNUSED(parent);
         if self.__composite is None:
             return
@@ -35,7 +34,7 @@ class MapTileLayerListModel(QAbstractListModel):
     def data(self, index, role):
         if not index.isValid():
             return QVariant("Invalid index")
-        if index.row()>=self.rowCount():
+        if index.row() >= self.rowCount():
             return QVariant("Index out of bounds")
         if self.__composite is None:
             return QVariant("Null composite")
@@ -53,7 +52,7 @@ class MapTileLayerListModel(QAbstractListModel):
     def flags(self, index):
         if not index.isValid():
             return Qt.NoItemFlags
-        return Qt.ItemIsSelectable| Qt.ItemIsEnabled
+        return Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
     def handleCompositeSourcesChanged(self):
         topleft = self.index(0)

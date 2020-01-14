@@ -251,12 +251,13 @@ class Conversions:
         xyz = Conversions.lla2xyz(byu1)
         byu2 = Conversions.xyz2lla(xyz)
 
-        if QtCore.qAbs(byu2.longitude() - byu1.longitude()) > 0.001 or QtCore.qAbs(byu2.latitude() - byu1.latitude()) > 0.001 or QtCore.qAbs(byu2.altitude() - byu1.altitude()) > 1.0:
+        if QtCore.qAbs(byu2.longitude() - byu1.longitude()) > 0.001 or QtCore.qAbs(
+                byu2.latitude() - byu1.latitude()) > 0.001 or QtCore.qAbs(byu2.altitude() - byu1.altitude()) > 1.0:
             QtCore.qDebug("Failed LLA -> XYZ -> LLA")
         else:
             QtCore.qDebug("Passed LLA -> XYZ -> LLA")
 
-        enu1 = QtGui.QVector3D(5,5,0)
+        enu1 = QtGui.QVector3D(5, 5, 0)
         byu3 = Conversions.enu2lla(enu1, byu1)
         enu3 = Conversions.lla2enu(byu3, byu1)
 
