@@ -22,6 +22,10 @@ class MapTileSource(QtCore.QObject):
         self.__cacheExpirationsLoaded = False
         self.setCacheMode(self.CacheMode.DiskAndMemCaching)
 
+        self.tileRequested = QtCore.pyqtSignal(int, int, int)
+        self.tileRequested.connect(self.startTileRequest)
+        self.allTilesInvalidated = QtCore.pyqtSignal()
+        self.allTilesInvalidated.connect(self.clearTempCache)
         # connect(this, SIGNAL(tileRequested(quint32, quint32, quint8)),this,SLOT(startTileRequest(quint32, quint32, quint8)),
         #        Qt::QueuedConnection);
         # connect(this, SIGNAL(allTilesInvalidated()), this, SLOT(clearTempCache()));
@@ -45,6 +49,7 @@ class MapTileSource(QtCore.QObject):
         QtCore.qDebug("Cache expirations saved to" + self.__cacheExpirationsFile)
 
     def requestTile(self, x, y, z):
+        self.tileRequested.emit(x, y, z)
         # SIGNAL tileRequested(x,y,z)
         pass
 

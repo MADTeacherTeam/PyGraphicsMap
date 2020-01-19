@@ -1,70 +1,70 @@
-from PyQt5.QtCore import QRectF,QPointF
+from PyQt5.QtCore import QRectF, QPointF
 from PyQt5.QtGui import QPainter
 from .guts.Conversions import Conversions
 from .MapGraphicsObject import MapGraphicsObject
+
+
 class LineObject(MapGraphicsObject):
-    def __init__(self,endA,endB,thickness,parent):
-        super.__init__(False,parent)
-        self.__a=endA
-        self.__b=endB
-        self.__thickness=max(0,min(5,thickness))
+    def __init__(self, endA, endB, thickness, parent):
+        super.__init__(False, parent)
+        self.__a = endA
+        self.__b = endB
+        self.__thickness = max(0, min(5, thickness))
         self.updatePositionFromEndPoints()
 
     def boundingRect(self):
-        avgLat=(self.__a.latitude()+self.__b.latitude())/2
-        lonPerMeter=Conversions.degreesLonPerMeter(avgLat)
-        latPerMeter=Conversions.degreesLatPerMeter(avgLat)
+        avgLat = (self.__a.latitude() + self.__b.latitude()) / 2
+        lonPerMeter = Conversions.degreesLonPerMeter(avgLat)
+        latPerMeter = Conversions.degreesLatPerMeter(avgLat)
 
-        widthLon=abs(self.__a.longitude() - self.__b.longitude())
-        heightlat=abs(self.__a.latitude() - self.__b.latitude())
+        widthLon = abs(self.__a.longitude() - self.__b.longitude())
+        heightlat = abs(self.__a.latitude() - self.__b.latitude())
 
-        widthMeters=max(widthLon/lonPerMeter,5)
-        heightMeters=max(heightlat / latPerMeter, 5.0)
+        widthMeters = max(widthLon / lonPerMeter, 5)
+        heightMeters = max(heightlat / latPerMeter, 5.0)
 
-        toRet=QRectF(-1.0 * widthMeters,-1.0 * heightMeters,2.0 * widthMeters,2.0 * heightMeters)
+        toRet = QRectF(-1.0 * widthMeters, -1.0 * heightMeters, 2.0 * widthMeters, 2.0 * heightMeters)
         return toRet
 
     def paint(self, painter, option, widget):
         painter.setRenderHint(QPainter.Antialiasing, True)
-        pen=painter.pen()
+        pen = painter.pen()
         pen.setWidthF(self.__thickness)
         painter.setPen(pen)
-        avgLat=(self.__a.latitude()+self.__b.latitude())/2
-        lonPerMeter=Conversions.degreesLonPerMeter(avgLat)
-        latPerMeter=Conversions.degreesLatPerMeter(avgLat)
-        center=self.pos()
-        offsetA=self.__a.lonLat() - center
-        offsetB=self.__b.lonLat() - center
-        metersA=QPointF(offsetA.x() / lonPerMeter,offsetA.y() / latPerMeter)
-        metersB=QPointF(offsetB.x() / lonPerMeter,offsetB.y() / latPerMeter)
+        avgLat = (self.__a.latitude() + self.__b.latitude()) / 2
+        lonPerMeter = Conversions.degreesLonPerMeter(avgLat)
+        latPerMeter = Conversions.degreesLatPerMeter(avgLat)
+        center = self.pos()
+        offsetA = self.__a.lonLat() - center
+        offsetB = self.__b.lonLat() - center
+        metersA = QPointF(offsetA.x() / lonPerMeter, offsetA.y() / latPerMeter)
+        metersB = QPointF(offsetB.x() / lonPerMeter, offsetB.y() / latPerMeter)
         painter.drawLine(metersA, metersB)
+
     def thickness(self):
-        return  self.__thickness
+        return self.__thickness
 
-    def setThickness(self,nThick):
-        self.__thickness=max(0,min(5,nThick))
-        #SIGNAL self.redrawRequested()
+    def setThickness(self, nThick):
+        self.__thickness = max(0, min(5, nThick))
+        # SIGNAL self.redrawRequested()
 
-    def setEndPointA(self,pos):
-        self.__a=pos
+    def setEndPointA(self, pos):
+        self.__a = pos
         self.updatePositionFromEndPoints()
         # SIGNAL self.redrawRequested()
 
-    def setEndPointB(self,pos):
-        self.__b=pos
+    def setEndPointB(self, pos):
+        self.__b = pos
         self.updatePositionFromEndPoints()
         # SIGNAL self.redrawRequested()
 
-
-    def setEndPoints(self,a,b):
-        self.__a=a
-        self.__b=b
+    def setEndPoints(self, a, b):
+        self.__a = a
+        self.__b = b
         self.updatePositionFromEndPoints()
         # SIGNAL self.redrawRequested()
-
 
     def updatePositionFromEndPoints(self):
-        avgLon=(self.__a.longitude() + self.__b.longitude()) / 2
-        avgLat=(self.__a.latitude() + self.__b.latitude()) / 2
+        avgLon = (self.__a.longitude() + self.__b.longitude()) / 2
+        avgLat = (self.__a.latitude() + self.__b.latitude()) / 2
         self.setPos(QPointF(avgLon, avgLat))
-        

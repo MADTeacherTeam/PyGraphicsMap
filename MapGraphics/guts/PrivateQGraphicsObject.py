@@ -274,14 +274,12 @@ class PrivateQGraphicsObject(QGraphicsObject):
         selectable = False
         focusable = False
 
-        # if (flags & MapGraphicsObject::ObjectIsMovable)
-        #     movable = true;
-        #
-        # if (flags & MapGraphicsObject::ObjectIsSelectable)
-        #     selectable = true;
-        #
-        # if (flags & MapGraphicsObject::ObjectIsFocusable)
-        #     focusable = true;
+        if flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable:
+            movable = True
+        if flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable:
+            selectable = True
+        if flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable:
+            focusable = True
 
         self.setFlag(QGraphicsObject.ItemIsMovable, movable)
         self.setFlag(QGraphicsObject.ItemIsSelectable, selectable)

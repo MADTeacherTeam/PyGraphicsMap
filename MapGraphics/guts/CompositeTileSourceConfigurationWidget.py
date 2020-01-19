@@ -4,13 +4,16 @@ from PyQt5.QtCore import *
 
 from MapGraphics.guts.MapTileSourceDelegate import MapTileSourceDelegate
 from MapGraphics.guts.MapTileLayerListModel import MapTileLayerListModel
+from MapGraphics.guts.CompositeTileSourceConfigurationWidgetUi import Ui_CompositeTileSourceConfigurationWidget
+from MapGraphics.tileSources.OSMTileSource import OSMTileSource
+from MapGraphics.tileSources.CompositeTileSource import CompositeTileSource
 
 
 class CompositeTileSourceConfigurationWidget(QWidget):
     def __init__(self, composite, parent=None):
         QWidget.__init__(self, parent, None)
-        self.__ui = None # do ui
-        self.__composite = composite
+        self.__ui = Ui_CompositeTileSourceConfigurationWidget()
+        self.__composite = CompositeTileSource(composite)
         self.__ui.setupUi(self)
         self.init()
 
@@ -52,9 +55,8 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.__composite is None:
             return
 
-        # QSharedPointer < OSMTileSource > source(new
-        # OSMTileSource(OSMTileSource::OSMTiles));
-        # composite->addSourceTop(source);
+        source = OSMTileSource(OSMTileSource.OSMTileType.OSMTiles)
+        self.__composite.addSourceTop(source)
 
     def on_removeSourceButton_clicked(self):
         selModel = QItemSelectionModel(self.__ui.listView.selectionModel())

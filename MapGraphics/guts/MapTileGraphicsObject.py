@@ -6,7 +6,7 @@ from MapGraphics.MapTileSource import MapTileSource
 
 class MapTileGraphicsObject(QGraphicsObject):
     def __init__(self, tileSize=256):
-        super().__init__()
+        QGraphicsObject.__init__(self)
         self.__tileSize = None
         self.__tile = QPixmap(0)
         self.__tileX = 0
@@ -30,14 +30,11 @@ class MapTileGraphicsObject(QGraphicsObject):
                       size,
                       size)
 
-    def paint(self, painter, option, widget):
-        # Q_UNUSED(option)
-        # Q_UNUSED(widget)
+    def paint(self, painter, option, widget=None):
         if self.__tile != 0:
             painter.drawPixmap(self.boundingRect().toRect(), self.__tile)
         else:
             string = None
-            # if (_tileSource.isNull())
             if self.__tileSource is None:
                 string = " No tile source defined"
             else:

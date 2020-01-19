@@ -1,5 +1,5 @@
 from ..MapTileSource import MapTileSource
-from PyQt5.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt,QObject,QThread
+from PyQt5.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt, QObject, QThread
 from PyQt5.QtGui import QImage, QPainter, QTextOption
 
 
@@ -79,7 +79,7 @@ class CompositeTileSource(MapTileSource):
     def tileFileExtension(self):
         return ".jpg"
 
-    def addSourceTop(self, source, opacity):
+    def addSourceTop(self, source, opacity=1.0):
         lock = QMutexLocker(self.__globalMutex)
         if not source:
             return
@@ -90,7 +90,7 @@ class CompositeTileSource(MapTileSource):
         # connect(source.data(),SIGNAL(tileRetrieved(quint32,quint32,quint8)),this,SLOT(handleTileRetrieved(quint32,quint32,quint8)));
         # SINAL sourceAdded(0) sourcesChanged allTilesInvalidated
 
-    def addSourceBottom(self, source, opacity):
+    def addSourceBottom(self, source, opacity=1.0):
         lock = QMutexLocker(self.__globalMutex)
         if not source:
             return
@@ -188,77 +188,73 @@ class CompositeTileSource(MapTileSource):
                 child = self.__childSources[i]
                 child.requestTile(x, y, z)
 
-    def handleTileRetrieved(self,x,y,z):
+    def handleTileRetrieved(self, x, y, z):
         lock = QMutexLocker(self.__globalMutex)
-        sender=QObject.sender()
+        sender = QObject.sender()
         # NEED chech
-        tileSource=sender
+        tileSource = sender
         if not tileSource:
-            qWarning(self,"failed MapTileSource cast")
+            qWarning(self, "failed MapTileSource cast")
             return
         tileSourceIndex = -1
         for i in range(len(self.__childSources)):
-            if self.__childSources[i]!=tileSource:
+            if self.__childSources[i] != tileSource:
                 continue
             tileSourceIndex = i
             break
         if tileSourceIndex == -1:
-            qWarning(self,"received tile from unknown source...")
+            qWarning(self, "received tile from unknown source...")
             return
-        cacheID=MapTileSource._createCacheID(x,y,z)
+        cacheID = MapTileSource._createCacheID(x, y, z)
         if not cacheID in self.__pendingTiles:
-            qWarning(self,"received unknown tile",x,y,z,"from",tileSource)
+            qWarning(self, "received unknown tile", x, y, z, "from", tileSource)
             return
-        tile=tileSource.getFinishedTile(x,y,z)
+        tile = tileSource.getFinishedTile(x, y, z)
         if not tile:
-            qWarning(self,"received null tile",x,y,z,"from",tileSource)
+            qWarning(self, "received null tile", x, y, z, "from", tileSource)
             return
-        tiles=self.__pendingTiles[cacheID]
+        tiles = self.__pendingTiles[cacheID]
         if tileSourceIndex in tiles:
             return
-        tiles[tileSourceIndex]=tile
-        if len(tiles)<len(self.__childSources):
+        tiles[tileSourceIndex] = tile
+        if len(tiles) < len(self.__childSources):
             return
-        toRet=QImage(self.tileSize(),self.tileSize(),QImage.Format_ARGB32_Premultiplied)
-        painter=QPainter(toRet)
+        toRet = QImage(self.tileSize(), self.tileSize(), QImage.Format_ARGB32_Premultiplied)
+        painter = QPainter(toRet)
         painter.setCompositionMode(QPainter.CompositionMode_SourceOver)
         painter.setOpacity(1.0)
-        for i in range(len(tiles)-1,-1):
-            childTile=tiles[i]
-            opacity=self.__childOpacities[i]
-            if self.numSources()==1:
+        for i in range(len(tiles) - 1, -1):
+            childTile = tiles[i]
+            opacity = self.__childOpacities[i]
+            if self.numSources() == 1:
                 opacity = 1
-            if self.__childEnabledFlags[i]==False:
+            if self.__childEnabledFlags[i] == False:
                 opacity = 0
 
             painter.setOpacity(opacity)
             painter.drawImage(0, 0, childTile)
         self.__pendingTiles.pop(cacheID)
         painter.end()
-        self._prepareNewlyReceivedTile(x,y,z,toRet)
-
-
-
+        self._prepareNewlyReceivedTile(x, y, z, toRet)
 
     def doChildThreading(self, source):
         if not source:
             return
-        sourceThread=QThread()
+        sourceThread = QThread()
         sourceThread.start()
         source.moveToThread(sourceThread)
-        #connect(source.data(),
-         #       SIGNAL(destroyed()),
-          #      sourceThread,
-           #     SLOT(quit()));
-        #connect(sourceThread,
-         #       SIGNAL(finished()),
-          #      sourceThread,
-           #     SLOT(deleteLater()));
+        # connect(source.data(),
+        #       SIGNAL(destroyed()),
+        #      sourceThread,
+        #     SLOT(quit()));
+        # connect(sourceThread,
+        #       SIGNAL(finished()),
+        #      sourceThread,
+        #     SLOT(deleteLater()));
 
     def clearPendingTiles(self):
-        pendingTiles=self.__pendingTiles.values()
-        for i in range(0,pendingTiles):
-            tiles=pendingTiles[i]
+        pendingTiles = self.__pendingTiles.values()
+        for i in range(0, pendingTiles):
+            tiles = pendingTiles[i]
             tiles.clear()
         self.__pendingTiles.clear()
-
