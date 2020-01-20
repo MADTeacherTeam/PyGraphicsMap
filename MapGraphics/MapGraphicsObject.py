@@ -21,8 +21,25 @@ class MapGraphicsObject(QtCore.QObject):
 
         self.__sizeIsZoomInvariant = sizeIsZoomInvariant
         self.__constructed = False
+        #SIGNALS
+        self.enabledChanged=QtCore.pyqtSignal()
+        self.opacityChanged=QtCore.pyqtSignal()
+        self.parentChanged=QtCore.pyqtSignal()
+        self.posChanged=QtCore.pyqtSignal()
+        self.rotationChanged=QtCore.pyqtSignal()
+        self.visibleChanged=QtCore.pyqtSignal()
+        self.zValueChanged=QtCore.pyqtSignal()
+        self.toolTipChanged=QtCore.pyqtSignal(str)
+        self.flagsChanged=QtCore.pyqtSignal()
+        self.selectedChanged=QtCore.pyqtSignal()
+        self.newObjectGenerated=QtCore.pyqtSignal(MapGraphicsObject)
+        self.redrawRequested=QtCore.pyqtSignal()
+        self.keyFocusRequested=QtCore.pyqtSignal()
+##############################################################################################################
+        QtCore.QTimer().singleShot(1,self.slot_setConstructed())
 
-        # QtCore.Qtimer.singleShot(1, self, signal(setConstrucred))
+
+
 
     def boundingRect(self):
         pass
@@ -37,10 +54,9 @@ class MapGraphicsObject(QtCore.QObject):
     def setParent(self, nParent):
         self.__parent = nParent
         if self.__constructed:
-            # this->parentChanged();
-            pass
+            self.parentChanged.emit()
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(parentChanged))
+            QtCore.QTimer().singleShot(1, self, self.parentChanged)
             pass
 
     def setPos(self, nPos):
@@ -49,10 +65,9 @@ class MapGraphicsObject(QtCore.QObject):
         self.__pos = nPos
 
         if self.__constructed:
-            # poschanged
-            pass
+            self.posChanged.emit()
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(posChanged))
+            QtCore.QTimer().singleShot(1,self.posChanged)
             pass
 
     def setRotation(self, nRotation):
@@ -61,10 +76,9 @@ class MapGraphicsObject(QtCore.QObject):
         self.__rotation = nRotation
 
         if self.__constructed:
-            # rorationchanged
-            pass
+            self.rotationChanged.emit()
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(rotationChanged))
+            QtCore.QTimer().singleShot(1, self.rotationChanged)
             pass
 
     def setVisible(self, nVisible):
@@ -73,10 +87,10 @@ class MapGraphicsObject(QtCore.QObject):
         self.__visible = nVisible
 
         if self.__constructed:
-            # visibleChanged()
+            self.visibleChanged.emit()
             pass
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(visibleChanged()))
+            QtCore.QTimer().singleShot(1, self.visibleChanged)
             pass
 
     def setLongitude(self, nLongitude):
@@ -88,10 +102,10 @@ class MapGraphicsObject(QtCore.QObject):
     def setZValue(self, nZValue):
         self.__zValue = nZValue
         if self.__constructed:
-            # zValueChanged
+            self.zValueChanged.emit()
             pass
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(zValueChanged))
+            QtCore.QTimer().singleShot(1, self.zValueChanged)
             pass
 
     def setSelected(self, sel):
@@ -100,15 +114,15 @@ class MapGraphicsObject(QtCore.QObject):
         self.__selected = sel
 
         if self.__constructed:
-            # selectedChanged()
+            self.selectedChanged.emit()
             pass
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(selectedChanged()))
+            QtCore.QTimer().singleShot(1,self.selectedChanged())
             pass
 
     def setToolTip(self, toolTip):
         self.__toolTip = toolTip
-        # this->toolTipChanged(toolTip);
+        self.toolTipChanged.emit(toolTip)
 
     def setFlag(self, flag, enabled):
         if enabled:
@@ -116,16 +130,15 @@ class MapGraphicsObject(QtCore.QObject):
         else:
             self.__flag = self.__flag & (~flag)
 
-        # this->flagsChanged();
+        self.flagsChanged.emit();
 
     def setFlags(self, flags):
         self.__flags = flags
 
         if self.__constructed:
-            # this->flagsChanged();
-            pass
+            self.flagsChanged.emit()
         else:
-            # QtCore.QTimer.singleShot(1, self, signal(flagsChanged()))
+            QtCore.QTimer().singleShot(1, self.flagsChanged)
             pass
 
     def contextMenuEvent(self, event):
@@ -151,8 +164,7 @@ class MapGraphicsObject(QtCore.QObject):
         if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable or self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable:
             event.accept()
             if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable:
-                # this->keyFocusRequested();
-                pass
+                self.keyFocusRequested.emit()
         else:
             event.ignore()
 

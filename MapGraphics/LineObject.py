@@ -5,7 +5,7 @@ from .MapGraphicsObject import MapGraphicsObject
 
 
 class LineObject(MapGraphicsObject):
-    def __init__(self, endA, endB, thickness, parent):
+    def __init__(self, endA, endB, thickness, parent=0):
         super.__init__(False, parent)
         self.__a = endA
         self.__b = endB

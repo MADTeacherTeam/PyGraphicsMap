@@ -5,15 +5,9 @@ from .Position import Position
 from .guts import Conversions
 from MapGraphics.CircleObject import CircleObject
 
-
-class posChanged(QtCore.QObject):
-    signalPosChanged = pyqtSignal()
-
-
 class PolygonObject(MapGraphicsObject):
     def __init__(self, geoPoly, fillColor, parent):
         MapGraphicsObject.__init__(self, parent)
-        self.newObjectGenerated = pyqtSignal
         self.__geoPoly = geoPoly
         self.__fillColor = fillColor
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable)
@@ -22,6 +16,9 @@ class PolygonObject(MapGraphicsObject):
         self.setGeoPoly()
         self.__editCircles = []
         self.__addVertexCircles = []
+
+        #SIGNALS
+        self.polygonChanged=pyqtSignal(QtGui.QPolygonF)
 
     def __del__(self):
         QtCore.qDebug(self + "destroying")
@@ -77,9 +74,7 @@ class PolygonObject(MapGraphicsObject):
                 circle.setPos(circle.pos() + diff)
             self.__fixAddVertexCirclePos()
         self.setPos(nPos)
-        # self.comunicate=posChanged()
-        # self.comunicate.signalPosChanged=
-        # self.communicate.signalPosChanged.emit()
+        self.posChanged.emit()
 
     def __fixAddVertexCirclePos(self):
         for i in range(self.__geoPoly.size()):
@@ -94,21 +89,21 @@ class PolygonObject(MapGraphicsObject):
     def __constructAddVertexCircle(self):
         toRet = CircleObject(3, True, QtGui.QColor(100, 100, 100, 255))
         toRet.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable, False)
-        toRet.selectedChanged.connect(self.__handleAddVertexCircleSelected())
-        self.newObjectGenerated(toRet)
+        toRet.selectedChanged.connect(self.__handleAddVertexCircleSelected)
+        self.newObjectGenerated.emit(toRet)
         toRet.setToolTip("Single-click (don't drag!) to add vertex.")
         return toRet
 
     def constructEditCircle(self):
         toRet = CircleObject(8)
-        toRet.posChanged.connect(self.handleEditCirclePosChanged())
-        toRet.destroyed.connect(self.__handleEditCircleDestroyed())
-        self.newObjectGenerated(toRet).emit()
+        toRet.posChanged.connect(self.handleEditCirclePosChanged)
+        toRet.destroyed().connect(self.__handleEditCircleDestroyed)
+        self.newObjectGenerated.emit(toRet)
         return toRet
 
     def destroyEditCircle(self, obj):
-        obj.posChanged.disconnect()
-        obj.destroyed.disconnect()
+        obj.posChanged.disconnect(self.handleEditCirclePosChanged)
+        obj.destroyed.disconnect(self.__handleEditCircleDestroyed)
         obj.deleteLater()
 
     def setGeoPoly(self, newPoly):
@@ -128,7 +123,7 @@ class PolygonObject(MapGraphicsObject):
         if self.__fillColor == color:
             return
         self.__fillColor = color
-        # SIGNAL redrawRequested
+        self.redrawRequested.emit()
 
     def mousePressEvent(self, ev):
         geoPos = ev.scenePos()
@@ -158,7 +153,7 @@ class PolygonObject(MapGraphicsObject):
         self.__geoPoly.replace(index, newPos)
         self.setPos(self.__geoPoly.boundingRect().center())
         self.__fixAddVertexCirclePos()
-        # SIGNAL this->polygonChanged(this->geoPoly())
+        self.polygonChanged.emit(self.geoPoly())
 
     def __handleAddVertexCircleSelected(self):
         sender = QtCore.QObject.sender()
@@ -187,7 +182,7 @@ class PolygonObject(MapGraphicsObject):
         addVertexCircle.setPos(avg)
         self.__addVertexCircles.insert(index, addVertexCircle)
         self.__fixAddVertexCirclePos()
-        # SIGNAL polygonChanged(this->geoPoly());
+        self.polygonChanged.emit(self.geoPoly())
 
     def __handleEditCircleDestroyed(self):
         sender = QtCore.QObject.sender()
@@ -203,7 +198,7 @@ class PolygonObject(MapGraphicsObject):
         self.__editCircles.remove(circle)
         self.__addVertexCircles.pop(index).deleteLater()
         self.__fixAddVertexCirclePos()
-        # SIGNAL redrawRequested
+        self.redrawRequested.emit()
         self.setPos(self.__geoPoly.boundingRect().center())
 
     def __destroyAddVertexCircle(self, obj):

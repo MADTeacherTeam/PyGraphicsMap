@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-
+from .MapGraphicsObject import MapGraphicsObject
 
 class MapGraphicsScene(QtCore.QObject):
 
@@ -7,30 +7,32 @@ class MapGraphicsScene(QtCore.QObject):
         QtCore.QObject.__init__(self, parent)
         # self.objects = []
         self.__objects = set()
+        #SIGNALS
+        self.objectAdded=QtCore.pyqtSignal(MapGraphicsObject)
+        self.objectRemoved=QtCore.pyqtSignal(MapGraphicsObject)
+
 
     def addObject(self, object):
         if object == 0:
             return
-
+        object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
+        object.destroyed.connect(self.slot_handleObjectDestroyed)
         self.__objects.add(object)
         print('add Object')
-        # generate signal object added
-        pass
+        self.objectAdded.emit(object)
+
 
     def removeObject(self, object):
         print('remove Object')
         self.__objects.remove(object)
-        # generate object remove
-        pass
+        self.objectRemoved.emit(object)
 
     def slot_handleNewObjectGenerated(self, newObject):
         print('handleNewObjectGenerated')
         self.addObject(newObject)
-        pass
 
     def slot_handleObjectDestroyed(self, object):
         self.removeObject(object)
-        pass
 
     def __del__(self):
         self.__objects.clear()

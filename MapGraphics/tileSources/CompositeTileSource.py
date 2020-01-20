@@ -1,5 +1,5 @@
 from ..MapTileSource import MapTileSource
-from PyQt5.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt, QObject, QThread
+from PyQt5.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt, QObject, QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPainter, QTextOption
 
 
@@ -12,6 +12,11 @@ class CompositeTileSource(MapTileSource):
         self.__pendingTiles = {}
         self.__globalMutex = QMutex(QMutex.Recursive)
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
+        # SIGNALS
+        self.sourcesChanged = pyqtSignal()
+        self.sourceAdded = pyqtSignal(int)
+        self.sourceRemoved = pyqtSignal(int)
+        self.sourcesReordered = pyqtSignal()
 
     def __del__(self):
         self.__globalMutex.lock()
@@ -89,6 +94,10 @@ class CompositeTileSource(MapTileSource):
         self.__childEnabledFlags.insert(0, True)
         # connect(source.data(),SIGNAL(tileRetrieved(quint32,quint32,quint8)),this,SLOT(handleTileRetrieved(quint32,quint32,quint8)));
         # SINAL sourceAdded(0) sourcesChanged allTilesInvalidated
+        source.tileRetrieved.connect(self.handleTileRetrieved)
+        self.sourceAdded.emit(0)
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def addSourceBottom(self, source, opacity=1.0):
         lock = QMutexLocker(self.__globalMutex)
@@ -100,6 +109,10 @@ class CompositeTileSource(MapTileSource):
         self.__childEnabledFlags.append(True)
         # connect(source.data(), SIGNAL(tileRetrieved(quint32,quint32,quint8)),this,SLOT(handleTileRetrieved(quint32,quint32,quint8)))
         # SINAL sourceAdded(0) sourcesChanged allTilesInvalidated
+        source.tileRetrieved.connect(self.handleTileRetrieved)
+        self.sourceAdded.emit(len(self.__childSources) - 1)
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def moveSource(self, From, to):
         if From < 0 or to < 0:
@@ -113,6 +126,9 @@ class CompositeTileSource(MapTileSource):
         self.__childEnabledFlags[From], self.__childEnabledFlags[to] = self.__childEnabledFlags[to], \
                                                                        self.__childEnabledFlags[From]
         # SINAL sourceAdded(0) sourcesChanged allTilesInvalidated
+        self.sourcesReordered.emit()
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def removeSource(self, index):
         lock = QMutexLocker(self.__globalMutex)
@@ -122,7 +138,10 @@ class CompositeTileSource(MapTileSource):
         self.__childOpacities.pop(index)
         self.__childEnabledFlags.pop(index)
         self.clearPendingTiles()
-        # SINAL sourceAdded(0) sourcesChanged allTilesInvalidated
+
+        self.sourceRemoved.emit(index)
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def clearPendingTiles(self):
         pass
@@ -151,7 +170,9 @@ class CompositeTileSource(MapTileSource):
         if self.__childOpacities == opacity:
             return
         self.__childOpacities[index] = opacity
-        # SIGNAL sourcesChanged,allTilesInvalidated
+
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def getEnabledFlag(self, index):
         lock = QMutexLocker(self.__globalMutex)
@@ -166,7 +187,9 @@ class CompositeTileSource(MapTileSource):
         if self.__childEnabledFlags[index] == isEnabled:
             return
         self.__childEnabledFlags[index] = isEnabled
-        # SIGNAL sourcesChanged,allTilesInvalidated
+
+        self.sourcesChanged.emit()
+        self.allTilesInvalidated.emit()
 
     def fetchTile(self, x, y, z):
         lock = QMutexLocker(self.__globalMutex)
@@ -203,15 +226,15 @@ class CompositeTileSource(MapTileSource):
             tileSourceIndex = i
             break
         if tileSourceIndex == -1:
-            qWarning(self, "received tile from unknown source...")
+            qWarning(self + "received tile from unknown source...")
             return
         cacheID = MapTileSource._createCacheID(x, y, z)
         if not cacheID in self.__pendingTiles:
-            qWarning(self, "received unknown tile", x, y, z, "from", tileSource)
+            qWarning(self + "received unknown tile" + x + y + z + "from" + tileSource)
             return
         tile = tileSource.getFinishedTile(x, y, z)
         if not tile:
-            qWarning(self, "received null tile", x, y, z, "from", tileSource)
+            qWarning(self + "received null tile" + x + y + z + "from", tileSource)
             return
         tiles = self.__pendingTiles[cacheID]
         if tileSourceIndex in tiles:
@@ -251,6 +274,8 @@ class CompositeTileSource(MapTileSource):
         #       SIGNAL(finished()),
         #      sourceThread,
         #     SLOT(deleteLater()));
+        source.destroyed().connect(sourceThread.quit)
+        sourceThread.finished.connect(sourceThread.deleteLater)
 
     def clearPendingTiles(self):
         pendingTiles = self.__pendingTiles.values()
