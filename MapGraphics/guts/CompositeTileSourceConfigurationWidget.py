@@ -1,6 +1,6 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import pyqtSignal, QItemSelectionModel, QModelIndex, QAbstractItemModel
 
 from MapGraphics.guts.MapTileSourceDelegate import MapTileSourceDelegate
 from MapGraphics.guts.MapTileLayerListModel import MapTileLayerListModel
@@ -16,6 +16,8 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         self.__composite = CompositeTileSource(composite)
         self.__ui.setupUi(self)
         self.init()
+
+        self.currentChanged = pyqtSignal(QModelIndex, QModelIndex)
 
     def __del__(self):
         pass
@@ -128,11 +130,15 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         #     oldDelegate;
 
         selModel = QItemSelectionModel(self.__ui.listView.selectionModel())
+
+        self.currentChanged.connect(self.handleCurrentSelectionChanged)
         # connect(selModel,
         #         SIGNAL(currentChanged(QModelIndex, QModelIndex)),
         #         this,
         #         SLOT(handleCurrentSelectionChanged(QModelIndex, QModelIndex)));
 
         menu = QMenu(self.__ui.addSourceButton)
-        menu.addAction("OpenStreetMap Tiles", self, PYQT_SLOT()) # SLOT(addOSMTileLayer())
+        openStreetMapTilesAction = QAction("OpenStreetMap Tiles", self)
+        openStreetMapTilesAction.triggered.connect(self.addOSMTileLayer)
+        menu.addAction(openStreetMapTilesAction)  # SLOT(addOSMTileLayer())
         self.__ui.addSourceButton.setMenu(menu)
