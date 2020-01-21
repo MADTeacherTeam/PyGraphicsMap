@@ -1,10 +1,14 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import pyqtSignal, QRectF, qWarning
 from MapGraphics.MapTileSource import MapTileSource
 
 
 class MapTileGraphicsObject(QGraphicsObject):
+    tileRequested = pyqtSignal(int, int, int)
+    tileRetrieved = pyqtSignal(int, int, int)
+    allTilesInvalidated = pyqtSignal()
+
     def __init__(self, tileSize=256):
         QGraphicsObject.__init__(self)
         self.__tileSize = None
@@ -64,6 +68,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         if self.__tileSource is None:
             return
 
+        self.tileRetrieved.connect(self.handleTileRetrieved)
         # connect(_tileSource.data(),
         #         SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #         this,
@@ -78,6 +83,9 @@ class MapTileGraphicsObject(QGraphicsObject):
     def setTileSource(self, nSource):
         if not self.__tileSource is None:
             pass
+
+        self.tileRetrieved.disconnect(self.handleTileRetrieved)
+        self.tileRetrieved.disconnect(self.handleTileInvalidation)
         # QObject::disconnect(_tileSource.data(),
         #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #                     this,
@@ -92,6 +100,9 @@ class MapTileGraphicsObject(QGraphicsObject):
 
         if not self.__tileSource is None:
             pass
+
+
+        self.allTilesInvalidated.connect(self.handleTileInvalidation)
         # connect(_tileSource.data(),
         #         SIGNAL(allTilesInvalidated()),
         #         this,
@@ -129,6 +140,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tile = tile
         self.update()
 
+        self.tileRetrieved.disconnect(self.handleTileRetrieved)
         # QObject::disconnect(_tileSource.data(),
         #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #                     this,
@@ -138,5 +150,3 @@ class MapTileGraphicsObject(QGraphicsObject):
         if self.__initialized:
             return
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)
-
-# signal tileRequested(x,y,z)

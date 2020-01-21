@@ -1,10 +1,15 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import pyqtSignal, qWarning
 from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
+from MapGraphics.MapGraphicsObject import MapGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
+    selectionChanged = pyqtSignal()
+    objectAdded = pyqtSignal(MapGraphicsObject)
+    objectRemoved = pyqtSignal(MapGraphicsObject)
+
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.__mgScene = None
@@ -13,6 +18,7 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.__oldSelections = []
         self.setMapGraphicsScene(mgScene)
 
+        self.selectionChanged.connect(self.handleSelectionChanged)
         # connect(this,
         #         SIGNAL(selectionChanged()),
         #         this,
@@ -64,10 +70,14 @@ class PrivateQGraphicsScene(QGraphicsScene):
             qWarning("got a null MapGraphicsScene")
             return
 
+
+        self.objectAdded.connect(self.handleMGObjectAdded)
         # connect(_mgScene.data(),
         #         SIGNAL(objectAdded(MapGraphicsObject *)),
         #         this,
         #         SLOT(handleMGObjectAdded(MapGraphicsObject *)));
+
+        self.objectRemoved.connect(self.handleMGObjectRemoved)
         # connect(_mgScene.data(),
         #         SIGNAL(objectRemoved(MapGraphicsObject *)),
         #         this,

@@ -1,6 +1,6 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import pyqtSignal, qWarning, QRectF, QPointF
 
 from MapGraphics.MapGraphicsObject import MapGraphicsObject
 from MapGraphics.guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
@@ -9,6 +9,20 @@ from MapGraphics.guts.Conversions import Conversions
 
 
 class PrivateQGraphicsObject(QGraphicsObject):
+    enabledChanged = pyqtSignal()
+    opacityChanged = pyqtSignal()
+    parentChanged = pyqtSignal()
+    posChanged = pyqtSignal()
+    rotationChanged = pyqtSignal()
+    visibleChanged = pyqtSignal()
+    zValueChanged = pyqtSignal()
+    selectedChanged = pyqtSignal()
+    toolTipChanged = pyqtSignal(str)
+    flagsChanged = pyqtSignal()
+    keyFocusRequested = pyqtSignal()
+    redrawRequested = pyqtSignal()
+    destroyed = pyqtSignal()
+
     def __init__(self, mgObj, infoSource, parent=None):
         QGraphicsObject.__init__(self, parent)
         self.__unconvertedSceneMouseCoordinates = {}
@@ -309,50 +323,75 @@ class PrivateQGraphicsObject(QGraphicsObject):
         if self.__mgObj is None:
             return
 
+
+        self.enabledChanged.connect(self.handleEnabledChanged)
         # connect(_mgObj,
         #         SIGNAL(enabledChanged()),
         #         this,
         #         SLOT(handleEnabledChanged()));
+
+
+        self.opacityChanged.connect(self.handleOpacityChanged)
         # connect(_mgObj,
         #         SIGNAL(opacityChanged()),
         #         this,
         #         SLOT(handleOpacityChanged()));
+
+        self.parentChanged.connect(self.handleParentChanged)
         # connect(_mgObj,
         #         SIGNAL(parentChanged()),
         #         this,
         #         SLOT(handleParentChanged()));
+
+        self.posChanged.connect(self.handlePosChanged)
         # connect(_mgObj,
         #         SIGNAL(posChanged()),
         #         this,
         #         SLOT(handlePosChanged()));
+
+        self.rotationChanged.connect(self.handleRotationChanged)
         # connect(_mgObj,
         #         SIGNAL(rotationChanged()),
         #         this,
         #         SLOT(handleRotationChanged()));
+
+        self.visibleChanged.connect(self.handleVisibleChanged)
         # connect(_mgObj,
         #         SIGNAL(visibleChanged()),
         #         this,
         #         SLOT(handleVisibleChanged()));
+
+        self.zValueChanged.connect(self.handleZValueChanged)
         # connect(_mgObj,
         #         SIGNAL(zValueChanged()),
         #         this,
         #         SLOT(handleZValueChanged()));
+
+        self.selectedChanged.connect(self.handleMGSelectedChanged)
         # connect(_mgObj,
         #         SIGNAL(selectedChanged()),
         #         this,
         #         SLOT(handleMGSelectedChanged()));
+
+        self.toolTipChanged.connect(self.handleMGToolTipChanged)
         # connect(_mgObj,
         #         SIGNAL(toolTipChanged(QString)),
         #         this,
         #         SLOT(handleMGToolTipChanged(QString)));
+
+        self.flagsChanged.connect(self.handleMGFlagsChanged)
         # connect(_mgObj,
         #         SIGNAL(flagsChanged()),
         #         this,
         #         SLOT(handleMGFlagsChanged()));
+
+        self.keyFocusRequested.connect(self.handleKeyFocusRequested)
         # connect(_mgObj,
         #         SIGNAL(keyFocusRequested()),
         #         this,
         #         SLOT(handleKeyFocusRequested()));
+
+        self.redrawRequested.connect(self.handleRedrawRequested)
         # connect(_mgObj,
         #         SIGNAL(redrawRequested()),
         #         this,
@@ -360,6 +399,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
         self.updateAllFromMG()
 
+        self.destroyed.connect(self.deleteLater)
         # connect(mgObj,
         #         SIGNAL(destroyed()),
         #         this,
