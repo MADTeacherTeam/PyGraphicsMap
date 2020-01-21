@@ -51,15 +51,16 @@ class PrivateQGraphicsObject(QGraphicsObject):
         enuRect = QRectF(self.__mgObj.boundingRect())
 
         latLonCenter = QPointF(self.__mgObj.pos())
-        latLonCenterPos = Position(latLonCenter, 0.0)
-        leftLatLon = QPointF(Conversions.enu2lla(enuRect.left(),
-                                                 0.0,
-                                                 0.0,
-                                                 latLonCenterPos.lonLat()))
-        upLatLon = QPointF(Conversions.enu2lla(0.0,
-                                               enuRect.top(),
-                                               0.0,
-                                               latLonCenterPos.lonLat()))
+        # TODO costr of class Posotion
+        latLonCenterPos = Position.constr_two_arg(latLonCenter, 0.0)
+        leftLatLon = QPointF(Conversions.enu2lla_4_LLA(enuRect.left(),
+                                                       0.0,
+                                                       0.0,
+                                                       latLonCenterPos.lonLat()))
+        upLatLon = QPointF(Conversions.enu2lla_4_LLA(0.0,
+                                                     enuRect.top(),
+                                                     0.0,
+                                                     latLonCenterPos.lonLat()))
 
         lonWidth = 2.0 * (latLonCenter.x() - leftLatLon.x())
         latHeight = 2.0 * (upLatLon.y() - latLonCenter.y())
@@ -323,13 +324,11 @@ class PrivateQGraphicsObject(QGraphicsObject):
         if self.__mgObj is None:
             return
 
-
         self.enabledChanged.connect(self.handleEnabledChanged)
         # connect(_mgObj,
         #         SIGNAL(enabledChanged()),
         #         this,
         #         SLOT(handleEnabledChanged()));
-
 
         self.opacityChanged.connect(self.handleOpacityChanged)
         # connect(_mgObj,

@@ -10,6 +10,7 @@ class PrivateQGraphicsView(QGraphicsView):
     hadMouseReleaseEvent = pyqtSignal(QMouseEvent)
     hadContextMenuEvent = pyqtSignal(QContextMenuEvent)
     hadWheelEvent = pyqtSignal(QWheelEvent)
+
     # signals
     # void
     # hadMouseDoubleClickEvent(QMouseEvent * event);

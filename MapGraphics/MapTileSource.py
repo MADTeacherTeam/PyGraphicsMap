@@ -22,14 +22,13 @@ class MapTileSource(QtCore.QObject):
         self.__cacheExpirationsLoaded = False
         self.setCacheMode(self.CacheMode.DiskAndMemCaching)
 
-        #SIGNALS
-        self.tileRetrieved=QtCore.pyqtSignal(int,int,int)
-        self.tileRequested=QtCore.pyqtSignal(int,int,int)
-        self.allTilesInvalidated=QtCore.pyqtSignal()
+        # SIGNALS
+        self.tileRetrieved = QtCore.pyqtSignal(int, int, int)
+        self.tileRequested = QtCore.pyqtSignal(int, int, int)
+        self.allTilesInvalidated = QtCore.pyqtSignal()
 
         self.tileRequested.connect(self.startTileRequest)
         self.allTilesInvalidated.connect(self.clearTempCache)
-
 
     def setCacheMode(self, nMode):
         self.__cacheMode = nMode
@@ -132,7 +131,7 @@ class MapTileSource(QtCore.QObject):
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         self.__tempCache[self._createCacheID(x, y, z)] = image
         lock.unlock()
-        self.tileRetrieved.emit(x,y,z)
+        self.tileRetrieved.emit(x, y, z)
 
     def _fetchTile(self):
         pass

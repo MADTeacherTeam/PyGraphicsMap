@@ -1,16 +1,16 @@
 from PyQt5 import QtCore
 from .MapGraphicsObject import MapGraphicsObject
 
+
 class MapGraphicsScene(QtCore.QObject):
 
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
         # self.objects = []
         self.__objects = set()
-        #SIGNALS
-        self.objectAdded=QtCore.pyqtSignal(MapGraphicsObject)
-        self.objectRemoved=QtCore.pyqtSignal(MapGraphicsObject)
-
+        # SIGNALS
+        self.objectAdded = QtCore.pyqtSignal(MapGraphicsObject)
+        self.objectRemoved = QtCore.pyqtSignal(MapGraphicsObject)
 
     def addObject(self, object):
         if object == 0:
@@ -20,7 +20,6 @@ class MapGraphicsScene(QtCore.QObject):
         self.__objects.add(object)
         print('add Object')
         self.objectAdded.emit(object)
-
 
     def removeObject(self, object):
         print('remove Object')

@@ -78,7 +78,6 @@ class OSMTileSource(MapTileSource):
 
         # SIGNAL connect(reply,IGNAL(finished()),this,SLOT(handleNetworkRequestFinished()))
         reply.finished.connect(self.handleNetworkRequestFinished)
-        
 
     def handleNetworkRequestFinished(self):
         sender = QObject.sender()

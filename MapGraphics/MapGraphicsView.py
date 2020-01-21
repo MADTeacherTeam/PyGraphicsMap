@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QTimer, qDebug, QCoreApplication, QPoint, QPointF, qWarning, pyqtSignal, QThread
 from PyQt5.QtWidgets import QWidget, QGraphicsView, QVBoxLayout
 from PyQt5.Qt import QEventLoop
-from PyQt5.QtGui import QCursor,QPolygonF
+from PyQt5.QtGui import QCursor, QPolygonF
 from .guts.MapTileGraphicsObject import MapTileGraphicsObject
 from .guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
 from .guts.PrivateQGraphicsScene import PrivateQGraphicsScene
@@ -133,7 +133,7 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
     def zoomLevel(self):
         return self.__zoomLevel
 
-    def setZoomLevel(self, nZoom, zMode):
+    def setZoomLevel(self, nZoom, zMode=ZoomMode.CenterZoom):
         if not self.__tileSource:
             return
         centerGeoPos = self.mapToScene(QPoint(self.width() / 2, self.height() / 2))
@@ -164,36 +164,35 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
         if not self.__tileSource:
             return
 
-        if self.zoomLevel()<self.maxZoomLevel():
-            self.setZoomLevel(self.zoomLevel()+1,zMode)
+        if self.zoomLevel() < self.maxZoomLevel():
+            self.setZoomLevel(self.zoomLevel() + 1, zMode)
 
-
-    def zoomOut(self,zMode):
+    def zoomOut(self, zMode):
         if not self.__tileSource:
             return
 
-        if self.zoomLevel()>self.minZoomLevel():
-            self.setZoomLevel(self.zoomLevel()-1,zMode)
+        if self.zoomLevel() > self.minZoomLevel():
+            self.setZoomLevel(self.zoomLevel() - 1, zMode)
 
-    def handleChildMouseDoubleClick(self,event):
+    def handleChildMouseDoubleClick(self, event):
         event.setAccepted(False)
 
-    def handleChildMouseMove(self,event):
+    def handleChildMouseMove(self, event):
         event.setAccepted(False)
 
-    def handleChildMousePress(self,event):
+    def handleChildMousePress(self, event):
         event.setAccepted(False)
 
-    def handleChildMouseRelease(self,event):
+    def handleChildMouseRelease(self, event):
         event.setAccepted(False)
 
-    def handleChildViewContextMenu(self,event):
+    def handleChildViewContextMenu(self, event):
         event.setAccepted(False)
 
-    def handleChildViewScrollWheel(self,event):
+    def handleChildViewScrollWheel(self, event):
         event.setAccepted(False)
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
-        if event.delta()>0:
+        if event.delta() > 0:
             self.zoomIn(MapGraphicsView.ZoomMode.MouseZoom)
         else:
             self.zoomOut(MapGraphicsView.ZoomMode.MouseZoom)
@@ -207,18 +206,19 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
             return
         self.doTileLayout()
 
-
     def doTileLayout(self):
-        centerPointQGS=self.__childView.mapToScene(self.__childView.width()/2.0,self.__childView.height()/2.0)
-        viewportPolygonQGV=QPolygonF()
-        viewportPolygonQGV<<QPoint(0,0)<<QPoint(0,self.__childView.height())<<QPoint(self.__childView.width(),self.__childView.height())<<QPoint(self.__childView.width(),0)
-        viewportPolygonQGS=self.__childView.mapToScene(viewportPolygonQGV)
-        boundingRect=viewportPolygonQGS.boundingRect()
+        centerPointQGS = self.__childView.mapToScene(self.__childView.width() / 2.0, self.__childView.height() / 2.0)
+        viewportPolygonQGV = QPolygonF()
+        viewportPolygonQGV << QPoint(0, 0) << QPoint(0, self.__childView.height()) << QPoint(self.__childView.width(),
+                                                                                             self.__childView.height()) << QPoint(
+            self.__childView.width(), 0)
+        viewportPolygonQGS = self.__childView.mapToScene(viewportPolygonQGV)
+        boundingRect = viewportPolygonQGS.boundingRect()
         exaggeratedBoundingRect = boundingRect
         exaggeratedBoundingRect.setSize(boundingRect.size() * 2.0)
         exaggeratedBoundingRect.moveCenter(boundingRect.center())
-        freeTiles=Queue()
-        placesWhereTilesAre=set()
+        freeTiles = Queue()
+        placesWhereTilesAre = set()
         for tileObject in self.__tileObjects:
             if not tileObject.isVisible() or not tileObject.pos() in exaggeratedBoundingRect:
                 freeTiles.put(tileObject)
@@ -226,44 +226,41 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
             else:
                 placesWhereTilesAre.add(tileObject.pos())
 
-        tileSize=self.__tileSource.tileSize()
-        tilesPerRow=sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))
+        tileSize = self.__tileSource.tileSize()
+        tilesPerRow = sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))
         tilesPerCol = tilesPerRow
-        perSide=max(boundingRect.width()/tileSize,boundingRect.height()/tileSize)+3
-        xc=max(0,(centerPointQGS.x() / tileSize) - perSide/2)
-        yc=max(0,(centerPointQGS.y() / tileSize) - perSide/2)
-        xMax=min(tilesPerRow,xc + perSide)
-        yMax=min(yc + perSide,tilesPerCol)
-        for x in range(xc,xMax,1):
-            for y in range(yc,yMax,1):
-                scenePos=QPointF(x*tileSize + tileSize/2,y*tileSize + tileSize/2)
-                tileIsThere =False
+        perSide = max(boundingRect.width() / tileSize, boundingRect.height() / tileSize) + 3
+        xc = max(0, (centerPointQGS.x() / tileSize) - perSide / 2)
+        yc = max(0, (centerPointQGS.y() / tileSize) - perSide / 2)
+        xMax = min(tilesPerRow, xc + perSide)
+        yMax = min(yc + perSide, tilesPerCol)
+        for x in range(xc, xMax, 1):
+            for y in range(yc, yMax, 1):
+                scenePos = QPointF(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2)
+                tileIsThere = False
                 if scenePos in placesWhereTilesAre:
-                    tileIsThere=True
+                    tileIsThere = True
                 if tileIsThere:
                     continue
                 if not freeTiles:
-                    tileObject=MapTileGraphicsObject(tileSize)
+                    tileObject = MapTileGraphicsObject(tileSize)
                     tileObject.setTileSource(self.__tileSource)
                     self.__tileObjects.add(tileObject)
-                    self.__childScene=tileObject
-                tileObject=freeTiles.get()
-                if tileObject.pos()!=scenePos:
+                    self.__childScene = tileObject
+                tileObject = freeTiles.get()
+                if tileObject.pos() != scenePos:
                     tileObject.setPos(scenePos)
-                if tileObject.isVisible()!=True:
+                if tileObject.isVisible() != True:
                     tileObject.setVisible(True)
-                tileObject.setTile(x,y,self.zoomLevel())
-        while freeTiles.qsize()>2:
-            tileObject=freeTiles.get()
+                tileObject.setTile(x, y, self.zoomLevel())
+        while freeTiles.qsize() > 2:
+            tileObject = freeTiles.get()
             self.__tileObjects.remove(tileObject)
             self.__childScene.removeItem(tileObject)
 
     def resetQGSSceneSize(self):
         if not self.__tileSource:
             return
-        dimension=sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))* self.__tileSource.tileSize()
-        if self.__childScene.sceneRect().width()!=dimension:
-            self.__childScene.setSceneRect(0,0,dimension,dimension)
-
-
-
+        dimension = sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel())) * self.__tileSource.tileSize()
+        if self.__childScene.sceneRect().width() != dimension:
+            self.__childScene.setSceneRect(0, 0, dimension, dimension)

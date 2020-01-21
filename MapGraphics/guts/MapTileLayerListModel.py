@@ -12,6 +12,10 @@ class MapTileLayerListModel(QAbstractListModel):
         if self.__composite is None:
             return
         raw = CompositeTileSource(self.__composite)
+
+        raw.sourcesChanged.connect(self.handleCompositeSourcesChanged)
+        raw.sourceAdded.connect(self.handleCompositeSourcesAdded)
+        raw.sourceRemoved.connect(self.handleCompositeSourcesRemoved)
         # connect(raw,
         #         SIGNAL(sourcesChanged()),
         #         this,

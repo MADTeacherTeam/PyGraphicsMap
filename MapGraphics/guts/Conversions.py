@@ -12,7 +12,7 @@ rad2deg = 180.0 / pi
 
 class Conversions:
     @staticmethod
-    def lla2xyz(wlat, wlon, walt):
+    def lla2xyz_3(wlat, wlon, walt):
         toRet = QtGui.QVector3D()
 
         if wlat < -90.0 or wlat > 90.0 or wlon < -180.0 or wlon > 180.0:
@@ -31,16 +31,16 @@ class Conversions:
 
     @staticmethod
     def lla2xyz(lla):
-        return Conversions.lla2xyz(lla.latitude(),
-                                   lla.longitude(),
-                                   lla.altitude())
+        return Conversions.lla2xyz_3(lla.latitude(),
+                                     lla.longitude(),
+                                     lla.altitude())
 
     @staticmethod
     def xyz2lla(v):
-        return Conversions.xyz2lla(v.x(), v.y().v.z())
+        return Conversions.xyz2lla_3(v.x(), v.y().v.z())
 
     @staticmethod
-    def xyz2lla(x, y, z):
+    def xyz2lla_3(x, y, z):
         # пока так
         toRet = Position()
         toRet.setAltitude(0.0)
@@ -85,8 +85,8 @@ class Conversions:
         return toRet
 
     @staticmethod
-    def xyz2enu(xyz, reflat, reflon, refalt):
-        refxyz = Conversions.lla2xyz(reflat, reflon, refalt)
+    def xyz2enu_4_re(xyz, reflat, reflon, refalt):
+        refxyz = Conversions.lla2xyz_3(reflat, reflon, refalt)
         diffxyz = xyz - refxyz
 
         R1 = Conversions.rot(90.0 + reflon, 3)
@@ -102,28 +102,28 @@ class Conversions:
         return enu
 
     @staticmethod
-    def xyz2enu(xyz, refLLA):
-        return Conversions.xyz2enu(xyz,
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def xyz2enu_2(xyz, refLLA):
+        return Conversions.xyz2enu_4_LLA(xyz,
+                                         refLLA.latitude(),
+                                         refLLA.longitude(),
+                                         refLLA.altitude())
 
     @staticmethod
-    def xyz2enu(x, y, z, reflat, reflon, refalt):
-        return Conversions.xyz2enu(QtGui.QVector3D(x, y, z),
-                                   reflat,
-                                   reflon,
-                                   refalt)
+    def xyz2enu_6(x, y, z, reflat, reflon, refalt):
+        return Conversions.xyz2enu_4_re(QtGui.QVector3D(x, y, z),
+                                        reflat,
+                                        reflon,
+                                        refalt)
 
     @staticmethod
-    def xyz2enu(x, y, z, refLLA):
-        return Conversions.xyz2enu(QtGui.QVector3D(x, y, z),
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def xyz2enu_4_LLA(x, y, z, refLLA):
+        return Conversions.xyz2enu_4_LLA(QtGui.QVector3D(x, y, z),
+                                         refLLA.latitude(),
+                                         refLLA.longitude(),
+                                         refLLA.altitude())
 
     @staticmethod
-    def enu2xyz(enu, reflat, reflon, refalt):
+    def enu2xyz_4_re(enu, reflat, reflon, refalt):
         R1 = Conversions.rot(90.0 + reflon, 3)
         R2 = Conversions.rot(90.0 - reflat, 1)
         R = R2 * R1
@@ -139,81 +139,81 @@ class Conversions:
 
         diffxyz = QtGui.QVector3D(x, y, z)
 
-        refxyz = Conversions.lla2xyz(reflat, reflon, refalt)
+        refxyz = Conversions.lla2xyz_3(reflat, reflon, refalt)
 
         return (diffxyz + refxyz)
 
     @staticmethod
-    def enu2xyz(enu, refLLA):
-        return Conversions.enu2xyz(enu,
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def enu2xyz_2(enu, refLLA):
+        return Conversions.enu2xyz_4_re(enu,
+                                        refLLA.latitude(),
+                                        refLLA.longitude(),
+                                        refLLA.altitude())
 
     @staticmethod
-    def enu2xyz(east, north, up, refLLA):
-        return Conversions.enu2xyz(QtGui.QVector3D(east, north, up),
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def enu2xyz_4_LLA(east, north, up, refLLA):
+        return Conversions.enu2xyz_4_LLA(QtGui.QVector3D(east, north, up),
+                                         refLLA.latitude(),
+                                         refLLA.longitude(),
+                                         refLLA.altitude())
 
     @staticmethod
-    def enu2lla(enu, reflat, reflon, refalt):
-        xyz = Conversions.enu2xyz(enu, reflat, reflon, refalt)
+    def enu2lla_4_re(enu, reflat, reflon, refalt):
+        xyz = Conversions.enu2xyz_4_re(enu, reflat, reflon, refalt)
         return Conversions.xyz2lla(xyz)
 
     @staticmethod
-    def enu2lla(enu, refLLA):
-        return Conversions.enu2lla(enu,
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def enu2lla_2(enu, refLLA):
+        return Conversions.enu2lla_4_LLA(enu,
+                                         refLLA.latitude(),
+                                         refLLA.longitude(),
+                                         refLLA.altitude())
 
     @staticmethod
-    def enu2lla(east, north, up, reflat, reflon, refalt):
-        return Conversions.enu2lla(QtGui.QVector3D(east, north, up),
-                                   reflat,
-                                   reflon,
-                                   refalt)
+    def enu2lla_6(east, north, up, reflat, reflon, refalt):
+        return Conversions.enu2lla_4_re(QtGui.QVector3D(east, north, up),
+                                        reflat,
+                                        reflon,
+                                        refalt)
 
     @staticmethod
-    def enu2lla(east, north, up, refLLA):
-        return Conversions.enu2lla(QtGui.QVector3D(east, north, up),
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def enu2lla_4_LLA(east, north, up, refLLA):
+        return Conversions.enu2lla_4_LLA(QtGui.QVector3D(east, north, up),
+                                         refLLA.latitude(),
+                                         refLLA.longitude(),
+                                         refLLA.altitude())
 
     @staticmethod
-    def lla2enu(lat, lon, alt, reflat, reflon, refalt):
-        xyz = Conversions.lla2xyz(lat, lon, alt)
-        enu = Conversions.xyz2enu(xyz, reflat, reflon, refalt)
+    def lla2enu_6(lat, lon, alt, reflat, reflon, refalt):
+        xyz = Conversions.lla2xyz_3(lat, lon, alt)
+        enu = Conversions.xyz2enu_4_re(xyz, reflat, reflon, refalt)
 
         return enu
 
     @staticmethod
-    def lla2enu(lat, lon, alt, refLLA):
-        return Conversions.lla2enu(lat, lon, alt,
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def lla2enu_4_LLA(lat, lon, alt, refLLA):
+        return Conversions.lla2enu_6(lat, lon, alt,
+                                     refLLA.latitude(),
+                                     refLLA.longitude(),
+                                     refLLA.altitude())
 
     @staticmethod
-    def lla2enu(lla, reflat, reflon, refalt):
-        return Conversions.lla2enu(lla.latitude(),
-                                   lla.longitude(),
-                                   lla.altitude(),
-                                   reflat,
-                                   reflon,
-                                   refalt)
+    def lla2enu_4_re(lla, reflat, reflon, refalt):
+        return Conversions.lla2enu_6(lla.latitude(),
+                                     lla.longitude(),
+                                     lla.altitude(),
+                                     reflat,
+                                     reflon,
+                                     refalt)
 
     @staticmethod
-    def lla2enu(lla, refLLA):
-        return Conversions.lla2enu(lla.latitude(),
-                                   lla.longitude(),
-                                   lla.altitude(),
-                                   refLLA.latitude(),
-                                   refLLA.longitude(),
-                                   refLLA.altitude())
+    def lla2enu_2(lla, refLLA):
+        return Conversions.lla2enu_6(lla.latitude(),
+                                     lla.longitude(),
+                                     lla.altitude(),
+                                     refLLA.latitude(),
+                                     refLLA.longitude(),
+                                     refLLA.altitude())
 
     @staticmethod
     def degreesLatPerMeter(latitude):
@@ -258,8 +258,8 @@ class Conversions:
             QtCore.qDebug("Passed LLA -> XYZ -> LLA")
 
         enu1 = QtGui.QVector3D(5, 5, 0)
-        byu3 = Conversions.enu2lla(enu1, byu1)
-        enu3 = Conversions.lla2enu(byu3, byu1)
+        byu3 = Conversions.enu2lla_2(enu1, byu1)
+        enu3 = Conversions.lla2enu_2(byu3, byu1)
 
         if (enu3 - enu1).length() > 0.3:
             QtCore.qDebug("Failed LLA -> ENU -> LLA -> ENU")

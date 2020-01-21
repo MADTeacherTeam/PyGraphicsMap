@@ -101,7 +101,6 @@ class MapTileGraphicsObject(QGraphicsObject):
         if not self.__tileSource is None:
             pass
 
-
         self.allTilesInvalidated.connect(self.handleTileInvalidation)
         # connect(_tileSource.data(),
         #         SIGNAL(allTilesInvalidated()),

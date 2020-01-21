@@ -2,8 +2,9 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import pyqtSignal
 from .MapGraphicsObject import MapGraphicsObject
 from .Position import Position
-from .guts import Conversions
+from .guts.Conversions import Conversions
 from MapGraphics.CircleObject import CircleObject
+
 
 class PolygonObject(MapGraphicsObject):
     def __init__(self, geoPoly, fillColor, parent):
@@ -17,8 +18,8 @@ class PolygonObject(MapGraphicsObject):
         self.__editCircles = []
         self.__addVertexCircles = []
 
-        #SIGNALS
-        self.polygonChanged=pyqtSignal(QtGui.QPolygonF)
+        # SIGNALS
+        self.polygonChanged = pyqtSignal(QtGui.QPolygonF)
 
     def __del__(self):
         QtCore.qDebug(self + "destroying")
@@ -35,8 +36,8 @@ class PolygonObject(MapGraphicsObject):
         topLeftPos.constr_two_arg(latLonRect.topLeft(), 0.0)
         bottomRightPos = Position()
         bottomRightPos.constr_two_arg(latLonRect.bottomRight(), 0.0)
-        topLeftENU = Conversions.lla2xyz(topLeftPos, latLonCenterPos).toPointF()
-        bottomRightENU = Conversions.lla2enu(bottomRightPos, latLonCenterPos).toPointF()
+        topLeftENU = Conversions.lla2enu_2(topLeftPos, latLonCenterPos).toPointF()
+        bottomRightENU = Conversions.lla2enu_2(bottomRightPos, latLonCenterPos).toPointF()
         return QtCore.QRectF(topLeftENU, bottomRightENU)
 
     def contains(self, geoPos):
@@ -50,7 +51,7 @@ class PolygonObject(MapGraphicsObject):
         for latLon in self.__geoPoly:
             latLonPos = Position()
             latLonPos.constr_two_arg(latLon, 0)
-            enu = Conversions.lla2enu(latLonPos, latLonCenterPos).toPointF()
+            enu = Conversions.lla2enu_2(latLonPos, latLonCenterPos).toPointF()
             enuPoly << enu
         painter.setBrush(self.__fillColor)
         painter.drawPolygon(enuPoly)

@@ -76,12 +76,12 @@ class Position():
 
     @staticmethod
     def Position2ENU(refPos, pos):
-        return Conversions.lla2enu(pos.latitude(), pos.longitude(), pos.altitude(), refPos.latitude(),
-                                   refPos.longitude(), refPos.altitude())
+        return Conversions.lla2enu_6(pos.latitude(), pos.longitude(), pos.altitude(), refPos.latitude(),
+                                     refPos.longitude(), refPos.altitude())
 
     @staticmethod
     def fromENU(refPos, enu):
-        cPos = Conversions.enu2lla(enu, refPos.latitude(), refPos.longitude(), refPos.altitude())
+        cPos = Conversions.enu2lla_4_re(enu, refPos.latitude(), refPos.longitude(), refPos.altitude())
         return cPos
 
     # OVERLOAD OPERATOR >>

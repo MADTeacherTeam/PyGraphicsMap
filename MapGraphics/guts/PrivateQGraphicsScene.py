@@ -70,7 +70,6 @@ class PrivateQGraphicsScene(QGraphicsScene):
             qWarning("got a null MapGraphicsScene")
             return
 
-
         self.objectAdded.connect(self.handleMGObjectAdded)
         # connect(_mgScene.data(),
         #         SIGNAL(objectAdded(MapGraphicsObject *)),

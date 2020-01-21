@@ -10,14 +10,14 @@ from MapGraphics.tileSources.CompositeTileSource import CompositeTileSource
 
 
 class CompositeTileSourceConfigurationWidget(QWidget):
+    currentChanged = pyqtSignal(QModelIndex, QModelIndex)
+
     def __init__(self, composite, parent=None):
         QWidget.__init__(self, parent, None)
         self.__ui = Ui_CompositeTileSourceConfigurationWidget()
         self.__composite = CompositeTileSource(composite)
         self.__ui.setupUi(self)
         self.init()
-
-        self.currentChanged = pyqtSignal(QModelIndex, QModelIndex)
 
     def __del__(self):
         pass
@@ -50,8 +50,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             return
 
         opacityFloat = self.__composite.getOpacity(index.row())
-        self.__ui.opacitySlider.setValue(opacityFloat*100)
-
+        self.__ui.opacitySlider.setValue(opacityFloat * 100)
 
     def addOSMTileLayer(self):
         if self.__composite is None:
@@ -80,7 +79,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.__composite is None:
             return
 
-        opacityFloat = value/100.0
+        opacityFloat = value / 100.0
         self.__composite.setOpacity(index.row(), opacityFloat)
 
     def on_moveDownButton_clicked(self):
@@ -94,7 +93,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
         numberOfLayers = self.__composite.numSources()
         currentIndex = index.row()
-        desiredIndex = min(numberOfLayers-1, currentIndex+1)
+        desiredIndex = min(numberOfLayers - 1, currentIndex + 1)
         self.__composite.moveSource(currentIndex, desiredIndex)
         selModel.setCurrentIndex(selModel.model().index(desiredIndex, 0), QItemSelectionModel.SelectCurrent)
 
@@ -108,7 +107,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             return
 
         currentIndex = index.row()
-        desiredIndex = max(0, currentIndex-1)
+        desiredIndex = max(0, currentIndex - 1)
         self.__composite.moveSource(currentIndex, desiredIndex)
         selModel.setCurrentIndex(selModel.model().index(desiredIndex, 0), QItemSelectionModel.SelectCurrent)
 
