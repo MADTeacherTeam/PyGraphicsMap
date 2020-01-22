@@ -25,12 +25,12 @@ class PrivateQGraphicsView(QGraphicsView):
     # void hadWheelEvent(QWheelEvent *);
 
     def __init__(self, parent=None):
-        QGraphicsView.__init__(parent)
+        super(PrivateQGraphicsView, self).__init__(parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-    def __init__(self, scene, parent=None):
-        QGraphicsView.__init__(scene, parent)
+    def constr_2_arg(self, scene, parent=None):
+        super(PrivateQGraphicsView, self).__init__(scene, parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 

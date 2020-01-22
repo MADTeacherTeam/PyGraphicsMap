@@ -6,7 +6,7 @@ from .MapGraphicsObject import MapGraphicsObject
 
 class LineObject(MapGraphicsObject):
     def __init__(self, endA, endB, thickness, parent=0):
-        super.__init__(False, parent)
+        super().__init__(False, parent)
         self.__a = endA
         self.__b = endB
         self.__thickness = max(0, min(5, thickness))

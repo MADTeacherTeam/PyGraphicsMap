@@ -25,6 +25,7 @@ class PrivateQGraphicsScene(QGraphicsScene):
         #         SLOT(handleSelectionChanged()));
 
     def handleMGObjectAdded(self, added):
+
         qgObj = PrivateQGraphicsObject(added, self.__infoSource)
         self.addItem(qgObj)
         self.__mgToqg[added] = qgObj

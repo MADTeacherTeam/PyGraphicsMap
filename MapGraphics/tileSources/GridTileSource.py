@@ -10,7 +10,7 @@ rad2deg = 180.0 / PI
 
 class GridTileSource(MapTileSource):
     def __init__(self):
-        super.__init__()
+        super().__init__()
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
 
     def __del__(self):

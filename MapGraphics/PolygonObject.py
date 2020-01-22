@@ -142,6 +142,7 @@ class PolygonObject(MapGraphicsObject):
 
     def handleEditCirclePosChanged(self):
         sender = QtCore.QObject.sender(self)
+        # self.sender()
         if sender == 0:
             return
         circle = CircleObject(sender)

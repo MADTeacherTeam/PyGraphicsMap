@@ -15,14 +15,15 @@ class OSMTileSource(MapTileSource):
         OSMTiles = 0x01
 
     def __init__(self, tileType):
-        super.__init__()
+        super(OSMTileSource, self).__init__()
+        self.__tileType = None
         self.__pendingRequests = set()
         self.__pendingReplies = {}
         self.__tileType = tileType
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
     def __del__(self):
-        qDebug(self + self.name() + "Destructing")
+        qDebug("Destructing OSMTileSource")
 
     def name(self):
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:

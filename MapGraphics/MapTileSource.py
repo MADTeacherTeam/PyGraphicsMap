@@ -8,12 +8,17 @@ MAX_DISK_CACHE_READ_ATTEMPTS = 100000
 
 
 class MapTileSource(QtCore.QObject):
+    # SIGNALS
+    tileRetrieved = QtCore.pyqtSignal(int, int, int)
+    tileRequested = QtCore.pyqtSignal(int, int, int)
+    allTilesInvalidated = QtCore.pyqtSignal()
+
     class CacheMode(Enum):
         NoCaching = 1
         DiskAndMemCaching = 2
 
     def __init__(self):
-        super.__init__()
+        super(MapTileSource, self).__init__()
         self.__cacheExpirationsFile = ""
         self.__tempCacheLock = QtCore.QMutex()
         self.__tempCache = {}
@@ -22,10 +27,7 @@ class MapTileSource(QtCore.QObject):
         self.__cacheExpirationsLoaded = False
         self.setCacheMode(self.CacheMode.DiskAndMemCaching)
 
-        # SIGNALS
-        self.tileRetrieved = QtCore.pyqtSignal(int, int, int)
-        self.tileRequested = QtCore.pyqtSignal(int, int, int)
-        self.allTilesInvalidated = QtCore.pyqtSignal()
+
 
         self.tileRequested.connect(self.startTileRequest)
         self.allTilesInvalidated.connect(self.clearTempCache)

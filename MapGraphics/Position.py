@@ -8,11 +8,11 @@ class Position():
         self.__lonLat = QtCore.QPointF(0.0, 0.0)
         self.__altitude = 0
 
-    def constr_three_arg(self, longitude, latitude, altitude):
+    def constr_three_arg(self, longitude, latitude, altitude=0.0):
         self.__lonLat = QtCore.QPointF(longitude, latitude)
         self.__altitude = altitude
 
-    def constr_two_arg(self, lonLat, altitude):
+    def constr_two_arg(self, lonLat, altitude=0.0):
         self.__lonLat = lonLat
         self.__altitude = altitude
 

@@ -5,7 +5,7 @@ from PyQt5.QtGui import QImage, QPainter, QTextOption
 
 class CompositeTileSource(MapTileSource):
     def __init__(self):
-        super.__init__()
+        super().__init__()
         self.__childSources = []
         self.__childOpacities = []
         self.__childEnabledFlags = []

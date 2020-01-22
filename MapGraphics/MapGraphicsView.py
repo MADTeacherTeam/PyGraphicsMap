@@ -11,7 +11,10 @@ from queue import Queue
 from math import sqrt
 
 
-class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
+class MapGraphicsView(QWidget):
+    __metaclass__ = PrivateQGraphicsInfoSource
+    zoomLevelChanged = pyqtSignal(int)
+
     class DragMode(Enum):
         NoDrag = 0
         ScrollHandDrag = 1
@@ -22,7 +25,9 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
         MouseZoom = 1
 
     def __init__(self, scene=0, parent=0):
-        QWidget.__init__(self, parent, None)
+        QWidget.__init__(self, parent)
+        self.__tileSource = None
+        self.__dragMode = None
         self.setScene(scene)
         self.__zoomLevel = 2
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
@@ -30,10 +35,10 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
         renderTimer.timeout.connect(self.renderTiles)
         renderTimer.start(200)
         self.__tileObjects = set()
-        self.zoomLevelChanged = pyqtSignal(int)
+        # self.
 
     def __del__(self):
-        qDebug(self, "Destructing")
+        qDebug("Destructing MapGraphicsView")
         for tileObject in self.__tileObjects:
             if self.__childScene:
                 self.__childScene.removeItem(tileObject)
@@ -95,7 +100,8 @@ class MapGraphicsView(QWidget, PrivateQGraphicsInfoSource):
     def setScene(self, scene):
         childScene = PrivateQGraphicsScene(scene, self, self)
         self.zoomLevelChanged.connect(childScene.handleZoomLevelChanged)
-        childView = PrivateQGraphicsView(childScene, self)
+        childView = PrivateQGraphicsView(childScene)
+        childView.constr_2_arg(childScene, self)
         childView.hadMouseDoubleClickEvent.connect(self.handleChildMouseDoubleClick)
         childView.hadMouseMoveEvent.connect(self.handleChildMouseMove)
         childView.hadMousePressEvent.connect(self.handleChildMousePress)

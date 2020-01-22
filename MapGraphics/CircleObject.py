@@ -5,7 +5,7 @@ from .MapGraphicsObject import MapGraphicsObject
 
 class CircleObject(MapGraphicsObject):
     def __init__(self, radius, sizeIsZoomInvariant=True, fillColor=QColor(0, 0, 0, 0), parent=0):
-        super.__init__(sizeIsZoomInvariant, parent)
+        super().__init__(sizeIsZoomInvariant, parent)
         self.__fillColor = fillColor
         self.__radius = max(radius, 0.01)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable)

@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui
 import math
-from MapGraphics.Position import Position
 
 pi = 3.141592653589793238462643383
 A_EARTH = 6378137
@@ -42,7 +41,9 @@ class Conversions:
     @staticmethod
     def xyz2lla_3(x, y, z):
         # пока так
+        from MapGraphics.Position import Position
         toRet = Position()
+        del Position
         toRet.setAltitude(0.0)
 
         if x == 0.0 and y == 0.0 and z == 0.0:
@@ -247,7 +248,9 @@ class Conversions:
 
     @staticmethod
     def test():
+        from MapGraphics.Position import Position
         byu1 = Position.constr_two_arg(QtCore.QPointF(-111.649253, 40.249707), 1423)
+        del Position
         xyz = Conversions.lla2xyz(byu1)
         byu2 = Conversions.xyz2lla(xyz)
 
