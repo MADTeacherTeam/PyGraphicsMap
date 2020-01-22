@@ -1,13 +1,13 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSignal, QRectF, qWarning
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+from PySide2.QtCore import Signal, QRectF, qWarning
 from MapGraphics.MapTileSource import MapTileSource
 
 
 class MapTileGraphicsObject(QGraphicsObject):
-    tileRequested = pyqtSignal(int, int, int)
-    tileRetrieved = pyqtSignal(int, int, int)
-    allTilesInvalidated = pyqtSignal()
+    tileRequested = Signal(int, int, int)
+    tileRetrieved = Signal(int, int, int)
+    allTilesInvalidated = Signal()
 
     def __init__(self, tileSize=256):
         QGraphicsObject.__init__(self)
@@ -124,7 +124,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         image = QImage(self.__tileSource.getFinishedTile(x, y, z))
 
         if image == 0:
-            qWarning("Failed to get tile " + x + y + z + " from MapTileSource")
+            qWarning(b"Failed to get tile " + x + y + z + b" from MapTileSource")
             return
 
         tile = QPixmap()
@@ -133,7 +133,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         image = 0
 
         if self.__tile != 0:
-            qWarning("Tile should be null, but isn't")
+            qWarning(b"Tile should be null, but isn't")
             self.__tile = 0
 
         self.__tile = tile

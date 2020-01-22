@@ -1,7 +1,7 @@
 import sys
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QObject
+from PySide2 import QtWidgets
+from PySide2.QtCore import QObject
 
 from MainApp.MainWindow import Ui_MainWindow
 from MapGraphics.MapGraphicsScene import MapGraphicsScene
@@ -32,4 +32,4 @@ app = QtWidgets.QApplication([])
 application = MyWindow()
 application.show()
 
-sys.exit(app.exec())
+sys.exit(app.exec_())

@@ -1,5 +1,5 @@
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import pyqtSignal
+from PySide2 import QtCore, QtGui
+from PySide2.QtCore import Signal
 from .MapGraphicsObject import MapGraphicsObject
 from .Position import Position
 from .guts.Conversions import Conversions
@@ -9,17 +9,17 @@ from MapGraphics.CircleObject import CircleObject
 class PolygonObject(MapGraphicsObject):
     def __init__(self, geoPoly, fillColor, parent):
         MapGraphicsObject.__init__(self, parent)
-        self.__geoPoly = geoPoly
+        self.__geoPoly = None
         self.__fillColor = fillColor
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable)
-        self.setGeoPoly()
+        self.setGeoPoly(geoPoly)
         self.__editCircles = []
         self.__addVertexCircles = []
 
         # SIGNALS
-        self.polygonChanged = pyqtSignal(QtGui.QPolygonF)
+        self.polygonChanged = Signal(QtGui.QPolygonF)
 
     def __del__(self):
         QtCore.qDebug(self + "destroying")
@@ -30,12 +30,9 @@ class PolygonObject(MapGraphicsObject):
     def boundingRect(self):
         latLonRect = self.__geoPoly.boundingRect()
         latLonCenter = latLonRect.center()
-        latLonCenterPos = Position()
-        latLonCenterPos.constr_two_arg(latLonCenter, 0.0)
-        topLeftPos = Position()
-        topLeftPos.constr_two_arg(latLonRect.topLeft(), 0.0)
-        bottomRightPos = Position()
-        bottomRightPos.constr_two_arg(latLonRect.bottomRight(), 0.0)
+        latLonCenterPos = Position(latLonCenter, 0.0)
+        topLeftPos = Position(latLonRect.topLeft(), 0.0)
+        bottomRightPos = Position(latLonRect.bottomRight(), 0.0)
         topLeftENU = Conversions.lla2enu_2(topLeftPos, latLonCenterPos).toPointF()
         bottomRightENU = Conversions.lla2enu_2(bottomRightPos, latLonCenterPos).toPointF()
         return QtCore.QRectF(topLeftENU, bottomRightENU)
@@ -43,14 +40,12 @@ class PolygonObject(MapGraphicsObject):
     def contains(self, geoPos):
         return self.__geoPoly.containsPoint(geoPos, QtCore.Qt.OddEvenFill)
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         enuPoly = QtGui.QPolygonF()
-        latLonCenterPos = Position()
-        latLonCenterPos.constr_two_arg(self.__geoPoly.boundingRect().center(), 0)
+        latLonCenterPos = Position(self.__geoPoly.boundingRect().center(), 0)
         for latLon in self.__geoPoly:
-            latLonPos = Position()
-            latLonPos.constr_two_arg(latLon, 0)
+            latLonPos = Position(latLon, 0)
             enu = Conversions.lla2enu_2(latLonPos, latLonCenterPos).toPointF()
             enuPoly << enu
         painter.setBrush(self.__fillColor)
@@ -118,7 +113,7 @@ class PolygonObject(MapGraphicsObject):
         self.__editCircles.clear()
         self.__addVertexCircles.clear()
         self.setPos(newPoly.boundingRect().center())
-        self.polygonChanged(newPoly)
+        self.polygonChanged.emit(newPoly)
 
     def setFillColor(self, color):
         if self.__fillColor == color:
@@ -134,19 +129,22 @@ class PolygonObject(MapGraphicsObject):
             ev.ignore()
 
     def keyReleaseEvent(self, event):
-        if (event.matches(QtGui.QKeySequence.Delete)):
+        if event.matches(QtGui.QKeySequence.Delete):
             self.deleteLater()
             event.accept()
         else:
             event.ignore()
 
     def handleEditCirclePosChanged(self):
-        sender = QtCore.QObject.sender(self)
+        # TODO all senders
+        sender = self.sender()
+        print(' handleEditCirclePosChanged sender type')
+        type(sender)
         # self.sender()
-        if sender == 0:
+        if sender is None:
             return
         circle = CircleObject(sender)
-        if circle == 0:
+        if not isinstance(circle, CircleObject):
             return
         if circle not in self.__editCircles:
             return
@@ -158,11 +156,11 @@ class PolygonObject(MapGraphicsObject):
         self.polygonChanged.emit(self.geoPoly())
 
     def __handleAddVertexCircleSelected(self):
-        sender = QtCore.QObject.sender()
+        sender = self.sender()
         if sender == 0:
             return
         circle = sender
-        if circle == 0:
+        if not isinstance(circle, CircleObject):
             return
         if not circle.isSelected():
             return
@@ -187,13 +185,13 @@ class PolygonObject(MapGraphicsObject):
         self.polygonChanged.emit(self.geoPoly())
 
     def __handleEditCircleDestroyed(self):
-        sender = QtCore.QObject.sender()
+        sender = self.sender()
         if sender == 0:
-            QtCore.qWarning("Can't process desyroyed edit circle. Sender is null")
+            QtCore.qWarning(b"Can't process desyroyed edit circle. Sender is null")
             return
         circle = sender
         if circle not in self.__editCircles:
-            QtCore.qWarning("Can't process destroyed edit circle. Not contained in edit circle list")
+            QtCore.qWarning(b"Can't process destroyed edit circle. Not contained in edit circle list")
             return
         index = self.__editCircles.index(circle)
         self.__geoPoly.remove(index)

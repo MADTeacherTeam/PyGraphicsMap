@@ -1,12 +1,30 @@
-from PyQt5 import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 import math
 from MapGraphics.guts.Conversions import Conversions
 
 
 class Position():
-    def __init__(self):
-        self.__lonLat = QtCore.QPointF(0.0, 0.0)
-        self.__altitude = 0
+    def __init__(self, *args):
+        len = args.__len__()
+        if len == 0:
+            self.__lonLat = QtCore.QPointF(0.0, 0.0)
+            self.__altitude = 0
+        elif len == 1 and isinstance(args[0], Position):
+            self.constr_one_arg(args[0])
+        elif (len == 2 and isinstance(args[0], QtCore.QPointF) and isinstance(args[1], int)) \
+                or (len == 1 and isinstance(args[0], QtCore.QPointF)):
+            if len == 2:
+                self.constr_two_arg(args[0], args[1])
+            else:
+                self.constr_two_arg(args[0])
+        elif (len == 3 and isinstance(args[0], int) and isinstance(args[1], int) and isinstance(args[2], int)) \
+                or (len == 2 and isinstance(args[0], int) and isinstance(args[1], int)):
+            if len == 3:
+                self.constr_three_arg(args[0], args[1], args[2])
+            else:
+                self.constr_three_arg(args[0], args[1])
+        else:
+            QtCore.qWarning(b'Wrong len in init of Position class')
 
     def constr_three_arg(self, longitude, latitude, altitude=0.0):
         self.__lonLat = QtCore.QPointF(longitude, latitude)
@@ -21,7 +39,7 @@ class Position():
         self.__altitude = other.__altitude
 
     def __eq__(self, other):
-        return (self.__lonLat == other.__lonLat and self.__altitude == other.__altitude)
+        return self.__lonLat == other.__lonLat and self.__altitude == other.__altitude
 
     def __ne__(self, other):
         return not (self == other)

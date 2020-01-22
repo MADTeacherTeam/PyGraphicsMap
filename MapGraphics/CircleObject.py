@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QRectF, QPointF
-from PyQt5.QtGui import QColor, QPainter, QKeySequence
+from PySide2.QtCore import QRectF, QPointF
+from PySide2.QtGui import QColor, QPainter, QKeySequence
 from .MapGraphicsObject import MapGraphicsObject
 
 
@@ -15,7 +15,7 @@ class CircleObject(MapGraphicsObject):
     def boundingRect(self):
         return QRectF(-1 * self.__radius, -1 * self.__radius, 2 * self.__radius, 2 * self.__radius)
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setBrush(self.__fillColor)
         painter.drawEllipse(QPointF(0, 0), self.__radius, self.__radius)

@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QRectF, QPointF
-from PyQt5.QtGui import QPainter
+from PySide2.QtCore import QRectF, QPointF
+from PySide2.QtGui import QPainter
 from .guts.Conversions import Conversions
 from .MapGraphicsObject import MapGraphicsObject
 
@@ -26,7 +26,7 @@ class LineObject(MapGraphicsObject):
         toRet = QRectF(-1.0 * widthMeters, -1.0 * heightMeters, 2.0 * widthMeters, 2.0 * heightMeters)
         return toRet
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
         pen = painter.pen()
         pen.setWidthF(self.__thickness)

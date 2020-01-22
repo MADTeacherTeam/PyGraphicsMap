@@ -1,7 +1,7 @@
 from ..MapTileSource import MapTileSource
 from math import log, tan, atan, sinh
-from PyQt5.QtCore import qDebug, QPointF, Qt
-from PyQt5.QtGui import QImage, qRgba, QPainter
+from PySide2.QtCore import qDebug, QPointF, Qt
+from PySide2.QtGui import QImage, qRgba, QPainter
 
 PI = 3.14159265358979323846
 deg2rad = PI / 180.0
@@ -14,7 +14,7 @@ class GridTileSource(MapTileSource):
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
 
     def __del__(self):
-        qDebug(self, "destructing")
+        qDebug(self + b"destructing")
 
     def ll2qgs(self, ll, zoomLevel):
         tilesOnOneEdge = pow(2, zoomLevel)
@@ -54,7 +54,7 @@ class GridTileSource(MapTileSource):
         toRet.fill(qRgba(0, 0, 0, 0))
         painter = QPainter(toRet)
         painter.setPen(Qt.black)
-        everyNDegrees = 10.0
+        everyNDegrees = 10
         # Longitude
         for lon in range(-180, 180, everyNDegrees):
             geoPos = QPointF(lon, 0)
@@ -67,7 +67,7 @@ class GridTileSource(MapTileSource):
         for lat in range(-90, 90, everyNDegrees):
             geoPos = QPointF(0, lat)
             qgsScenePos = self.ll2qgs(geoPos, z)
-            if (qgsScenePos.y() < topScenePixel or qgsScenePos.y() > bottomScenePixel):
+            if qgsScenePos.y() < topScenePixel or qgsScenePos.y() > bottomScenePixel:
                 continue
             painter.drawLine(0, qgsScenePos.y() - topScenePixel, self.tileSize(), qgsScenePos.y() - topScenePixel)
 

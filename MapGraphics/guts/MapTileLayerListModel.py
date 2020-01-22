@@ -1,5 +1,5 @@
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtCore import *
 
 from MapGraphics.tileSources.CompositeTileSource import CompositeTileSource
 
@@ -11,7 +11,7 @@ class MapTileLayerListModel(QAbstractListModel):
 
         if self.__composite is None:
             return
-        raw = CompositeTileSource(self.__composite)
+        raw = self.__composite
 
         raw.sourcesChanged.connect(self.handleCompositeSourcesChanged)
         raw.sourceAdded.connect(self.handleCompositeSourcesAdded)
@@ -35,7 +35,7 @@ class MapTileLayerListModel(QAbstractListModel):
             return
         return self.__composite.numSources()
 
-    def data(self, index, role):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return QVariant("Invalid index")
         if index.row() >= self.rowCount():

@@ -1,4 +1,4 @@
-from PyQt5 import QtCore
+from PySide2 import QtCore
 from .MapGraphicsObject import MapGraphicsObject
 
 
@@ -9,8 +9,8 @@ class MapGraphicsScene(QtCore.QObject):
         # self.objects = []
         self.__objects = set()
         # SIGNALS
-        self.objectAdded = QtCore.pyqtSignal(MapGraphicsObject)
-        self.objectRemoved = QtCore.pyqtSignal(MapGraphicsObject)
+        self.objectAdded = QtCore.Signal(MapGraphicsObject)
+        self.objectRemoved = QtCore.Signal(MapGraphicsObject)
 
     def addObject(self, object):
         if object == 0:

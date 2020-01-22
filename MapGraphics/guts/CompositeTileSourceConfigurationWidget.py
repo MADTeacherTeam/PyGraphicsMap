@@ -1,6 +1,6 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSignal, QItemSelectionModel, QModelIndex, QAbstractItemModel
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+from PySide2.QtCore import Signal, QItemSelectionModel, QModelIndex, QAbstractItemModel
 
 from MapGraphics.guts.MapTileSourceDelegate import MapTileSourceDelegate
 from MapGraphics.guts.MapTileLayerListModel import MapTileLayerListModel
@@ -10,12 +10,12 @@ from MapGraphics.tileSources.CompositeTileSource import CompositeTileSource
 
 
 class CompositeTileSourceConfigurationWidget(QWidget):
-    currentChanged = pyqtSignal(QModelIndex, QModelIndex)
+    currentChanged = Signal(QModelIndex, QModelIndex)
 
     def __init__(self, composite, parent=None):
-        QWidget.__init__(self, parent, None)
+        QWidget.__init__(self, parent)
         self.__ui = Ui_CompositeTileSourceConfigurationWidget()
-        self.__composite = CompositeTileSource(composite)
+        self.__composite = composite
         self.__ui.setupUi(self)
         self.init()
 

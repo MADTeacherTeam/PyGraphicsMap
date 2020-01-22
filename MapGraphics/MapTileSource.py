@@ -1,5 +1,5 @@
-from PyQt5 import QtCore
-from PyQt5.QtGui import QImage
+from PySide2 import QtCore
+from PySide2.QtGui import QImage
 from enum import Enum
 
 MAPGRAPHICS_CACHE_FOLDER_NAME = ".MapGraphicsCache"
@@ -9,9 +9,9 @@ MAX_DISK_CACHE_READ_ATTEMPTS = 100000
 
 class MapTileSource(QtCore.QObject):
     # SIGNALS
-    tileRetrieved = QtCore.pyqtSignal(int, int, int)
-    tileRequested = QtCore.pyqtSignal(int, int, int)
-    allTilesInvalidated = QtCore.pyqtSignal()
+    tileRetrieved = QtCore.Signal(int, int, int)
+    tileRequested = QtCore.Signal(int, int, int)
+    allTilesInvalidated = QtCore.Signal()
 
     class CacheMode(Enum):
         NoCaching = 1
@@ -43,26 +43,27 @@ class MapTileSource(QtCore.QObject):
             return
         fp = QtCore.QFile(self.__cacheExpirationsFile)
         if not fp.open(QtCore.QIODevice.Truncate | QtCore.QIODevice.WriteOnly):
-            QtCore.qWarning("Failed to open cache expiration file for writing:")
+            QtCore.qWarning(b"Failed to open cache expiration file for writing:")
             fp.errorString()
             return
         stream = QtCore.QDataStream(fp)
         stream << self.__cacheExpirations
-        QtCore.qDebug("Cache expirations saved to" + self.__cacheExpirationsFile)
+        QtCore.qDebug(b"Cache expirations saved to" + bytes(self.__cacheExpirationsFile))
 
     def requestTile(self, x, y, z):
         self.tileRequested.emit(x, y, z)
 
-    def _createCacheID(self, x, y, z):
+    @staticmethod
+    def _createCacheID(x, y, z):
         toRet = str(x) + ',' + str(y) + ',' + str(z)
-        QtCore.qDebug(toRet)
+        QtCore.qDebug(bytes(toRet))
         return toRet
 
     def getFinishedTile(self, x, y, z):
         cacheID = self._createCacheID(x, y, z)
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         if not (cacheID in self.__tempCache):
-            QtCore.qWarning("getFinishedTile() called, but the tile is not present")
+            QtCore.qWarning(b"getFinishedTile() called, but the tile is not present")
             return 0
         return self.__tempCache[cacheID]
 
@@ -76,7 +77,7 @@ class MapTileSource(QtCore.QObject):
             if not cached:
                 cached = self._fromDiskCache(cacheID)
             if cached:
-                self.__prepareRetrievedTile(x, y, z, cached);
+                self.__prepareRetrievedTile(x, y, z, cached)
                 return
         self._fetchTile(x, y, z)
 
@@ -106,18 +107,18 @@ class MapTileSource(QtCore.QObject):
         expireTime = self._getTileExpirationTime(cacheID)
         if QtCore.QDateTime.currentDateTimeUtc().secsTo(expireTime) <= 0:
             if not QtCore.QFile.remove(path):
-                QtCore.qWarning("Failed to remove old cache file" + path)
+                QtCore.qWarning(b"Failed to remove old cache file" + bytes(path))
             return 0
         if not fp.open(QtCore.QFile.ReadOnly):
-            QtCore.qWarning("Failed to open" + QtCore.QFileInfo(fp.fileName()).baseName() + "from cache")
+            QtCore.qWarning(b"Failed to open" + bytes(QtCore.QFileInfo(fp.fileName()).baseName()) + b"from cache")
             return 0
         counter = 0
         data = QtCore.QByteArray()
-        while (len(data) < fp.size()):
+        while len(data) < fp.size():
             data += fp.read(20480)
-            if (counter + 1 >= MAX_DISK_CACHE_READ_ATTEMPTS):
+            if counter + 1 >= MAX_DISK_CACHE_READ_ATTEMPTS:
                 counter += 1
-                QtCore.qWarning("Reading cache file" + fp.fileName() + "took too long. Aborting.")
+                QtCore.qWarning(b"Reading cache file" + bytes(fp.fileName()) + b"took too long. Aborting.")
                 return 0
             else:
                 counter += 1
@@ -135,14 +136,15 @@ class MapTileSource(QtCore.QObject):
         lock.unlock()
         self.tileRetrieved.emit(x, y, z)
 
-    def _fetchTile(self):
+    def _fetchTile(self, x, y, z):
         pass
 
-    def _cacheID2xyz(self, string, x, y, z):
+    @staticmethod
+    def _cacheID2xyz(string, x, y, z):
         # All var is list for link,x,y,z=x[0],y[0],z[0]
         list = string.split(',')
         if len(list) != 3:
-            QtCore.qWarning("Bad cacheID" + string + "cannot convert")
+            QtCore.qWarning(b"Bad cacheID" + bytes(string) + b"cannot convert")
             return False
         ok = True
         x[0] = abs(int(list[0]))
@@ -161,7 +163,7 @@ class MapTileSource(QtCore.QObject):
             expireTime = self.__cacheExpirations[cacheID]
         else:
             QtCore.qWarning(
-                "Tile" + cacheID + "has unknown expire time. Resetting to default of" + DEFAULT_CACHE_DAYS + "days.")
+                "Tile" + cacheID + "has unknown expire time. Resetting to default of" + DEFAULT_CACHE_DAYS ) # + "days."
             expireTime = QtCore.QDateTime.currentDateTimeUtc().addDays(DEFAULT_CACHE_DAYS)
             self.__cacheExpirations[cacheID] = expireTime
         return expireTime
@@ -199,12 +201,12 @@ class MapTileSource(QtCore.QObject):
         format = 0
         quality = 100
         if not toCache.save(filePath, format, quality):
-            QtCore.qWarning("Failed to put" + self.name() + str(x[0]) + str(y[0]) + str(z[0]) + "into disk cache")
+            QtCore.qWarning(b"Failed to put") #  + self.name() + str(x[0]) + str(y[0]) + str(z[0]) + "into disk cache"
 
     def name(self):
         pass
 
-    def _prepareNewlyReceivedTile(self, x, y, z, image, expireTime):
+    def _prepareNewlyReceivedTile(self, x, y, z, image, expireTime=QtCore.QDateTime()):
         cacheID = self._createCacheID(x, y, z)
         if self.cacheMode() == self.CacheMode.DiskAndMemCaching:
             self._toMemCache(cacheID, image, expireTime)
@@ -222,7 +224,7 @@ class MapTileSource(QtCore.QObject):
         if not fp.exists():
             return
         if not fp.open(QtCore.QIODevice.ReadOnly):
-            QtCore.qWarning("Failed to open cache expiration file for reading:" + fp.errorString())
+            QtCore.qWarning(b"Failed to open cache expiration file for reading:" + bytes(fp.errorString()))
             return
         stream = QtCore.QDataStream(fp)
         stream >> self.__cacheExpirations
@@ -233,7 +235,7 @@ class MapTileSource(QtCore.QObject):
         toRet = QtCore.QDir(pathString)
         if not toRet.exists():
             if not toRet.mkpath(toRet.absolutePath()):
-                QtCore.qWarning("Failed to create cache directory" + toRet.absolutePath())
+                QtCore.qWarning(b"Failed to create cache directory" + bytes(toRet.absolutePath()))
         return toRet
 
     def tileFileExtension(self):

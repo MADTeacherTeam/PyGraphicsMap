@@ -1,15 +1,15 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSignal, Qt
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+from PySide2.QtCore import Signal, Qt
 
 
 class PrivateQGraphicsView(QGraphicsView):
-    hadMouseDoubleClickEvent = pyqtSignal(QMouseEvent)
-    hadMouseMoveEvent = pyqtSignal(QMouseEvent)
-    hadMousePressEvent = pyqtSignal(QMouseEvent)
-    hadMouseReleaseEvent = pyqtSignal(QMouseEvent)
-    hadContextMenuEvent = pyqtSignal(QContextMenuEvent)
-    hadWheelEvent = pyqtSignal(QWheelEvent)
+    hadMouseDoubleClickEvent = Signal(QMouseEvent)
+    hadMouseMoveEvent = Signal(QMouseEvent)
+    hadMousePressEvent = Signal(QMouseEvent)
+    hadMouseReleaseEvent = Signal(QMouseEvent)
+    hadContextMenuEvent = Signal(QContextMenuEvent)
+    hadWheelEvent = Signal(QWheelEvent)
 
     # signals
     # void
@@ -24,48 +24,46 @@ class PrivateQGraphicsView(QGraphicsView):
     # hadContextMenuEvent(QContextMenuEvent *);
     # void hadWheelEvent(QWheelEvent *);
 
-    def __init__(self, parent=None):
-        super(PrivateQGraphicsView, self).__init__(parent)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-    def constr_2_arg(self, scene, parent=None):
-        super(PrivateQGraphicsView, self).__init__(scene, parent)
+    def __init__(self, parent=None, scene=None):
+        if scene is None:
+            super(PrivateQGraphicsView, self).__init__(parent)
+        else:
+            super(PrivateQGraphicsView, self).__init__(scene, parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def mouseDoubleClickEvent(self, event):
         event.setAccepted(False)
-        self.hadMouseDoubleClickEvent(event)
+        self.hadMouseDoubleClickEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.mouseDoubleClickEvent(self, event)
 
     def mouseMoveEvent(self, event):
         event.setAccepted(False)
-        self.hadMouseMoveEvent(event)
+        self.hadMouseMoveEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.mouseMoveEvent(self, event)
 
     def mousePressEvent(self, event):
         event.setAccepted(False)
-        self.hadMousePressEvent(event)
+        self.hadMousePressEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.mousePressEvent(self, event)
 
     def mouseReleaseEvent(self, event):
         event.setAccepted(False)
-        self.hadMouseReleaseEvent(event)
+        self.hadMouseReleaseEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.mouseReleaseEvent(self, event)
 
     def contextMenuEvent(self, event):
         event.setAccepted(False)
-        self.hadContextMenuEvent(event)
+        self.hadContextMenuEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.contextMenuEvent(self, event)
 
     def wheelEvent(self, event):
         event.setAccepted(False)
-        self.hadWheelEvent(event)
+        self.hadWheelEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.wheelEvent(self, event)

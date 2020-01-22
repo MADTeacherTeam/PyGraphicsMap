@@ -1,7 +1,6 @@
-from PyQt5.QtCore import QTimer, qDebug, QCoreApplication, QPoint, QPointF, qWarning, pyqtSignal, QThread
-from PyQt5.QtWidgets import QWidget, QGraphicsView, QVBoxLayout
-from PyQt5.Qt import QEventLoop
-from PyQt5.QtGui import QCursor, QPolygonF
+from PySide2.QtCore import QTimer, qDebug, QCoreApplication, QPoint, QPointF, qWarning, Signal, QThread, QEventLoop
+from PySide2.QtWidgets import QWidget, QGraphicsView, QVBoxLayout
+from PySide2.QtGui import QCursor, QPolygonF
 from .guts.MapTileGraphicsObject import MapTileGraphicsObject
 from .guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
 from .guts.PrivateQGraphicsScene import PrivateQGraphicsScene
@@ -13,7 +12,7 @@ from math import sqrt
 
 class MapGraphicsView(QWidget):
     __metaclass__ = PrivateQGraphicsInfoSource
-    zoomLevelChanged = pyqtSignal(int)
+    zoomLevelChanged = Signal(int)
 
     class DragMode(Enum):
         NoDrag = 0
@@ -28,17 +27,18 @@ class MapGraphicsView(QWidget):
         QWidget.__init__(self, parent)
         self.__tileSource = None
         self.__dragMode = None
+        self.__tileObjects = set()
         self.setScene(scene)
         self.__zoomLevel = 2
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
         renderTimer = QTimer(self)
         renderTimer.timeout.connect(self.renderTiles)
         renderTimer.start(200)
-        self.__tileObjects = set()
+
         # self.
 
     def __del__(self):
-        qDebug("Destructing MapGraphicsView")
+        qDebug(b"Destructing MapGraphicsView")
         for tileObject in self.__tileObjects:
             if self.__childScene:
                 self.__childScene.removeItem(tileObject)
@@ -73,7 +73,7 @@ class MapGraphicsView(QWidget):
 
     def mapToScene(self, viewPos):
         if not self.__tileSource:
-            qWarning("No tile source --- Transformation cannot work")
+            qWarning(b"No tile source --- Transformation cannot work")
             return QPointF(0, 0)
         qgsScenePos = self.__childView.mapToScene(viewPos)
         zoom = self.zoomLevel()
@@ -100,8 +100,8 @@ class MapGraphicsView(QWidget):
     def setScene(self, scene):
         childScene = PrivateQGraphicsScene(scene, self, self)
         self.zoomLevelChanged.connect(childScene.handleZoomLevelChanged)
-        childView = PrivateQGraphicsView(childScene)
-        childView.constr_2_arg(childScene, self)
+        childView = PrivateQGraphicsView(self, childScene)
+        # childView.constr_2_arg(childScene, self)
         childView.hadMouseDoubleClickEvent.connect(self.handleChildMouseDoubleClick)
         childView.hadMouseMoveEvent.connect(self.handleChildMouseMove)
         childView.hadMousePressEvent.connect(self.handleChildMousePress)
@@ -205,10 +205,10 @@ class MapGraphicsView(QWidget):
 
     def renderTiles(self):
         if not self.__scene:
-            qDebug("No MapGraphicsScene to render")
+            qDebug(b"No MapGraphicsScene to render")
             return
         if not self.__tileSource:
-            qDebug("No MapTileSource to render")
+            qDebug(b"No MapTileSource to render")
             return
         self.doTileLayout()
 

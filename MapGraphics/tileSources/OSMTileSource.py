@@ -1,9 +1,10 @@
 from ..MapTileSource import MapTileSource
 from enum import Enum
-from PyQt5.QtCore import qDebug, QPointF, QUrl, QObject, qWarning, QDateTime, QRegExp
-from PyQt5.QtGui import QImage
-from PyQt5.QtNetwork import QNetworkRequest, QNetworkReply
+from PySide2.QtCore import qDebug, QPointF, QUrl, QObject, qWarning, QDateTime, QRegExp, Slot
+from PySide2.QtGui import QImage
+from PySide2.QtNetwork import QNetworkRequest, QNetworkReply
 import math
+from MapGraphics.guts.MapGraphicsNetwork import MapGraphicsNetwork
 
 PI = 3.14159265358979323846
 deg2rad = PI / 180.0
@@ -23,7 +24,7 @@ class OSMTileSource(MapTileSource):
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
     def __del__(self):
-        qDebug("Destructing OSMTileSource")
+        qDebug(b"Destructing OSMTileSource")
 
     def name(self):
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
@@ -65,6 +66,7 @@ class OSMTileSource(MapTileSource):
 
     def fetchTile(self, x, y, z):
         network = MapGraphicsNetwork.getInstance()
+        host = ""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
             host = "http://b.tile.openstreetmap.org"
             url = "/%1/%2/%3.png"
@@ -81,30 +83,30 @@ class OSMTileSource(MapTileSource):
         reply.finished.connect(self.handleNetworkRequestFinished)
 
     def handleNetworkRequestFinished(self):
-        sender = QObject.sender()
-        reply = QNetworkReply(sender)
-        if reply == 0:
-            qWarning("QNetworkReply cast failure")
+        sender = self.sender()
+        reply = sender
+        if not isinstance(reply, QNetworkReply):
+            qWarning(b"QNetworkReply cast failure")
             return
         reply.deleteLater()
-        if not reply in self.__pendingReplies:
-            qWarning("Unknown QNetworkReply")
+        if reply not in self.__pendingReplies:
+            qWarning(b"Unknown QNetworkReply")
             return
         cacheID = self.__pendingReplies[reply]
         self.__pendingRequests.remove(cacheID)
         if reply.error() != QNetworkReply.NoError:
-            qDebug("Network Error:" + reply.errorString())
+            qDebug(b"Network Error:" + reply.errorString())
             return
         x = [1]
         y = [1]
         z = [1]
         if not MapTileSource._cacheID2xyz(cacheID, x, y, z):
-            qWarning("Failed to convert cacheID" + cacheID + "back to xyz")
+            qWarning(b"Failed to convert cacheID" + cacheID + b"back to xyz")
             return
         bytes = reply.readAll()
         image = QImage()
         if not image.loadFromData(bytes):
-            qWarning("Failed to make QImage from network bytes")
+            qWarning(b"Failed to make QImage from network bytes")
             return
         expireTime = QDateTime
         if reply.hasRawHeader("Cache-Control"):
@@ -112,6 +114,7 @@ class OSMTileSource(MapTileSource):
             maxAgeFinder = QRegExp("max-age=(\\d+)")
             if maxAgeFinder.indexIn(cacheControl) != -1:
                 ok = False
+                # TODO toULongLong
                 delta = maxAgeFinder.cap(1).toULongLong(ok)
                 if ok:
                     QDateTime.currentDateTimeUtc().addSecs(delta)

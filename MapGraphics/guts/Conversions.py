@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 import math
 
 pi = 3.141592653589793238462643383
@@ -36,7 +36,7 @@ class Conversions:
 
     @staticmethod
     def xyz2lla(v):
-        return Conversions.xyz2lla_3(v.x(), v.y().v.z())
+        return Conversions.xyz2lla_3(v.x(), v.y(), v.z())
 
     @staticmethod
     def xyz2lla_3(x, y, z):
@@ -47,7 +47,7 @@ class Conversions:
         toRet.setAltitude(0.0)
 
         if x == 0.0 and y == 0.0 and z == 0.0:
-            QtCore.qWarning("Error: XYZ at center of the earth")
+            QtCore.qWarning(b"Error: XYZ at center of the earth")
             return toRet
 
         if x == 0.0 and y == 0.0:
@@ -131,7 +131,7 @@ class Conversions:
 
         invR = R.inverted()
         if invR.isIdentity():
-            QtCore.qWarning("Failed to invert rotation matrix --- did you enter a bad lat,lon,or alt?")
+            QtCore.qWarning(b"Failed to invert rotation matrix --- did you enter a bad lat,lon,or alt?")
             return enu
 
         x = invR.m11() * enu.x() + invR.m12() * enu.y() + invR.m13() * enu.z()
@@ -142,7 +142,7 @@ class Conversions:
 
         refxyz = Conversions.lla2xyz_3(reflat, reflon, refalt)
 
-        return (diffxyz + refxyz)
+        return diffxyz + refxyz
 
     @staticmethod
     def enu2xyz_2(enu, refLLA):
@@ -242,32 +242,32 @@ class Conversions:
         elif axis == 3:
             toRet.setMatrix(cang, sang, 0.0, -1 * sang, cang, 0.0, 0.0, 0.0, 1.0)
         else:
-            QtCore.qWarning("Wrong axis")
+            QtCore.qWarning(b"Wrong axis")
 
         return toRet
 
     @staticmethod
     def test():
         from MapGraphics.Position import Position
-        byu1 = Position.constr_two_arg(QtCore.QPointF(-111.649253, 40.249707), 1423)
+        byu1 = Position(QtCore.QPointF(-111.649253, 40.249707), 1423)
         del Position
         xyz = Conversions.lla2xyz(byu1)
         byu2 = Conversions.xyz2lla(xyz)
 
         if QtCore.qAbs(byu2.longitude() - byu1.longitude()) > 0.001 or QtCore.qAbs(
                 byu2.latitude() - byu1.latitude()) > 0.001 or QtCore.qAbs(byu2.altitude() - byu1.altitude()) > 1.0:
-            QtCore.qDebug("Failed LLA -> XYZ -> LLA")
+            QtCore.qDebug(b"Failed LLA -> XYZ -> LLA")
         else:
-            QtCore.qDebug("Passed LLA -> XYZ -> LLA")
+            QtCore.qDebug(b"Passed LLA -> XYZ -> LLA")
 
         enu1 = QtGui.QVector3D(5, 5, 0)
         byu3 = Conversions.enu2lla_2(enu1, byu1)
         enu3 = Conversions.lla2enu_2(byu3, byu1)
 
         if (enu3 - enu1).length() > 0.3:
-            QtCore.qDebug("Failed LLA -> ENU -> LLA -> ENU")
+            QtCore.qDebug(b"Failed LLA -> ENU -> LLA -> ENU")
         else:
-            QtCore.qDebug("Passed LLA -> ENU -> LLA -> ENU")
+            QtCore.qDebug(b"Passed LLA -> ENU -> LLA -> ENU")
 
-        QtCore.qDebug(str(Conversions.degreesLatPerMeter(15.0)))
-        QtCore.qDebug(str(Conversions.degreesLonPerMeter(15.0)))
+        QtCore.qDebug(bytes(str(Conversions.degreesLatPerMeter(15.0))))
+        QtCore.qDebug(bytes(str(Conversions.degreesLonPerMeter(15.0))))

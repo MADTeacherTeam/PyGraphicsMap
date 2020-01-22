@@ -1,6 +1,6 @@
 from ..MapTileSource import MapTileSource
-from PyQt5.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt, QObject, QThread, pyqtSignal
-from PyQt5.QtGui import QImage, QPainter, QTextOption
+from PySide2.QtCore import QMutex, qDebug, QMutexLocker, qWarning, QPointF, Qt, QObject, QThread, Signal, Slot
+from PySide2.QtGui import QImage, QPainter, QTextOption
 
 
 class CompositeTileSource(MapTileSource):
@@ -13,14 +13,14 @@ class CompositeTileSource(MapTileSource):
         self.__globalMutex = QMutex(QMutex.Recursive)
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
         # SIGNALS
-        self.sourcesChanged = pyqtSignal()
-        self.sourceAdded = pyqtSignal(int)
-        self.sourceRemoved = pyqtSignal(int)
-        self.sourcesReordered = pyqtSignal()
+        self.sourcesChanged = Signal()
+        self.sourceAdded = Signal(int)
+        self.sourceRemoved = Signal(int)
+        self.sourcesReordered = Signal()
 
     def __del__(self):
         self.__globalMutex.lock()
-        qDebug(self, "destructing")
+        qDebug(self + b"destructing")
         self.clearPendingTiles()
         tileSourceThreads = []
         for source in self.__childSources:
@@ -35,14 +35,14 @@ class CompositeTileSource(MapTileSource):
     def ll2qgs(self, ll, zoomLevel):
         lock = QMutexLocker(self.__globalMutex)
         if not self.__childSources:
-            qWarning("Composite tile source is empty --- results undefined")
+            qWarning(b"Composite tile source is empty --- results undefined")
             return QPointF(0, 0)
         return self.__childSources[0].ll2qgs(ll, zoomLevel)
 
     def qgs2ll(self, qgs, zoomLevel):
         lock = QMutexLocker(self.__globalMutex)
         if not self.__childSources:
-            qWarning("Composite tile source is empty --- results undefined")
+            qWarning(b"Composite tile source is empty --- results undefined")
             return QPointF(0, 0)
         return self.___childSources[0].qgs2ll(qgs, zoomLevel)
 
@@ -65,7 +65,7 @@ class CompositeTileSource(MapTileSource):
         highest = 0
         for source in self.__childSources:
             current = source.minZoomLevel(ll)
-            if (current > highest):
+            if current > highest:
                 highest = current
         return highest
 
@@ -74,7 +74,7 @@ class CompositeTileSource(MapTileSource):
         lowest = 50
         for source in self.__childSources:
             current = source.maxZoomLevel(ll)
-            if (current < lowest):
+            if current < lowest:
                 lowest = current
         return lowest
 
@@ -143,9 +143,6 @@ class CompositeTileSource(MapTileSource):
         self.sourcesChanged.emit()
         self.allTilesInvalidated.emit()
 
-    def clearPendingTiles(self):
-        pass
-
     def numSources(self):
         lock = QMutexLocker(self.__globalMutex)
         return len(self.__childSources)
@@ -213,11 +210,11 @@ class CompositeTileSource(MapTileSource):
 
     def handleTileRetrieved(self, x, y, z):
         lock = QMutexLocker(self.__globalMutex)
-        sender = QObject.sender()
+        sender = self.sender()
         # NEED chech
         tileSource = sender
-        if not tileSource:
-            qWarning(self, "failed MapTileSource cast")
+        if not isinstance(tileSource, MapTileSource):
+            qWarning(self + b"failed MapTileSource cast")
             return
         tileSourceIndex = -1
         for i in range(len(self.__childSources)):
@@ -234,7 +231,7 @@ class CompositeTileSource(MapTileSource):
             return
         tile = tileSource.getFinishedTile(x, y, z)
         if not tile:
-            qWarning(self + "received null tile" + x + y + z + "from", tileSource)
+            qWarning(self + "received null tile" + x + y + z + "from" + tileSource)
             return
         tiles = self.__pendingTiles[cacheID]
         if tileSourceIndex in tiles:
@@ -251,7 +248,7 @@ class CompositeTileSource(MapTileSource):
             opacity = self.__childOpacities[i]
             if self.numSources() == 1:
                 opacity = 1
-            if self.__childEnabledFlags[i] == False:
+            if not self.__childEnabledFlags[i]:
                 opacity = 0
 
             painter.setOpacity(opacity)
@@ -278,8 +275,8 @@ class CompositeTileSource(MapTileSource):
         sourceThread.finished.connect(sourceThread.deleteLater)
 
     def clearPendingTiles(self):
-        pendingTiles = self.__pendingTiles.values()
-        for i in range(0, pendingTiles):
-            tiles = pendingTiles[i]
-            tiles.clear()
+        # pendingTiles = self.__pendingTiles.values()
+        # for i in range(0, pendingTiles):
+        #     tiles = pendingTiles[i]
+        #     tiles.clear()
         self.__pendingTiles.clear()

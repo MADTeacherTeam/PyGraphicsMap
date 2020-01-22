@@ -1,6 +1,6 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSignal, qWarning, QRectF, QPointF
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+from PySide2.QtCore import Signal, qWarning, QRectF, QPointF
 
 from MapGraphics.MapGraphicsObject import MapGraphicsObject
 from MapGraphics.guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
@@ -9,19 +9,19 @@ from MapGraphics.guts.Conversions import Conversions
 
 
 class PrivateQGraphicsObject(QGraphicsObject):
-    enabledChanged = pyqtSignal()
-    opacityChanged = pyqtSignal()
-    parentChanged = pyqtSignal()
-    posChanged = pyqtSignal()
-    rotationChanged = pyqtSignal()
-    visibleChanged = pyqtSignal()
-    zValueChanged = pyqtSignal()
-    selectedChanged = pyqtSignal()
-    toolTipChanged = pyqtSignal(str)
-    flagsChanged = pyqtSignal()
-    keyFocusRequested = pyqtSignal()
-    redrawRequested = pyqtSignal()
-    destroyed = pyqtSignal()
+    enabledChanged = Signal()
+    opacityChanged = Signal()
+    parentChanged = Signal()
+    posChanged = Signal()
+    rotationChanged = Signal()
+    visibleChanged = Signal()
+    zValueChanged = Signal()
+    selectedChanged = Signal()
+    toolTipChanged = Signal(str)
+    flagsChanged = Signal()
+    keyFocusRequested = Signal()
+    redrawRequested = Signal()
+    destroyed = Signal()
 
     def __init__(self, mgObj, infoSource, parent=None):
         QGraphicsObject.__init__(self, parent)
@@ -42,7 +42,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
     def boundingRect(self):
         toRet = QRectF(-1.0, -1.0, 2.0, 2.0)
         if self.__mgObj is None:
-            qWarning("Warning:" + "could not get bounding rect as MapGraphicsObject is null")
+            qWarning(b"Warning:" + b"could not get bounding rect as MapGraphicsObject is null")
             return toRet
 
         if self.__mgObj.sizeIsZoomInvariant():
@@ -51,8 +51,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         enuRect = QRectF(self.__mgObj.boundingRect())
 
         latLonCenter = QPointF(self.__mgObj.pos())
-        # TODO costr of class Posotion
-        latLonCenterPos = Position.constr_two_arg(latLonCenter, 0.0)
+        latLonCenterPos = Position(latLonCenter, 0.0)
         leftLatLon = QPointF(Conversions.enu2lla_4_LLA(enuRect.left(),
                                                        0.0,
                                                        0.0,
@@ -69,7 +68,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
         tileSource = self.__infoSource.tileSource()
         if tileSource is None:
-            qWarning(self + "can't do bounding box conversion, null tile source.")
+            qWarning(self + b"can't do bounding box conversion, null tile source.")
             return toRet
 
         zoomLevel = self.__infoSource.zoomLevel()
@@ -77,26 +76,26 @@ class PrivateQGraphicsObject(QGraphicsObject):
         bottomRight = QPointF(tileSource.ll2qgs(latLonRect.bottomRight(), zoomLevel))
 
         toRet = QRectF(topLeft, bottomRight)
-        toRet.moveCenter(QPointF(0.0))
+        toRet.moveCenter(QPointF(0, 0))
         return toRet
 
     def contains(self, point):
         if self.__mgObj is None:
             return False
 
-        scenePoint = QPointF(self.mapToItem(point))
+        scenePoint = QPointF(self.mapToScene(point))
 
         tileSource = self.__infoSource.tileSource()
         if tileSource is None:
-            qWarning("can't do bounding box conversion, null tile source.")
+            qWarning(b"can't do bounding box conversion, null tile source.")
             return False
         geoPoint = QPointF(tileSource.qgs2ll(scenePoint, self.__infoSource.zoomLevel()))
 
         return self.__mgObj.contains(geoPoint)
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         if self.__mgObj is None:
-            qWarning("could not paint as our MapGraphicsObject is null")
+            qWarning(b"could not paint as our MapGraphicsObject is null")
             return
 
         painter.save()
@@ -418,7 +417,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         if self.__unconvertedSceneMouseCoordinates.get(event):
             qgsScenePos = self.__unconvertedSceneMouseCoordinates.get(event)
         else:
-            qWarning("didn't have original scene mouse coordiantes stored for un-conversion")
+            qWarning(b"didn't have original scene mouse coordiantes stored for un-conversion")
             tileSource = self.__infoSource.tileSource()
             qgsScenePos = tileSource.ll2qgs(event.scenePos(), self.__infoSource.zoomLevel())
 

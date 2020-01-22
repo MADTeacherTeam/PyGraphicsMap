@@ -1,14 +1,14 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSignal, qWarning
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+from PySide2.QtCore import Signal, qWarning
 from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
 from MapGraphics.MapGraphicsObject import MapGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
-    selectionChanged = pyqtSignal()
-    objectAdded = pyqtSignal(MapGraphicsObject)
-    objectRemoved = pyqtSignal(MapGraphicsObject)
+    selectionChanged = Signal()
+    objectAdded = Signal(MapGraphicsObject)
+    objectRemoved = Signal(MapGraphicsObject)
 
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
@@ -32,13 +32,13 @@ class PrivateQGraphicsScene(QGraphicsScene):
 
     def handleMGObjectRemoved(self, removed):
         if not self.__mgToqg.get(removed):
-            qWarning("There is no QGraphicsObject in the scene for")
+            qWarning(b"There is no QGraphicsObject in the scene for")
             return
 
         qgObj = QGraphicsObject(self.__mgToqg.pop(removed))
 
         # if not self.items().__contains__(qgObj):
-        #     qWarning("does not contain PrivateQGraphicsObject")
+        #     qWarning(b"does not contain PrivateQGraphicsObject")
         #     return
         # qgObj.deleteLater()
         # self.removeItem(qgObj)
@@ -68,7 +68,7 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.__mgScene = mgScene
 
         if self.__mgScene is None:
-            qWarning("got a null MapGraphicsScene")
+            qWarning(b"got a null MapGraphicsScene")
             return
 
         self.objectAdded.connect(self.handleMGObjectAdded)
