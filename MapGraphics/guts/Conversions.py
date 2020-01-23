@@ -47,7 +47,7 @@ class Conversions:
         toRet.setAltitude(0.0)
 
         if x == 0.0 and y == 0.0 and z == 0.0:
-            QtCore.qWarning(b"Error: XYZ at center of the earth")
+            print("Error: XYZ at center of the earth")
             return toRet
 
         if x == 0.0 and y == 0.0:
@@ -131,7 +131,7 @@ class Conversions:
 
         invR = R.inverted()
         if invR.isIdentity():
-            QtCore.qWarning(b"Failed to invert rotation matrix --- did you enter a bad lat,lon,or alt?")
+            print("Failed to invert rotation matrix --- did you enter a bad lat,lon,or alt?")
             return enu
 
         x = invR.m11() * enu.x() + invR.m12() * enu.y() + invR.m13() * enu.z()
@@ -242,7 +242,7 @@ class Conversions:
         elif axis == 3:
             toRet.setMatrix(cang, sang, 0.0, -1 * sang, cang, 0.0, 0.0, 0.0, 1.0)
         else:
-            QtCore.qWarning(b"Wrong axis")
+            print("Wrong axis")
 
         return toRet
 
@@ -256,18 +256,18 @@ class Conversions:
 
         if QtCore.qAbs(byu2.longitude() - byu1.longitude()) > 0.001 or QtCore.qAbs(
                 byu2.latitude() - byu1.latitude()) > 0.001 or QtCore.qAbs(byu2.altitude() - byu1.altitude()) > 1.0:
-            QtCore.qDebug(b"Failed LLA -> XYZ -> LLA")
+            print("Failed LLA -> XYZ -> LLA")
         else:
-            QtCore.qDebug(b"Passed LLA -> XYZ -> LLA")
+            print("Passed LLA -> XYZ -> LLA")
 
         enu1 = QtGui.QVector3D(5, 5, 0)
         byu3 = Conversions.enu2lla_2(enu1, byu1)
         enu3 = Conversions.lla2enu_2(byu3, byu1)
 
         if (enu3 - enu1).length() > 0.3:
-            QtCore.qDebug(b"Failed LLA -> ENU -> LLA -> ENU")
+            print("Failed LLA -> ENU -> LLA -> ENU")
         else:
-            QtCore.qDebug(b"Passed LLA -> ENU -> LLA -> ENU")
+            print("Passed LLA -> ENU -> LLA -> ENU")
 
-        QtCore.qDebug(bytes(str(Conversions.degreesLatPerMeter(15.0))))
-        QtCore.qDebug(bytes(str(Conversions.degreesLonPerMeter(15.0))))
+        print(str(Conversions.degreesLatPerMeter(15.0)))
+        print(str(Conversions.degreesLonPerMeter(15.0)))

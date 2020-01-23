@@ -22,7 +22,7 @@ class PolygonObject(MapGraphicsObject):
         self.polygonChanged = Signal(QtGui.QPolygonF)
 
     def __del__(self):
-        QtCore.qDebug(self + "destroying")
+        print(self + "destroying")
         for each in self.__editCircles:
             self.destroyEditCircle(each)
         self.__editCircles.clear()
@@ -187,11 +187,11 @@ class PolygonObject(MapGraphicsObject):
     def __handleEditCircleDestroyed(self):
         sender = self.sender()
         if sender == 0:
-            QtCore.qWarning(b"Can't process desyroyed edit circle. Sender is null")
+            print("Can't process desyroyed edit circle. Sender is null")
             return
         circle = sender
         if circle not in self.__editCircles:
-            QtCore.qWarning(b"Can't process destroyed edit circle. Not contained in edit circle list")
+            print("Can't process destroyed edit circle. Not contained in edit circle list")
             return
         index = self.__editCircles.index(circle)
         self.__geoPoly.remove(index)

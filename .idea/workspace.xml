@@ -2,12 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="25f0c6ef-98fc-4b5c-865d-3aa2438f8fb0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/MainApp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainApp/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/MapGraphicsView.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/MapGraphicsView.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/PolygonObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/PolygonObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/Position.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/Position.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MapGraphics/guts/Conversions.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/Conversions.py" afterDir="false" />
-=======
->>>>>>> 3c57f0de04ca2481fac4d1d74f8f00a146bf5a23
+      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/MapGraphicsNetwork.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/MapGraphicsNetwork.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/MapTileGraphicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/MapTileGraphicsObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsScene.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsScene.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/CompositeTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/CompositeTileSource.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/GridTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/GridTileSource.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,94 +47,63 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main (1)">
-    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="GraphicsMapTransport" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MainApp" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MainApp/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
-      <module name="GraphicsMapTransport" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\ger-d\GraphicsMapTransport\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
-      <module name="GraphicsMapTransport" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MainApp" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MainApp/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.main (1)" />
-    </list>
-    <recent_temporary>
+  <component name="RunDashboard">
+    <option name="ruleStates">
       <list>
-        <item itemvalue="Python.main (1)" />
-      </list>
-    </recent_temporary>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
       </list>
     </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
+      <module name="GraphicsMapTransport" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MainApp" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MainApp/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
+      <module name="GraphicsMapTransport" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MainApp" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MainApp/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -138,6 +118,9 @@
       <workItem from="1576932713973" duration="4392000" />
       <workItem from="1577274315327" duration="11995000" />
       <workItem from="1577408184910" duration="2463000" />
+      <workItem from="1579768268486" duration="25000" />
+      <workItem from="1579768308015" duration="4775000" />
+      <workItem from="1579775269509" duration="12852000" />
     </task>
     <servers />
   </component>
@@ -166,5 +149,41 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="52" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1577534949636" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MapGraphics/PolygonObject.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MapGraphics/PolygonObject.py</url>
+          <line>158</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MapGraphics/PolygonObject.py</url>
+          <line>187</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MapGraphics/tileSources/CompositeTileSource.py</url>
+          <line>212</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/GraphicsMapTransport$test.coverage" NAME="test Coverage Results" MODIFIED="1579771154655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GraphicsMapTransport$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1579771856136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MainApp" />
+    <SUITE FILE_PATH="coverage/GraphicsMapTransport$main.coverage" NAME="main Coverage Results" MODIFIED="1579788326394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MainApp" />
   </component>
 </project>

@@ -10,8 +10,8 @@ from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 
 
 class MyWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(MyWindow, self).__init__()
+    def __init__(self, parent=None):
+        super(MyWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         scene = MapGraphicsScene(self)
@@ -28,8 +28,9 @@ class MyWindow(QtWidgets.QMainWindow):
         view.centerOn2(-111.658752, 40.255456)
 
 
-app = QtWidgets.QApplication([])
-application = MyWindow()
-application.show()
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    application = MyWindow()
+    application.show()
 
-sys.exit(app.exec_())
+    sys.exit(app.exec_())

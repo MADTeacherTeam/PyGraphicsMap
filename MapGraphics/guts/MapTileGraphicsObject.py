@@ -12,7 +12,7 @@ class MapTileGraphicsObject(QGraphicsObject):
     def __init__(self, tileSize=256):
         QGraphicsObject.__init__(self)
         self.__tileSize = None
-        self.__tile = QPixmap(0)
+        self.__tile = None
         self.__tileX = 0
         self.__tileY = 0
         self.__tileZoom = 0
@@ -84,8 +84,10 @@ class MapTileGraphicsObject(QGraphicsObject):
         if not self.__tileSource is None:
             pass
 
-        self.tileRetrieved.disconnect(self.handleTileRetrieved)
-        self.tileRetrieved.disconnect(self.handleTileInvalidation)
+        # self.tileRetrieved.disconnect(self.handleTileRetrieved)
+        # self.tileRetrieved.disconnect(self.handleTileInvalidation)
+
+
         # QObject::disconnect(_tileSource.data(),
         #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #                     this,
@@ -124,7 +126,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         image = QImage(self.__tileSource.getFinishedTile(x, y, z))
 
         if image == 0:
-            qWarning(b"Failed to get tile " + x + y + z + b" from MapTileSource")
+            print("Failed to get tile " + x + y + z + " from MapTileSource")
             return
 
         tile = QPixmap()
@@ -133,7 +135,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         image = 0
 
         if self.__tile != 0:
-            qWarning(b"Tile should be null, but isn't")
+            print("Tile should be null, but isn't")
             self.__tile = 0
 
         self.__tile = tile

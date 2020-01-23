@@ -24,7 +24,7 @@ class OSMTileSource(MapTileSource):
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
     def __del__(self):
-        qDebug(b"Destructing OSMTileSource")
+        print("Destructing OSMTileSource")
 
     def name(self):
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
@@ -49,10 +49,12 @@ class OSMTileSource(MapTileSource):
     def tilesOnZoomLevel(self, zoomLevel):
         return pow(4, zoomLevel)
 
-    def minZoomLevel(self, ll):
+    def minZoomLevel(self, ll=QPointF()):
+        print(0)
         return 0
 
-    def maxZoomLevel(self, ll):
+    def maxZoomLevel(self, ll=QPointF()):
+        print(18)
         return 18
 
     def tileSize(self):
@@ -65,6 +67,7 @@ class OSMTileSource(MapTileSource):
             return "jpg"
 
     def fetchTile(self, x, y, z):
+        # TODO network
         network = MapGraphicsNetwork.getInstance()
         host = ""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
@@ -86,27 +89,27 @@ class OSMTileSource(MapTileSource):
         sender = self.sender()
         reply = sender
         if not isinstance(reply, QNetworkReply):
-            qWarning(b"QNetworkReply cast failure")
+            print("QNetworkReply cast failure")
             return
         reply.deleteLater()
         if reply not in self.__pendingReplies:
-            qWarning(b"Unknown QNetworkReply")
+            print("Unknown QNetworkReply")
             return
         cacheID = self.__pendingReplies[reply]
         self.__pendingRequests.remove(cacheID)
         if reply.error() != QNetworkReply.NoError:
-            qDebug(b"Network Error:" + reply.errorString())
+            print("Network Error:" + reply.errorString())
             return
         x = [1]
         y = [1]
         z = [1]
         if not MapTileSource._cacheID2xyz(cacheID, x, y, z):
-            qWarning(b"Failed to convert cacheID" + cacheID + b"back to xyz")
+            print("Failed to convert cacheID" + cacheID + "back to xyz")
             return
         bytes = reply.readAll()
         image = QImage()
         if not image.loadFromData(bytes):
-            qWarning(b"Failed to make QImage from network bytes")
+            print("Failed to make QImage from network bytes")
             return
         expireTime = QDateTime
         if reply.hasRawHeader("Cache-Control"):

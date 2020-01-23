@@ -14,7 +14,7 @@ class MapGraphicsNetwork:
         __mutex = QtCore.QMutex()
         lock = QtCore.QMutexLocker(__mutex)
         current = QtCore.QThread.currentThread()
-        if current in __instances:
+        if current not in __instances:
             __instances[current] = MapGraphicsNetwork()
         return __instances.get(current)
 
@@ -22,8 +22,8 @@ class MapGraphicsNetwork:
         self.__manager = 0
 
     def get(self, request):
-        request.setRawHeader("User-Agent", self.__userAgent)
-        toRet = QtNetwork.QNetworkReply(self.__manager.get(request))
+        request.setRawHeader(QtCore.QByteArray(b"User-Agent"), QtCore.QByteArray(self.__userAgent))
+        toRet = self.__manager.get(request)
         return toRet
 
     def setUserAgent(self, agent):

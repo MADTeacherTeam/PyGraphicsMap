@@ -24,7 +24,7 @@ class Position():
             else:
                 self.constr_three_arg(args[0], args[1])
         else:
-            QtCore.qWarning(b'Wrong len in init of Position class')
+            print('Wrong len in init of Position class')
 
     def constr_three_arg(self, longitude, latitude, altitude=0.0):
         self.__lonLat = QtCore.QPointF(longitude, latitude)

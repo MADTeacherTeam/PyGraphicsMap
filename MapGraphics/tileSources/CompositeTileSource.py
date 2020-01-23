@@ -20,7 +20,7 @@ class CompositeTileSource(MapTileSource):
 
     def __del__(self):
         self.__globalMutex.lock()
-        qDebug(self + b"destructing")
+        print(self + "destructing")
         self.clearPendingTiles()
         tileSourceThreads = []
         for source in self.__childSources:
@@ -35,14 +35,14 @@ class CompositeTileSource(MapTileSource):
     def ll2qgs(self, ll, zoomLevel):
         lock = QMutexLocker(self.__globalMutex)
         if not self.__childSources:
-            qWarning(b"Composite tile source is empty --- results undefined")
+            print("Composite tile source is empty --- results undefined")
             return QPointF(0, 0)
         return self.__childSources[0].ll2qgs(ll, zoomLevel)
 
     def qgs2ll(self, qgs, zoomLevel):
         lock = QMutexLocker(self.__globalMutex)
         if not self.__childSources:
-            qWarning(b"Composite tile source is empty --- results undefined")
+            print("Composite tile source is empty --- results undefined")
             return QPointF(0, 0)
         return self.___childSources[0].qgs2ll(qgs, zoomLevel)
 
@@ -214,7 +214,7 @@ class CompositeTileSource(MapTileSource):
         # NEED chech
         tileSource = sender
         if not isinstance(tileSource, MapTileSource):
-            qWarning(self + b"failed MapTileSource cast")
+            print(self + "failed MapTileSource cast")
             return
         tileSourceIndex = -1
         for i in range(len(self.__childSources)):
@@ -223,15 +223,15 @@ class CompositeTileSource(MapTileSource):
             tileSourceIndex = i
             break
         if tileSourceIndex == -1:
-            qWarning(self + "received tile from unknown source...")
+            print(self + "received tile from unknown source...")
             return
         cacheID = MapTileSource._createCacheID(x, y, z)
         if not cacheID in self.__pendingTiles:
-            qWarning(self + "received unknown tile" + x + y + z + "from" + tileSource)
+            print(self + "received unknown tile" + x + y + z + "from" + tileSource)
             return
         tile = tileSource.getFinishedTile(x, y, z)
         if not tile:
-            qWarning(self + "received null tile" + x + y + z + "from" + tileSource)
+            print(self + "received null tile" + x + y + z + "from" + tileSource)
             return
         tiles = self.__pendingTiles[cacheID]
         if tileSourceIndex in tiles:

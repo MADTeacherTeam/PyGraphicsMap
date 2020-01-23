@@ -32,13 +32,13 @@ class PrivateQGraphicsScene(QGraphicsScene):
 
     def handleMGObjectRemoved(self, removed):
         if not self.__mgToqg.get(removed):
-            qWarning(b"There is no QGraphicsObject in the scene for")
+            print("There is no QGraphicsObject in the scene for")
             return
 
         qgObj = QGraphicsObject(self.__mgToqg.pop(removed))
 
         # if not self.items().__contains__(qgObj):
-        #     qWarning(b"does not contain PrivateQGraphicsObject")
+        #     print("does not contain PrivateQGraphicsObject")
         #     return
         # qgObj.deleteLater()
         # self.removeItem(qgObj)
@@ -68,7 +68,7 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.__mgScene = mgScene
 
         if self.__mgScene is None:
-            qWarning(b"got a null MapGraphicsScene")
+            print("got a null MapGraphicsScene")
             return
 
         self.objectAdded.connect(self.handleMGObjectAdded)

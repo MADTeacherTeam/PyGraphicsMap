@@ -14,7 +14,7 @@ class GridTileSource(MapTileSource):
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
 
     def __del__(self):
-        qDebug(self + b"destructing")
+        print(self + "destructing")
 
     def ll2qgs(self, ll, zoomLevel):
         tilesOnOneEdge = pow(2, zoomLevel)

@@ -42,7 +42,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
     def boundingRect(self):
         toRet = QRectF(-1.0, -1.0, 2.0, 2.0)
         if self.__mgObj is None:
-            qWarning(b"Warning:" + b"could not get bounding rect as MapGraphicsObject is null")
+            print("Warning:" + "could not get bounding rect as MapGraphicsObject is null")
             return toRet
 
         if self.__mgObj.sizeIsZoomInvariant():
@@ -68,7 +68,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
         tileSource = self.__infoSource.tileSource()
         if tileSource is None:
-            qWarning(self + b"can't do bounding box conversion, null tile source.")
+            print(self + "can't do bounding box conversion, null tile source.")
             return toRet
 
         zoomLevel = self.__infoSource.zoomLevel()
@@ -87,7 +87,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
         tileSource = self.__infoSource.tileSource()
         if tileSource is None:
-            qWarning(b"can't do bounding box conversion, null tile source.")
+            print("can't do bounding box conversion, null tile source.")
             return False
         geoPoint = QPointF(tileSource.qgs2ll(scenePoint, self.__infoSource.zoomLevel()))
 
@@ -95,7 +95,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
     def paint(self, painter, option, widget=None):
         if self.__mgObj is None:
-            qWarning(b"could not paint as our MapGraphicsObject is null")
+            print("could not paint as our MapGraphicsObject is null")
             return
 
         painter.save()
@@ -417,7 +417,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         if self.__unconvertedSceneMouseCoordinates.get(event):
             qgsScenePos = self.__unconvertedSceneMouseCoordinates.get(event)
         else:
-            qWarning(b"didn't have original scene mouse coordiantes stored for un-conversion")
+            print("didn't have original scene mouse coordiantes stored for un-conversion")
             tileSource = self.__infoSource.tileSource()
             qgsScenePos = tileSource.ll2qgs(event.scenePos(), self.__infoSource.zoomLevel())
 
