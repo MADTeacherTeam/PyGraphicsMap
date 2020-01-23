@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="25f0c6ef-98fc-4b5c-865d-3aa2438f8fb0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainApp/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainApp/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/MapGraphicsView.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/MapGraphicsView.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/MapTileSource.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/PolygonObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/PolygonObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/Position.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/Position.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/Conversions.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/Conversions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/MapGraphicsNetwork.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/MapGraphicsNetwork.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/MapTileGraphicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/MapTileGraphicsObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsScene.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/guts/PrivateQGraphicsScene.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/CompositeTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/CompositeTileSource.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/GridTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/GridTileSource.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py" beforeDir="false" afterPath="$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +31,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="vcs.Subversion.Presentation" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -106,7 +92,7 @@
     </configuration>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\ger-d\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -120,7 +106,7 @@
       <workItem from="1577408184910" duration="2463000" />
       <workItem from="1579768268486" duration="25000" />
       <workItem from="1579768308015" duration="4775000" />
-      <workItem from="1579775269509" duration="12852000" />
+      <workItem from="1579775269509" duration="14901000" />
     </task>
     <servers />
   </component>
@@ -173,17 +159,12 @@
           <line>212</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/MapGraphics/tileSources/OSMTileSource.py</url>
-          <line>81</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/GraphicsMapTransport$test.coverage" NAME="test Coverage Results" MODIFIED="1579771154655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GraphicsMapTransport$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1579771856136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MainApp" />
-    <SUITE FILE_PATH="coverage/GraphicsMapTransport$main.coverage" NAME="main Coverage Results" MODIFIED="1579788326394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MainApp" />
+    <SUITE FILE_PATH="coverage/GraphicsMapTransport$main.coverage" NAME="main Coverage Results" MODIFIED="1579788630246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MainApp" />
   </component>
 </project>
