@@ -8,7 +8,6 @@ from MapGraphics.MapGraphicsScene import MapGraphicsScene
 from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 
-
 class MyWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
