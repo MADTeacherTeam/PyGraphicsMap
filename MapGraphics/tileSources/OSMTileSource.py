@@ -1,6 +1,6 @@
 from ..MapTileSource import MapTileSource
 from enum import Enum
-from PySide2.QtCore import qDebug, QPointF, QUrl, QObject, qWarning, QDateTime, QRegExp, Slot
+from PySide2.QtCore import qDebug, QPointF, QUrl, QObject, qWarning, QDateTime, QRegExp, Slot, QByteArray
 from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkRequest, QNetworkReply
 import math
@@ -21,6 +21,8 @@ class OSMTileSource(MapTileSource):
         self.__pendingRequests = set()
         self.__pendingReplies = {}
         self.__tileType = tileType
+        # test funct fetchTile
+        self.__instances = {}
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
     def __del__(self):
@@ -68,12 +70,12 @@ class OSMTileSource(MapTileSource):
 
     def fetchTile(self, x, y, z):
         # TODO network
-        network = MapGraphicsNetwork.getInstance()
+        network, self.__instances = MapGraphicsNetwork.getInstance(self.__instances)
         host = ""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
             host = "http://b.tile.openstreetmap.org"
             url = "/%1/%2/%3.png"
-        cacheID = self._createCacheID(x, y, z)
+        cacheID = self.createCacheID(x, y, z)
         if cacheID in self.__pendingRequests:
             return
         self.__pendingRequests.add(cacheID)
@@ -112,14 +114,15 @@ class OSMTileSource(MapTileSource):
             print("Failed to make QImage from network bytes")
             return
         expireTime = QDateTime
-        if reply.hasRawHeader("Cache-Control"):
-            cacheControl = reply.rawHeader("Cache-Control")
+        if reply.hasRawHeader(QByteArray(b"Cache-Control")):
+            cacheControl = reply.rawHeader(QByteArray(b"Cache-Control"))
             maxAgeFinder = QRegExp("max-age=(\\d+)")
-            if maxAgeFinder.indexIn(cacheControl) != -1:
+            if maxAgeFinder.indexIn(str(cacheControl)) != -1:
                 ok = False
                 # TODO toULongLong
-                delta = maxAgeFinder.cap(1).toULongLong(ok)
-                if ok:
-                    QDateTime.currentDateTimeUtc().addSecs(delta)
+                if maxAgeFinder.cap(1).isdigit():
+                    delta = int(maxAgeFinder.cap(1))
+                    if isinstance(delta, int):
+                        QDateTime.currentDateTimeUtc().addSecs(delta)
 
-        self._prepareNewlyReceivedTile(x, y, z, image, expireTime)
+        self._prepareNewlyReceivedTile(x[0], y[0], z[0], image, expireTime)

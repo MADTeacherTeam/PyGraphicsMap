@@ -43,7 +43,7 @@ class MapTileGraphicsObject(QGraphicsObject):
                 string = " No tile source defined"
             else:
                 string = " Loading..."
-                painter.drawText(self.boundingRect(), string, QTextOption(Qt.AlignCenter))
+            painter.drawText(self.boundingRect(), string, QTextOption(Qt.AlignCenter))
 
     def tileSize(self):
         return self.__tileSize
@@ -68,7 +68,8 @@ class MapTileGraphicsObject(QGraphicsObject):
         if self.__tileSource is None:
             return
 
-        self.tileRetrieved.connect(self.handleTileRetrieved)
+        self.__tileSource.tileRetrieved.connect(self.handleTileRetrieved)
+        # self.tileRetrieved.connect(self.handleTileRetrieved)
         # connect(_tileSource.data(),
         #         SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #         this,
@@ -82,28 +83,26 @@ class MapTileGraphicsObject(QGraphicsObject):
 
     def setTileSource(self, nSource):
         if not self.__tileSource is None:
+            # self.tileRetrieved.disconnect(self.handleTileRetrieved)
+            # self.tileRetrieved.disconnect(self.handleTileInvalidation)
             pass
 
-        # self.tileRetrieved.disconnect(self.handleTileRetrieved)
-        # self.tileRetrieved.disconnect(self.handleTileInvalidation)
-
-
-        # QObject::disconnect(_tileSource.data(),
-        #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
-        #                     this,
-        #                     SLOT(handleTileRetrieved(quint32, quint32, quint8)))
-        # QObject::disconnect(_tileSource.data(),
-        #                     SIGNAL(allTilesInvalidated()),
-        #                     this,
-        #                     SLOT(handleTileInvalidation()))
+            # QObject::disconnect(_tileSource.data(),
+            #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
+            #                     this,
+            #                     SLOT(handleTileRetrieved(quint32, quint32, quint8)))
+            # QObject::disconnect(_tileSource.data(),
+            #                     SIGNAL(allTilesInvalidated()),
+            #                     this,
+            #                     SLOT(handleTileInvalidation()))
 
         oldSource = self.__tileSource
         self.__tileSource = nSource
 
         if not self.__tileSource is None:
-            pass
+            self.allTilesInvalidated.connect(self.handleTileInvalidation)
 
-        self.allTilesInvalidated.connect(self.handleTileInvalidation)
+
         # connect(_tileSource.data(),
         #         SIGNAL(allTilesInvalidated()),
         #         this,
@@ -123,7 +122,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         if self.__tileSource is None:
             return
 
-        image = QImage(self.__tileSource.getFinishedTile(x, y, z))
+        image = self.__tileSource.getFinishedTile(x, y, z)
 
         if image == 0:
             print("Failed to get tile " + x + y + z + " from MapTileSource")
@@ -141,7 +140,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tile = tile
         self.update()
 
-        self.tileRetrieved.disconnect(self.handleTileRetrieved)
+        # self.tileRetrieved.disconnect(self.handleTileRetrieved)
         # QObject::disconnect(_tileSource.data(),
         #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
         #                     this,
@@ -150,4 +149,5 @@ class MapTileGraphicsObject(QGraphicsObject):
     def handleTileInvalidation(self):
         if self.__initialized:
             return
+        print('from Object ' + str(self.__tileX) + str(self.__tileY) + str(self.__tileZoom))
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)

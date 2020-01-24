@@ -9,14 +9,14 @@ DEFAULT_USER_AGENT = QtCore.QByteArray(b'MapGraphic')
 
 class MapGraphicsNetwork:
     @staticmethod
-    def getInstance():
-        __instances = {}
+    def getInstance(instances):
+        __instances = instances
         __mutex = QtCore.QMutex()
         lock = QtCore.QMutexLocker(__mutex)
         current = QtCore.QThread.currentThread()
         if current not in __instances:
             __instances[current] = MapGraphicsNetwork()
-        return __instances.get(current)
+        return __instances.get(current), __instances
 
     def __del__(self):
         self.__manager = 0

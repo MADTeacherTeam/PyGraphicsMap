@@ -21,7 +21,7 @@ class MyWindow(QtWidgets.QMainWindow):
         osmTiles = OSMTileSource(OSMTileSource.OSMTileType.OSMTiles)
         view.setTileSource(osmTiles)
 
-        self.ui.menuWindows.addAction(self.ui.dockWidget.toggleViewAction())
+        self.ui.menuWindow.addAction(self.ui.dockWidget.toggleViewAction())
         self.ui.dockWidget.toggleViewAction().setText("&Layers")
 
         view.setZoomLevel(4)

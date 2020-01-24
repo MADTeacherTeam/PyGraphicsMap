@@ -4,6 +4,11 @@ from PySide2.QtGui import QImage, QPainter, QTextOption
 
 
 class CompositeTileSource(MapTileSource):
+    sourcesChanged = Signal()
+    sourceAdded = Signal(int)
+    sourceRemoved = Signal(int)
+    sourcesReordered = Signal()
+
     def __init__(self):
         super().__init__()
         self.__childSources = []
@@ -13,10 +18,10 @@ class CompositeTileSource(MapTileSource):
         self.__globalMutex = QMutex(QMutex.Recursive)
         self.setCacheMode(MapTileSource.CacheMode.NoCaching)
         # SIGNALS
-        self.sourcesChanged = Signal()
-        self.sourceAdded = Signal(int)
-        self.sourceRemoved = Signal(int)
-        self.sourcesReordered = Signal()
+        # self.sourcesChanged = Signal()
+        # self.sourceAdded = Signal(int)
+        # self.sourceRemoved = Signal(int)
+        # self.sourcesReordered = Signal()
 
     def __del__(self):
         self.__globalMutex.lock()
@@ -60,7 +65,7 @@ class CompositeTileSource(MapTileSource):
         else:
             return self.__childSources[0].tileSize()
 
-    def minZoomLevel(self, ll):
+    def minZoomLevel(self, ll=QPointF()):
         lock = QMutexLocker(self.__globalMutex)
         highest = 0
         for source in self.__childSources:
@@ -69,7 +74,7 @@ class CompositeTileSource(MapTileSource):
                 highest = current
         return highest
 
-    def maxZoomLevel(self, ll):
+    def maxZoomLevel(self, ll=QPointF()):
         lock = QMutexLocker(self.__globalMutex)
         lowest = 50
         for source in self.__childSources:
@@ -198,7 +203,7 @@ class CompositeTileSource(MapTileSource):
             painter.end()
             self._prepareNewlyReceivedTile(x, y, z, toRet)
             return
-        cacheID = MapTileSource._createCacheID(x, y, z)
+        cacheID = MapTileSource.createCacheID(x, y, z)
         if cacheID in self.__pendingTiles:
             tiles = self.__pendingTiles[cacheID]
             tiles.clear()
@@ -225,7 +230,7 @@ class CompositeTileSource(MapTileSource):
         if tileSourceIndex == -1:
             print(self + "received tile from unknown source...")
             return
-        cacheID = MapTileSource._createCacheID(x, y, z)
+        cacheID = MapTileSource.createCacheID(x, y, z)
         if not cacheID in self.__pendingTiles:
             print(self + "received unknown tile" + x + y + z + "from" + tileSource)
             return

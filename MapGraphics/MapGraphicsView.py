@@ -269,6 +269,7 @@ class MapGraphicsView(QWidget):
                     tileObject.setPos(scenePos)
                 if not tileObject.isVisible():
                     tileObject.setVisible(True)
+                # print('from MapGraphicsView ' + str(x) + str(y) + str(self.zoomLevel()))
                 tileObject.setTile(x, y, self.zoomLevel())
         while freeTiles.qsize() > 2:
             tileObject = freeTiles.get()
