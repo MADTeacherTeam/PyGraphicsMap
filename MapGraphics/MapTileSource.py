@@ -49,20 +49,24 @@ class MapTileSource(QtCore.QObject):
             fp.errorString()
             return
         stream = QtCore.QDataStream(fp)
-        stream << self.__cacheExpirations
+        for row in self.__cacheExpirations:
+            stream << row
+        # stream << self.__cacheExpirations
         print("Cache expirations saved to" + self.__cacheExpirationsFile)
 
     def requestTile(self, x, y, z):
         self.tileRequested.emit(x, y, z)
 
     @staticmethod
-    def _createCacheID(x, y, z):
+    def createCacheID(x, y, z):
+        if not isinstance(x, int):
+            print('popal9 na kek')
         toRet = str(x) + ',' + str(y) + ',' + str(z)
         print(toRet)
         return toRet
 
     def getFinishedTile(self, x, y, z):
-        cacheID = self._createCacheID(x, y, z)
+        cacheID = self.createCacheID(x, y, z)
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         if not (cacheID in self.__tempCache):
             print("getFinishedTile() called, but the tile is not present")
@@ -74,7 +78,7 @@ class MapTileSource(QtCore.QObject):
 
     def startTileRequest(self, x, y, z):
         if self.cacheMode() == self.CacheMode.DiskAndMemCaching:
-            cacheID = self._createCacheID(x, y, z)
+            cacheID = self.createCacheID(x, y, z)
             cached = self._fromMemCache(cacheID)
             if not cached:
                 cached = self._fromDiskCache(cacheID)
@@ -90,6 +94,10 @@ class MapTileSource(QtCore.QObject):
         toRet = 0
         if cacheID in self.__memoryCache:
             expireTime = self._getTileExpirationTime(cacheID)
+            # TODO fix expireTime comming empty _fromMemCache
+            if not isinstance(expireTime, QtCore.QDateTime):
+                print('Wrong type in fromMemCache')
+                return
             if QtCore.QDateTime.currentDateTime().secsTo(expireTime) <= 0:
                 self.__memoryCache.pop(cacheID, None)
             else:
@@ -97,9 +105,9 @@ class MapTileSource(QtCore.QObject):
         return toRet
 
     def _fromDiskCache(self, cacheID):
-        x = [0]
-        y = [0]
-        z = [0]
+        x = [1]
+        y = [1]
+        z = [1]
         if not self._cacheID2xyz(cacheID, x, y, z):
             return 0
         path = self.__getDiskCacheFile(x[0], y[0], z[0])
@@ -107,6 +115,10 @@ class MapTileSource(QtCore.QObject):
         if not fp.exists():
             return 0
         expireTime = self._getTileExpirationTime(cacheID)
+        # TODO fix expireTime comming empty _fromDiskCache
+        if not isinstance(expireTime, QtCore.QDateTime):
+            print('Wrong type in fromDiskCache')
+            return
         if QtCore.QDateTime.currentDateTimeUtc().secsTo(expireTime) <= 0:
             if not QtCore.QFile.remove(path):
                 print("Failed to remove old cache file" + path)
@@ -134,7 +146,9 @@ class MapTileSource(QtCore.QObject):
         if image == 0:
             return
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
-        self.__tempCache[self._createCacheID(x, y, z)] = image
+        self.__tempCache[self.createCacheID(x, y, z)] = image
+        for row in self.__tempCache:
+            print(row)
         lock.unlock()
         self.tileRetrieved.emit(x, y, z)
 
@@ -162,7 +176,7 @@ class MapTileSource(QtCore.QObject):
         self.__loadCacheExpirationsFromDisk()
         expireTime = QtCore.QDateTime()
         if cacheID in self.__cacheExpirations:
-            expireTime = self.__cacheExpirations[cacheID]
+            expireTime = self.__cacheExpirations.get(cacheID)
         else:
             print(
                 "Tile " + str(cacheID) + " has unknown expire time. Resetting to default of " + str(DEFAULT_CACHE_DAYS)  + " days.")
@@ -172,7 +186,7 @@ class MapTileSource(QtCore.QObject):
 
     def _setTileExpirationTime(self, cacheID, expireTime):
         self.__loadCacheExpirationsFromDisk()
-        if expireTime.isNull():
+        if expireTime is None:
             expireTime = QtCore.QDateTime.currentDateTimeUtc().addDays(DEFAULT_CACHE_DAYS)
         self.__cacheExpirations[cacheID] = expireTime
 
@@ -190,9 +204,9 @@ class MapTileSource(QtCore.QObject):
         return toRet
 
     def _toDiskCache(self, cacheID, toCache, expireTime):
-        x = [0]
-        y = [0]
-        z = [0]
+        x = [1]
+        y = [1]
+        z = [1]
         if not self._cacheID2xyz(cacheID, x, y, z):
             return
         filePath = self.__getDiskCacheFile(x[0], y[0], z[0])
@@ -200,7 +214,7 @@ class MapTileSource(QtCore.QObject):
         if fp.exists():
             return
         self._setTileExpirationTime(cacheID, expireTime)
-        format = 0
+        format = None
         quality = 100
         if not toCache.save(filePath, format, quality):
             print("Failed to put") #  + self.name() + str(x[0]) + str(y[0]) + str(z[0]) + "into disk cache"
@@ -209,7 +223,7 @@ class MapTileSource(QtCore.QObject):
         pass
 
     def _prepareNewlyReceivedTile(self, x, y, z, image, expireTime=QtCore.QDateTime()):
-        cacheID = self._createCacheID(x, y, z)
+        cacheID = self.createCacheID(x, y, z)
         if self.cacheMode() == self.CacheMode.DiskAndMemCaching:
             self._toMemCache(cacheID, image, expireTime)
             self._toDiskCache(cacheID, image, expireTime)
@@ -229,7 +243,10 @@ class MapTileSource(QtCore.QObject):
             print("Failed to open cache expiration file for reading:" + fp.errorString())
             return
         stream = QtCore.QDataStream(fp)
-        stream >> self.__cacheExpirations
+        for row in self.__cacheExpirations:
+            stream >> row
+        # stream >> self.__cacheExpirations
+        print('kek')
 
     def __getDiskCacheDirectory(self, x, y, z):
         pathString = QtCore.QDir.homePath() + "/" + MAPGRAPHICS_CACHE_FOLDER_NAME + "/" + self.name() + "/" + str(
