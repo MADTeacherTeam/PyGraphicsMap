@@ -36,22 +36,24 @@ class MapTileLayerListModel(QAbstractListModel):
         return self.__composite.numSources()
 
     def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid():
-            return QVariant("Invalid index")
-        if index.row() >= self.rowCount():
-            return QVariant("Index out of bounds")
-        if self.__composite is None:
-            return QVariant("Null composite")
-
-        if role == Qt.DisplayRole:
-            i = index.row()
-            tileSource = self.__composite.getSource(i)
-            if tileSource is None:
-                return QVariant("Error: Null source")
-            else:
-                return tileSource.name()
-        else:
-            return QVariant()
+        # TODO QVariant comment for run
+        # if not index.isValid():
+        #     return "Invalid index"
+        # if index.row() >= self.rowCount():
+        #     return QVariant("Index out of bounds")
+        # if self.__composite is None:
+        #     return QVariant("Null composite")
+        #
+        # if role == Qt.DisplayRole:
+        #     i = index.row()
+        #     tileSource = self.__composite.getSource(i)
+        #     if tileSource is None:
+        #         return QVariant("Error: Null source")
+        #     else:
+        #         return tileSource.name()
+        # else:
+        #     return QVariant()
+        pass
 
     def flags(self, index):
         if not index.isValid():

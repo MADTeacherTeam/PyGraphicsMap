@@ -33,10 +33,10 @@ class GridTileSource(MapTileSource):
     def tilesOnZoomLevel(self, zoomLevel):
         return pow(4.0, zoomLevel)
 
-    def minZoomLevel(self, ll):
+    def minZoomLevel(self, ll=QPointF()):
         return 0
 
-    def maxZoomLevel(self, ll):
+    def maxZoomLevel(self, ll=QPointF()):
         return 50
 
     def name(self):

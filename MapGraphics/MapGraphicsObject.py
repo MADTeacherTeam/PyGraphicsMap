@@ -92,10 +92,14 @@ class MapGraphicsObject(QtCore.QObject):
             pass
 
     def setLongitude(self, nLongitude):
-        self.setPos(QtCore.QPointF(nLongitude, self.__pos.y()))
+        # TODO uncommet. commet for run
+        pass
+        # self.setPos(QtCore.QPointF(nLongitude, self.__pos.y()))
 
     def setLatitude(self, nLatitude):
-        self.setPos(QtCore.QPointF(self.__pos.x(), nLatitude))
+        # TODO uncommet. commet for run
+        pass
+        # self.setPos(QtCore.QPointF(self.__pos.x(), nLatitude))
 
     def setZValue(self, nZValue):
         self.__zValue = nZValue

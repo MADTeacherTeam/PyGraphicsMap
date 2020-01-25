@@ -70,4 +70,4 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.removeSourceButton.setText(_translate("CompositeTileSourceConfigurationWidget", "X"))
         self.moveDownButton.setText(_translate("CompositeTileSourceConfigurationWidget", "D"))
         self.moveUpButton.setText(_translate("CompositeTileSourceConfigurationWidget", "U"))
-import resources_rc
+# import resources_rc

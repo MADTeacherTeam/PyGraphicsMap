@@ -6,8 +6,6 @@ from MapGraphics.MapTileSource import MapTileSource
 
 class MapTileGraphicsObject(QGraphicsObject):
     tileRequested = Signal(int, int, int)
-    tileRetrieved = Signal(int, int, int)
-    allTilesInvalidated = Signal()
 
     def __init__(self, tileSize=256):
         QGraphicsObject.__init__(self)
@@ -100,13 +98,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tileSource = nSource
 
         if not self.__tileSource is None:
-            self.allTilesInvalidated.connect(self.handleTileInvalidation)
-
-
-        # connect(_tileSource.data(),
-        #         SIGNAL(allTilesInvalidated()),
-        #         this,
-        #         SLOT(handleTileInvalidation()))
+            self.__tileSource.allTilesInvalidated.connect(self.handleTileInvalidation)
 
         self.handleTileInvalidation()
 
@@ -128,7 +120,6 @@ class MapTileGraphicsObject(QGraphicsObject):
             print("Failed to get tile " + x + y + z + " from MapTileSource")
             return
 
-        tile = QPixmap()
         tile = QPixmap.fromImage(image)
 
         image = 0
@@ -149,5 +140,5 @@ class MapTileGraphicsObject(QGraphicsObject):
     def handleTileInvalidation(self):
         if self.__initialized:
             return
-        print('from Object ' + str(self.__tileX) + str(self.__tileY) + str(self.__tileZoom))
+        # print('from Object ' + str(self.__tileX) + str(self.__tileY) + str(self.__tileZoom))
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)
