@@ -7,6 +7,8 @@ from MapGraphics.CircleObject import CircleObject
 
 
 class PolygonObject(MapGraphicsObject):
+    polygonChanged = Signal(QtGui.QPolygonF)
+
     def __init__(self, geoPoly, fillColor, parent):
         MapGraphicsObject.__init__(self, parent)
         self.__geoPoly = None
@@ -19,7 +21,7 @@ class PolygonObject(MapGraphicsObject):
         self.__addVertexCircles = []
 
         # SIGNALS
-        self.polygonChanged = Signal(QtGui.QPolygonF)
+        # self.polygonChanged = Signal(QtGui.QPolygonF)
 
     def __del__(self):
         print(self + "destroying")
@@ -136,11 +138,7 @@ class PolygonObject(MapGraphicsObject):
             event.ignore()
 
     def handleEditCirclePosChanged(self):
-        # TODO all senders
         sender = self.sender()
-        print(' handleEditCirclePosChanged sender type')
-        type(sender)
-        # self.sender()
         if sender is None:
             return
         circle = CircleObject(sender)
@@ -190,7 +188,7 @@ class PolygonObject(MapGraphicsObject):
             print("Can't process desyroyed edit circle. Sender is null")
             return
         circle = sender
-        if circle not in self.__editCircles:
+        if not isinstance(circle, CircleObject):
             print("Can't process destroyed edit circle. Not contained in edit circle list")
             return
         index = self.__editCircles.index(circle)

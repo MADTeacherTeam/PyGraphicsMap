@@ -35,24 +35,22 @@ class MapGraphicsView(QWidget):
         renderTimer.timeout.connect(self.renderTiles)
         renderTimer.start(200)
 
-        # self.
-
     def __del__(self):
         print("Destructing MapGraphicsView")
-        for tileObject in self.__tileObjects:
-            if self.__childScene:
-                self.__childScene.removeItem(tileObject)
+        # for tileObject in self.__tileObjects:
+            # if self.__childScene:
+                # self.__childScene.removeItem(tileObject)
         self.__tileObjects.clear()
-        if self.__tileSource:
-            tileSourceThread = self.__tileSource.thread()
-            self.__tileSource = 0
-            count = 0
-            maxCount = 100
-            while tileSourceThread and not tileSourceThread.wait(100):
-                QCoreApplication.processEvents(QEventLoop.ExcludeSocketNotifiers | QEventLoop.ExcludeUserInputEvents)
-                count += 1
-                if count == maxCount:
-                    break
+        # if self.__tileSource:
+        #     tileSourceThread = self.__tileSource.thread()
+        #     self.__tileSource = 0
+        #     count = 0
+        #     maxCount = 100
+        #     while tileSourceThread and not tileSourceThread.wait(100):
+        #         QCoreApplication.processEvents(QEventLoop.ExcludeSocketNotifiers | QEventLoop.ExcludeUserInputEvents)
+        #         count += 1
+        #         if count == maxCount:
+        #             break
 
     def center(self):
         centerGeoPos = self.mapToScene(QPoint(int(self.width() / 2), int(self.height() / 2)))
@@ -128,7 +126,7 @@ class MapGraphicsView(QWidget):
     def setTileSource(self, tSource):
         self.__tileSource = tSource
         if self.__tileSource:
-            tileSourceThread = QThread()
+            tileSourceThread = QThread(self)
             tileSourceThread.start()
             self.__tileSource.moveToThread(tileSourceThread)
             self.__tileSource.destroyed.connect(tileSourceThread.quit)

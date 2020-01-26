@@ -96,7 +96,7 @@ class MapTileSource(QtCore.QObject):
             expireTime = self._getTileExpirationTime(cacheID)
             # TODO fix expireTime comming empty _fromMemCache
             if not isinstance(expireTime, QtCore.QDateTime):
-                print('Wrong type in fromMemCache')
+                print('Wrong type in fromMemCache, MapTileSource')
                 return
             if QtCore.QDateTime.currentDateTime().secsTo(expireTime) <= 0:
                 self.__memoryCache.pop(cacheID, None)
@@ -117,7 +117,7 @@ class MapTileSource(QtCore.QObject):
         expireTime = self._getTileExpirationTime(cacheID)
         # TODO fix expireTime comming empty _fromDiskCache
         if not isinstance(expireTime, QtCore.QDateTime):
-            print('Wrong type in fromDiskCache')
+            print('Wrong type in fromDiskCache, MapTileSource')
             return
         if QtCore.QDateTime.currentDateTimeUtc().secsTo(expireTime) <= 0:
             if not QtCore.QFile.remove(path):
