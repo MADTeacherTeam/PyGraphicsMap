@@ -52,11 +52,9 @@ class OSMTileSource(MapTileSource):
         return pow(4, zoomLevel)
 
     def minZoomLevel(self, ll=QPointF()):
-        print(0)
         return 0
 
     def maxZoomLevel(self, ll=QPointF()):
-        print(18)
         return 18
 
     def tileSize(self):
@@ -69,7 +67,6 @@ class OSMTileSource(MapTileSource):
             return "jpg"
 
     def fetchTile(self, x, y, z):
-        # TODO network
         network, self.__instances = MapGraphicsNetwork.getInstance(self.__instances)
         host = ""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:

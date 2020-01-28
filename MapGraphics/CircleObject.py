@@ -4,13 +4,16 @@ from .MapGraphicsObject import MapGraphicsObject
 
 
 class CircleObject(MapGraphicsObject):
-    def __init__(self, radius, sizeIsZoomInvariant=True, fillColor=QColor(0, 0, 0, 0), parent=0):
+    def __init__(self, radius, sizeIsZoomInvariant=True, fillColor=QColor(0, 1, 1, 0), parent=None):
         super().__init__(sizeIsZoomInvariant, parent)
         self.__fillColor = fillColor
         self.__radius = max(radius, 0.01)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value)
+
+    def __del__(self):
+        print('kekasdfasdg')
 
     def boundingRect(self):
         return QRectF(-1 * self.__radius, -1 * self.__radius, 2 * self.__radius, 2 * self.__radius)
@@ -25,6 +28,7 @@ class CircleObject(MapGraphicsObject):
 
     def setRadius(self, radius):
         self.__radius = radius
+        self.redrawRequested.emit()
         # SIGNAL redrawRequested
 
     def keyReleaseEvent(self, event):

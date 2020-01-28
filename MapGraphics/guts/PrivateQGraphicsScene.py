@@ -6,9 +6,9 @@ from MapGraphics.MapGraphicsObject import MapGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
-    selectionChanged = Signal()
-    objectAdded = Signal(MapGraphicsObject)
-    objectRemoved = Signal(MapGraphicsObject)
+    # selectionChanged = Signal()
+    # objectAdded = Signal(MapGraphicsObject)
+    # objectRemoved = Signal(MapGraphicsObject)
 
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
@@ -35,17 +35,18 @@ class PrivateQGraphicsScene(QGraphicsScene):
             print("There is no QGraphicsObject in the scene for")
             return
 
-        qgObj = QGraphicsObject(self.__mgToqg.pop(removed))
+        qgObj = self.__mgToqg.pop(removed)
 
-        # if not self.items().__contains__(qgObj):
-        #     print("does not contain PrivateQGraphicsObject")
-        #     return
-        # qgObj.deleteLater()
-        # self.removeItem(qgObj)
+        if not self.items().__contains__(qgObj):
+            print("does not contain PrivateQGraphicsObject")
+            return
+        qgObj.deleteLater()
+        self.removeItem(qgObj)
 
     def handleZoomLevelChanged(self):
         for obj in self.__mgToqg:
-            obj.handleZoomLevelChanged()
+            self.__mgToqg[obj].handleZoomLevelChanged()
+            # obj[1].handleZoomLevelChanged()
 
     def handleSelectionChanged(self):
         selectedList = self.selectedItems()
@@ -71,13 +72,13 @@ class PrivateQGraphicsScene(QGraphicsScene):
             print("got a null MapGraphicsScene")
             return
 
-        self.objectAdded.connect(self.handleMGObjectAdded)
+        self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
         # connect(_mgScene.data(),
         #         SIGNAL(objectAdded(MapGraphicsObject *)),
         #         this,
         #         SLOT(handleMGObjectAdded(MapGraphicsObject *)));
 
-        self.objectRemoved.connect(self.handleMGObjectRemoved)
+        self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
         # connect(_mgScene.data(),
         #         SIGNAL(objectRemoved(MapGraphicsObject *)),
         #         this,

@@ -3,14 +3,16 @@ from .MapGraphicsObject import MapGraphicsObject
 
 
 class MapGraphicsScene(QtCore.QObject):
+    objectAdded = QtCore.Signal(MapGraphicsObject)
+    objectRemoved = QtCore.Signal(MapGraphicsObject)
 
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
         # self.objects = []
         self.__objects = set()
         # SIGNALS
-        self.objectAdded = QtCore.Signal(MapGraphicsObject)
-        self.objectRemoved = QtCore.Signal(MapGraphicsObject)
+        # self.objectAdded = QtCore.Signal(MapGraphicsObject)
+        # self.objectRemoved = QtCore.Signal(MapGraphicsObject)
 
     def addObject(self, object):
         if object == 0:
@@ -22,9 +24,10 @@ class MapGraphicsScene(QtCore.QObject):
         self.objectAdded.emit(object)
 
     def removeObject(self, object):
-        print('remove Object')
-        self.__objects.remove(object)
-        self.objectRemoved.emit(object)
+        if object in self.__objects:
+            self.__objects.remove(object)
+            print('remove Object')
+            self.objectRemoved.emit(object)
 
     def slot_handleNewObjectGenerated(self, newObject):
         print('handleNewObjectGenerated')

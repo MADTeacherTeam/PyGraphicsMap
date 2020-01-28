@@ -7,6 +7,7 @@ from MainApp.MainWindow import Ui_MainWindow
 from MapGraphics.MapGraphicsScene import MapGraphicsScene
 from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
+from MainApp.FlightDetect import FlightDetect
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -26,6 +27,9 @@ class MyWindow(QtWidgets.QMainWindow):
 
         view.setZoomLevel(4)
         view.centerOn2(-111.658752, 40.255456)
+
+        self.flight = FlightDetect(scene)
+        self.flight.createPlanes()
 
 
 if __name__ == '__main__':

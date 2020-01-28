@@ -59,10 +59,11 @@ class MapTileSource(QtCore.QObject):
 
     @staticmethod
     def createCacheID(x, y, z):
-        if not isinstance(x, int):
-            print('popal9 na kek')
+        # TODO popals9 na kek
+        # if not isinstance(x, int):
+        #     print('popal9 na kek')
         toRet = str(x) + ',' + str(y) + ',' + str(z)
-        print(toRet)
+        # print(toRet)
         return toRet
 
     def getFinishedTile(self, x, y, z):
@@ -147,8 +148,8 @@ class MapTileSource(QtCore.QObject):
             return
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         self.__tempCache[self.createCacheID(x, y, z)] = image
-        for row in self.__tempCache:
-            print(row)
+        # for row in self.__tempCache:
+        #     print(row)
         lock.unlock()
         self.tileRetrieved.emit(x, y, z)
 
@@ -246,7 +247,6 @@ class MapTileSource(QtCore.QObject):
         for row in self.__cacheExpirations:
             stream >> row
         # stream >> self.__cacheExpirations
-        print('kek')
 
     def __getDiskCacheDirectory(self, x, y, z):
         pathString = QtCore.QDir.homePath() + "/" + MAPGRAPHICS_CACHE_FOLDER_NAME + "/" + self.name() + "/" + str(

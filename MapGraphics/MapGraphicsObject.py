@@ -1,42 +1,90 @@
 from PySide2 import QtCore
 from enum import Enum
+from numpy import invert
 
 
 class MapGraphicsObject(QtCore.QObject):
+    enabledChanged = QtCore.Signal()
+    opacityChanged = QtCore.Signal()
+    parentChanged = QtCore.Signal()
+    posChanged = QtCore.Signal()
+    rotationChanged = QtCore.Signal()
+    visibleChanged = QtCore.Signal()
+    zValueChanged = QtCore.Signal()
+    toolTipChanged = QtCore.Signal(str)
+    flagsChanged = QtCore.Signal()
+    selectedChanged = QtCore.Signal()
+    newObjectGenerated = QtCore.Signal(object)
+    redrawRequested = QtCore.Signal()
+    keyFocusRequested = QtCore.Signal()
+
     class MapGraphicsObjectFlag(Enum):
-        ObjectIsMovable = 0x01
-        ObjectIsSelectable = 0x02
-        ObjectIsFocusable = 0x04
+        ObjectIsMovable = 1
+        ObjectIsSelectable = 2
+        ObjectIsFocusable = 4
 
     def __init__(self, sizeIsZoomInvariant=False, parent=None):
         super().__init__()
         self.__enabled = True
+        self.__constructed = False
         self.__opacity = 1.0
-        self.setParent(parent)
         self.__pos = QtCore.QPointF(0.0, 0.0)
         self.__rotation = 0.0
         self.__visible = True
         self.__zValue = 0.0
         self.__selected = False
-
+        self.__toolTip = None
         self.__sizeIsZoomInvariant = sizeIsZoomInvariant
-        self.__constructed = False
+        # TODO delete this
+        self.__flags = MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value
+        self.setParent(parent)
+
+
+
+
         # SIGNALS
-        self.enabledChanged = QtCore.Signal()
-        self.opacityChanged = QtCore.Signal()
-        self.parentChanged = QtCore.Signal()
-        self.posChanged = QtCore.Signal()
-        self.rotationChanged = QtCore.Signal()
-        self.visibleChanged = QtCore.Signal()
-        self.zValueChanged = QtCore.Signal()
-        self.toolTipChanged = QtCore.Signal(str)
-        self.flagsChanged = QtCore.Signal()
-        self.selectedChanged = QtCore.Signal()
-        self.newObjectGenerated = QtCore.Signal(MapGraphicsObject)
-        self.redrawRequested = QtCore.Signal()
-        self.keyFocusRequested = QtCore.Signal()
+        # self.enabledChanged = QtCore.Signal()
+        # self.opacityChanged = QtCore.Signal()
+        # self.parentChanged = QtCore.Signal()
+        # self.posChanged = QtCore.Signal()
+        # self.rotationChanged = QtCore.Signal()
+        # self.visibleChanged = QtCore.Signal()
+        # self.zValueChanged = QtCore.Signal()
+        # self.toolTipChanged = QtCore.Signal(str)
+        # self.flagsChanged = QtCore.Signal()
+        # self.selectedChanged = QtCore.Signal()
+        # self.newObjectGenerated = QtCore.Signal(MapGraphicsObject)
+        # self.redrawRequested = QtCore.Signal()
+        # self.keyFocusRequested = QtCore.Signal()
         ##############################################################################################################
-        QtCore.QTimer().singleShot(1, self.slot_setConstructed())
+        QtCore.QTimer().singleShot(1, self.slot_setConstructed)
+
+    def enabled(self):
+        return self.__enabled
+
+    def opacity(self):
+        return self.__opacity
+
+    def rotation(self):
+        return self.__rotation
+
+    def visible(self):
+        return self.__visible
+
+    def zValue(self):
+        return self.__zValue
+
+    def isSelected(self):
+        return self.__selected
+
+    def toolTip(self):
+        return self.__toolTip
+
+    def flags(self):
+        return self.__flags
+
+    def sizeIsZoomInvariant(self):
+        return self.__sizeIsZoomInvariant
 
     def boundingRect(self):
         pass
@@ -58,7 +106,7 @@ class MapGraphicsObject(QtCore.QObject):
             pass
 
     def setPos(self, nPos):
-        if nPos == self.__pos:
+        if QtCore.QPointF(nPos) == self.__pos:
             return
         self.__pos = nPos
 
@@ -92,14 +140,10 @@ class MapGraphicsObject(QtCore.QObject):
             pass
 
     def setLongitude(self, nLongitude):
-        # TODO uncommet. commet for run
-        pass
-        # self.setPos(QtCore.QPointF(nLongitude, self.__pos.y()))
+        self.setPos(QtCore.QPointF(nLongitude, self.__pos.y()))
 
     def setLatitude(self, nLatitude):
-        # TODO uncommet. commet for run
-        pass
-        # self.setPos(QtCore.QPointF(self.__pos.x(), nLatitude))
+        self.setPos(QtCore.QPointF(self.__pos.x(), nLatitude))
 
     def setZValue(self, nZValue):
         self.__zValue = nZValue
@@ -128,9 +172,9 @@ class MapGraphicsObject(QtCore.QObject):
 
     def setFlag(self, flag, enabled=True):
         if enabled:
-            self.__flag = self.__flag | flag
+            self.__flags = self.__flags | flag
         else:
-            self.__flag = self.__flag & (~flag)
+            self.__flags = self.__flags & (invert(flag))
 
         self.flagsChanged.emit()
 
