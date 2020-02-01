@@ -1,31 +1,20 @@
-from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from PySide2.QtCore import Signal, qWarning
 from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
-from MapGraphics.MapGraphicsObject import MapGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
-    # selectionChanged = Signal()
-    # objectAdded = Signal(MapGraphicsObject)
-    # objectRemoved = Signal(MapGraphicsObject)
 
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.__mgScene = None
-        self.__infoSource = infoSource  # мб конструктор
+        self.__infoSource = infoSource
         self.__mgToqg = {}
         self.__oldSelections = []
         self.setMapGraphicsScene(mgScene)
 
         self.selectionChanged.connect(self.handleSelectionChanged)
-        # connect(this,
-        #         SIGNAL(selectionChanged()),
-        #         this,
-        #         SLOT(handleSelectionChanged()));
 
     def handleMGObjectAdded(self, added):
-
         qgObj = PrivateQGraphicsObject(added, self.__infoSource)
         self.addItem(qgObj)
         self.__mgToqg[added] = qgObj
@@ -46,7 +35,6 @@ class PrivateQGraphicsScene(QGraphicsScene):
     def handleZoomLevelChanged(self):
         for obj in self.__mgToqg:
             self.__mgToqg[obj].handleZoomLevelChanged()
-            # obj[1].handleZoomLevelChanged()
 
     def handleSelectionChanged(self):
         selectedList = self.selectedItems()
@@ -73,13 +61,6 @@ class PrivateQGraphicsScene(QGraphicsScene):
             return
 
         self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
-        # connect(_mgScene.data(),
-        #         SIGNAL(objectAdded(MapGraphicsObject *)),
-        #         this,
-        #         SLOT(handleMGObjectAdded(MapGraphicsObject *)));
 
         self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
-        # connect(_mgScene.data(),
-        #         SIGNAL(objectRemoved(MapGraphicsObject *)),
-        #         this,
-        #         SLOT(handleMGObjectRemoved(MapGraphicsObject *)));
+

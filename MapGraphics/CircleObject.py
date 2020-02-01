@@ -13,7 +13,7 @@ class CircleObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value)
 
     def __del__(self):
-        print('kekasdfasdg')
+        print('del circle object')
 
     def boundingRect(self):
         return QRectF(-1 * self.__radius, -1 * self.__radius, 2 * self.__radius, 2 * self.__radius)

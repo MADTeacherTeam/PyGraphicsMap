@@ -20,7 +20,6 @@ class MapGraphicsScene(QtCore.QObject):
         object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
         object.destroyed.connect(self.slot_handleObjectDestroyed)
         self.__objects.add(object)
-        print('add Object')
         self.objectAdded.emit(object)
 
     def removeObject(self, object):

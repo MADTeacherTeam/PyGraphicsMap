@@ -41,11 +41,11 @@ class PrivateQGraphicsObject(QGraphicsObject):
         leftLatLon = QPointF(Conversions.enu2lla_4_LLA(enuRect.left(),
                                                        0.0,
                                                        0.0,
-                                                       latLonCenterPos.lonLat()))
+                                                       latLonCenterPos).lonLat())
         upLatLon = QPointF(Conversions.enu2lla_4_LLA(0.0,
                                                      enuRect.top(),
                                                      0.0,
-                                                     latLonCenterPos.lonLat()))
+                                                     latLonCenterPos).lonLat())
 
         lonWidth = 2.0 * (latLonCenter.x() - leftLatLon.x())
         latHeight = 2.0 * (upLatLon.y() - latLonCenter.y())
@@ -123,14 +123,14 @@ class PrivateQGraphicsObject(QGraphicsObject):
         event.setScenePos(qgsScenePos)
 
         if not event.isAccepted():
-            QGraphicsObject.contextMenuEvent(event)
+            QGraphicsObject.contextMenuEvent(self, event)
 
     def itemChange(self, change, value):
         if self.__mgObj is None:
             return value
 
         if change == QGraphicsItem.ItemPositionChange:
-            scenePos = QPointF(value.toPointF())
+            scenePos = QPointF(value)
             tileSource = self.__infoSource.tileSource()
             if tileSource is None:
                 geoPos = QPointF(tileSource.qgs2ll(scenePos, self.__infoSource.zoomLevel()))
@@ -148,7 +148,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.__mgObj.keyPressEvent(event)
 
         if not event.isAccepted():
-            QGraphicsObject.keyPressEvent(event)
+            QGraphicsObject.keyPressEvent(self, event)
 
     def keyReleaseEvent(self, event):
         if self.__mgObj is None:
@@ -157,7 +157,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.__mgObj.keyReleaseEvent(event)
 
         if not event.isAccepted():
-            QGraphicsObject.keyReleaseEvent(event)
+            QGraphicsObject.keyReleaseEvent(self, event)
 
     def mouseDoubleClickEvent(self, event):
         if self.__mgObj is None:
@@ -168,7 +168,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.unconvertSceneMouseEventCoorindates(event)
 
         if not event.isAccepted():
-            QGraphicsObject.mouseDoubleClickEvent(event)
+            QGraphicsObject.mouseDoubleClickEvent(self, event)
 
     def mouseMoveEvent(self, event):
         if self.__mgObj is None:
@@ -179,7 +179,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.unconvertSceneMouseEventCoorindates(event)
 
         if not event.isAccepted():
-            QGraphicsObject.mouseMoveEvent(event)
+            QGraphicsObject.mouseMoveEvent(self, event)
 
     def mousePressEvent(self, event):
         if self.__mgObj is None:
@@ -190,7 +190,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.unconvertSceneMouseEventCoorindates(event)
 
         if not event.isAccepted():
-            QGraphicsObject.mousePressEvent(event)
+            QGraphicsObject.mousePressEvent(self, event)
 
     def mouseReleaseEvent(self, event):
         if self.__mgObj is None:
@@ -201,7 +201,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.unconvertSceneMouseEventCoorindates(event)
 
         if not event.isAccepted():
-            QGraphicsObject.mouseReleaseEvent(event)
+            QGraphicsObject.mouseReleaseEvent(self, event)
 
     def wheelEvent(self, event):
         if self.__mgObj is None:
@@ -217,7 +217,8 @@ class PrivateQGraphicsObject(QGraphicsObject):
         event.setScenePos(qgsScenePos)
 
         if not event.isAccepted():
-            QGraphicsObject.wheelEvent(event)
+            # TODO check self
+            QGraphicsObject.wheelEvent(self, event)
 
     # public slot
     def handleZoomLevelChanged(self):
@@ -310,84 +311,21 @@ class PrivateQGraphicsObject(QGraphicsObject):
             return
 
         self.__mgObj.enabledChanged.connect(self.handleEnabledChanged)
-        # connect(_mgObj,
-        #         SIGNAL(enabledChanged()),
-        #         this,
-        #         SLOT(handleEnabledChanged()));
-
         self.__mgObj.opacityChanged.connect(self.handleOpacityChanged)
-        # connect(_mgObj,
-        #         SIGNAL(opacityChanged()),
-        #         this,
-        #         SLOT(handleOpacityChanged()));
-
         self.__mgObj.parentChanged.connect(self.handleParentChanged)
-        # connect(_mgObj,
-        #         SIGNAL(parentChanged()),
-        #         this,
-        #         SLOT(handleParentChanged()));
-
         self.__mgObj.posChanged.connect(self.handlePosChanged)
-        # connect(_mgObj,
-        #         SIGNAL(posChanged()),
-        #         this,
-        #         SLOT(handlePosChanged()));
-
         self.__mgObj.rotationChanged.connect(self.handleRotationChanged)
-        # connect(_mgObj,
-        #         SIGNAL(rotationChanged()),
-        #         this,
-        #         SLOT(handleRotationChanged()));
-
         self.__mgObj.visibleChanged.connect(self.handleVisibleChanged)
-        # connect(_mgObj,
-        #         SIGNAL(visibleChanged()),
-        #         this,
-        #         SLOT(handleVisibleChanged()));
-
         self.__mgObj.zValueChanged.connect(self.handleZValueChanged)
-        # connect(_mgObj,
-        #         SIGNAL(zValueChanged()),
-        #         this,
-        #         SLOT(handleZValueChanged()));
-
         self.__mgObj.selectedChanged.connect(self.handleMGSelectedChanged)
-        # connect(_mgObj,
-        #         SIGNAL(selectedChanged()),
-        #         this,
-        #         SLOT(handleMGSelectedChanged()));
-
         self.__mgObj.toolTipChanged.connect(self.handleMGToolTipChanged)
-        # connect(_mgObj,
-        #         SIGNAL(toolTipChanged(QString)),
-        #         this,
-        #         SLOT(handleMGToolTipChanged(QString)));
-
         self.__mgObj.flagsChanged.connect(self.handleMGFlagsChanged)
-        # connect(_mgObj,
-        #         SIGNAL(flagsChanged()),
-        #         this,
-        #         SLOT(handleMGFlagsChanged()));
-
         self.__mgObj.keyFocusRequested.connect(self.handleKeyFocusRequested)
-        # connect(_mgObj,
-        #         SIGNAL(keyFocusRequested()),
-        #         this,
-        #         SLOT(handleKeyFocusRequested()));
-
         self.__mgObj.redrawRequested.connect(self.handleRedrawRequested)
-        # connect(_mgObj,
-        #         SIGNAL(redrawRequested()),
-        #         this,
-        #         SLOT(handleRedrawRequested()));
 
         self.updateAllFromMG()
 
         self.__mgObj.destroyed.connect(self.deleteLater)
-        # connect(mgObj,
-        #         SIGNAL(destroyed()),
-        #         this,
-        #         SLOT(deleteLater()));
 
     def convertSceneMouseEventCoordinates(self, event):
         qgsScenePos = QPointF(event.scenePos())

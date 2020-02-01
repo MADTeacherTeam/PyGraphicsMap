@@ -114,7 +114,6 @@ class MapGraphicsObject(QtCore.QObject):
             self.posChanged.emit()
         else:
             QtCore.QTimer().singleShot(1, self.posChanged)
-            pass
 
     def setRotation(self, nRotation):
         if nRotation == self.__rotation:
@@ -207,9 +206,9 @@ class MapGraphicsObject(QtCore.QObject):
         event.ignore()
 
     def mousePressEvent(self, event):
-        if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable or self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable:
+        if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value or self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value:
             event.accept()
-            if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable:
+            if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value:
                 self.keyFocusRequested.emit()
         else:
             event.ignore()

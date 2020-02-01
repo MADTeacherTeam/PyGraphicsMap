@@ -31,9 +31,10 @@ class MapGraphicsView(QWidget):
         self.setScene(scene)
         self.__zoomLevel = 2
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
-        renderTimer = QTimer(self)
-        renderTimer.timeout.connect(self.renderTiles)
-        renderTimer.start(200)
+
+        self.renderTimer = QTimer(self)
+        self.renderTimer.timeout.connect(self.renderTiles)
+        self.renderTimer.start(200)
 
     def __del__(self):
         print("Destructing MapGraphicsView")

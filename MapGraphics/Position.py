@@ -11,14 +11,14 @@ class Position():
             self.__altitude = 0
         elif len == 1 and isinstance(args[0], Position):
             self.constr_one_arg(args[0])
-        elif (len == 2 and isinstance(args[0], QtCore.QPointF) and isinstance(args[1], int)) \
+        elif (len == 2 and isinstance(args[0], QtCore.QPointF) and isinstance(args[1], (int, float))) \
                 or (len == 1 and isinstance(args[0], QtCore.QPointF)):
             if len == 2:
                 self.constr_two_arg(args[0], args[1])
             else:
                 self.constr_two_arg(args[0])
-        elif (len == 3 and isinstance(args[0], int) and isinstance(args[1], int) and isinstance(args[2], int)) \
-                or (len == 2 and isinstance(args[0], int) and isinstance(args[1], int)):
+        elif (len == 3 and isinstance(args[0], (int, float)) and isinstance(args[1], (int, float)) and isinstance(args[2], (int, float))) \
+                or (len == 2 and isinstance(args[0], (int, float)) and isinstance(args[1], (int, float))):
             if len == 3:
                 self.constr_three_arg(args[0], args[1], args[2])
             else:

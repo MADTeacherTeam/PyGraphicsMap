@@ -130,6 +130,7 @@ class Conversions:
         R = R2 * R1
 
         invR = R.inverted()
+        invR = invR[0]
         if invR.isIdentity():
             print("Failed to invert rotation matrix --- did you enter a bad lat,lon,or alt?")
             return enu
@@ -179,7 +180,7 @@ class Conversions:
 
     @staticmethod
     def enu2lla_4_LLA(east, north, up, refLLA):
-        return Conversions.enu2lla_4_LLA(QtGui.QVector3D(east, north, up),
+        return Conversions.enu2lla_4_re(QtGui.QVector3D(east, north, up),
                                          refLLA.latitude(),
                                          refLLA.longitude(),
                                          refLLA.altitude())
