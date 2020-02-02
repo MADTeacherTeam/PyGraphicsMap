@@ -17,17 +17,9 @@ class Ui_MainWindow(object):
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         MainWindow.setCentralWidget(self.centralWidget)
-        self.dockWidget = QtWidgets.QDockWidget(MainWindow)
-        self.dockWidget.setObjectName("dockWidget")
-        self.dockWidgetContents = QtWidgets.QWidget()
-        self.dockWidgetContents.setObjectName("dockWidgetContents")
-        self.dockWidget.setWidget(self.dockWidgetContents)
-        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 1103, 21))
         self.menuBar.setObjectName("menuBar")
-        self.menuWindow = QtWidgets.QMenu(self.menuBar)
-        self.menuWindow.setObjectName("menuWindow")
         self.menuFile = QtWidgets.QMenu(self.menuBar)
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menuBar)
@@ -35,7 +27,6 @@ class Ui_MainWindow(object):
         self.actionExit.setObjectName("actionExit")
         self.menuFile.addAction(self.actionExit)
         self.menuBar.addAction(self.menuFile.menuAction())
-        self.menuBar.addAction(self.menuWindow.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -43,7 +34,5 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "TestApp"))
-        self.dockWidget.setWindowTitle(_translate("MainWindow", "Layers"))
-        self.menuWindow.setTitle(_translate("MainWindow", "&Window"))
         self.menuFile.setTitle(_translate("MainWindow", "&File"))
         self.actionExit.setText(_translate("MainWindow", "E&xit"))

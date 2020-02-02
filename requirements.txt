@@ -1,6 +1,5 @@
 Click==7.0
 numpy==1.18.1
-PyQt5Designer==5.10.1
 PySide2==5.14.0
 python-dotenv==0.10.3
 shiboken2==5.14.0

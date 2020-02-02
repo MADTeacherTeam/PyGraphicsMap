@@ -31,10 +31,8 @@ class MapGraphicsView(QWidget):
         self.setScene(scene)
         self.__zoomLevel = 2
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
-
-        self.renderTimer = QTimer(self)
-        self.renderTimer.timeout.connect(self.renderTiles)
-        self.renderTimer.start(200)
+        self.__tempCenterPointQGS = None
+        QTimer.singleShot(1000, self.renderTiles)
 
     def __del__(self):
         print("Destructing MapGraphicsView")
@@ -120,6 +118,7 @@ class MapGraphicsView(QWidget):
 
         self.resetQGSSceneSize()
         self.setDragMode(self.dragMode())
+        self.renderTiles()
 
     def tileSource(self):
         return self.__tileSource
@@ -127,13 +126,14 @@ class MapGraphicsView(QWidget):
     def setTileSource(self, tSource):
         self.__tileSource = tSource
         if self.__tileSource:
-            tileSourceThread = QThread(self)
-            tileSourceThread.start()
-            self.__tileSource.moveToThread(tileSourceThread)
-            self.__tileSource.destroyed.connect(tileSourceThread.quit)
-            tileSourceThread.finished.connect(tileSourceThread.deleteLater)
+            self.tileSourceThread = QThread()
+            self.tileSourceThread.start()
+            self.__tileSource.moveToThread(self.tileSourceThread)
+            self.__tileSource.destroyed.connect(self.tileSourceThread.quit)
+            self.tileSourceThread.finished.connect(self.tileSourceThread.deleteLater)
         for tileObject in self.__tileObjects:
             tileObject.setTileSource(tSource)
+        self.renderTiles()
 
     def zoomLevel(self):
         return self.__zoomLevel
@@ -170,6 +170,7 @@ class MapGraphicsView(QWidget):
             self.__childView.centerOn(mousePoint)
         else:
             self.centerOn(centerGeoPos)
+        self.renderTiles()
         self.zoomLevelChanged.emit(nZoom)
 
     def zoomIn(self, zMode):
@@ -190,6 +191,12 @@ class MapGraphicsView(QWidget):
         event.setAccepted(False)
 
     def handleChildMouseMove(self, event):
+        if self.__childView:
+            centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
+                                                         int(self.__childView.height() / 2.0))
+            if (abs(centerPointQGS.x() - self.__tempCenterPointQGS.x()) > 40) or (
+                    abs(centerPointQGS.y() - self.__tempCenterPointQGS.y()) > 40):
+                self.renderTiles()
         event.setAccepted(False)
 
     def handleChildMousePress(self, event):
@@ -221,6 +228,7 @@ class MapGraphicsView(QWidget):
     def doTileLayout(self):
         centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                      int(self.__childView.height() / 2.0))
+        self.__tempCenterPointQGS = centerPointQGS
         viewportPolygonQGV = QPolygon()
         viewportPolygonQGV << QPoint(0, 0)\
             << QPoint(0, self.__childView.height())\
