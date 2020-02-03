@@ -8,11 +8,7 @@ class MapGraphicsScene(QtCore.QObject):
 
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
-        # self.objects = []
         self.__objects = set()
-        # SIGNALS
-        # self.objectAdded = QtCore.Signal(MapGraphicsObject)
-        # self.objectRemoved = QtCore.Signal(MapGraphicsObject)
 
     def addObject(self, object):
         if object == 0:

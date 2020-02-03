@@ -11,7 +11,7 @@ from MainApp.PlaneManager import PlaneManager
 
 
 class MyWindow(QtWidgets.QMainWindow):
-    threadPlaneManag = Signal()
+    threadPlaneManager = Signal()
 
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
@@ -35,11 +35,12 @@ class MyWindow(QtWidgets.QMainWindow):
         self.flight = PlaneManager(scene)
         self.__thread_for_planes.start()
         self.flight.moveToThread(self.__thread_for_planes)
-        self.threadPlaneManag.connect(self.flight.createPlanes)
-        self.threadPlaneManag.emit()
+        self.threadPlaneManager.connect(self.flight.createPlanes)
+        self.threadPlaneManager.emit()
 
     def closeApp(self):
         self.close()
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

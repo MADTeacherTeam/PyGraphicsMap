@@ -35,28 +35,9 @@ class MapGraphicsObject(QtCore.QObject):
         self.__selected = False
         self.__toolTip = None
         self.__sizeIsZoomInvariant = sizeIsZoomInvariant
-        # TODO delete this
         self.__flags = MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value
         self.setParent(parent)
 
-
-
-
-        # SIGNALS
-        # self.enabledChanged = QtCore.Signal()
-        # self.opacityChanged = QtCore.Signal()
-        # self.parentChanged = QtCore.Signal()
-        # self.posChanged = QtCore.Signal()
-        # self.rotationChanged = QtCore.Signal()
-        # self.visibleChanged = QtCore.Signal()
-        # self.zValueChanged = QtCore.Signal()
-        # self.toolTipChanged = QtCore.Signal(str)
-        # self.flagsChanged = QtCore.Signal()
-        # self.selectedChanged = QtCore.Signal()
-        # self.newObjectGenerated = QtCore.Signal(MapGraphicsObject)
-        # self.redrawRequested = QtCore.Signal()
-        # self.keyFocusRequested = QtCore.Signal()
-        ##############################################################################################################
         QtCore.QTimer().singleShot(1, self.slot_setConstructed)
 
     def enabled(self):
@@ -101,7 +82,6 @@ class MapGraphicsObject(QtCore.QObject):
         if self.__constructed:
             self.parentChanged.emit()
         else:
-            # QtCore.QTimer().singleShot(1, self, self.parentChanged)
             QtCore.QTimer().singleShot(1, self.parentChanged)
             pass
 
@@ -190,7 +170,6 @@ class MapGraphicsObject(QtCore.QObject):
         event.ignore()
 
     def itemChange(self, change, value):
-
         return value
 
     def keyPressEvent(self, event):

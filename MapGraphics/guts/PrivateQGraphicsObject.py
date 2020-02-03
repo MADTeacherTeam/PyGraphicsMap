@@ -217,7 +217,6 @@ class PrivateQGraphicsObject(QGraphicsObject):
         event.setScenePos(qgsScenePos)
 
         if not event.isAccepted():
-            # TODO check self
             QGraphicsObject.wheelEvent(self, event)
 
     # public slot

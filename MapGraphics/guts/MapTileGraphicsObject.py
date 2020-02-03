@@ -140,5 +140,4 @@ class MapTileGraphicsObject(QGraphicsObject):
     def handleTileInvalidation(self):
         if self.__initialized:
             return
-        # print('from Object ' + str(self.__tileX) + str(self.__tileY) + str(self.__tileZoom))
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)

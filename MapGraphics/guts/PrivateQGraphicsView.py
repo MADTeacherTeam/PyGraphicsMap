@@ -11,19 +11,6 @@ class PrivateQGraphicsView(QGraphicsView):
     hadContextMenuEvent = Signal(QContextMenuEvent)
     hadWheelEvent = Signal(QWheelEvent)
 
-    # signals
-    # void
-    # hadMouseDoubleClickEvent(QMouseEvent * event);
-    # void
-    # hadMouseMoveEvent(QMouseEvent * event);
-    # void
-    # hadMousePressEvent(QMouseEvent * event);
-    # void
-    # hadMouseReleaseEvent(QMouseEvent * event);
-    # void
-    # hadContextMenuEvent(QContextMenuEvent *);
-    # void hadWheelEvent(QWheelEvent *);
-
     def __init__(self, parent=None, scene=None):
         if scene is None:
             super(PrivateQGraphicsView, self).__init__(parent)

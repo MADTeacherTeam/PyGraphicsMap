@@ -17,7 +17,8 @@ class Position():
                 self.constr_two_arg(args[0], args[1])
             else:
                 self.constr_two_arg(args[0])
-        elif (len == 3 and isinstance(args[0], (int, float)) and isinstance(args[1], (int, float)) and isinstance(args[2], (int, float))) \
+        elif (len == 3 and isinstance(args[0], (int, float)) and isinstance(args[1], (int, float)) and isinstance(
+                args[2], (int, float))) \
                 or (len == 2 and isinstance(args[0], (int, float)) and isinstance(args[1], (int, float))):
             if len == 3:
                 self.constr_three_arg(args[0], args[1], args[2])
@@ -101,8 +102,6 @@ class Position():
     def fromENU(refPos, enu):
         cPos = Conversions.enu2lla_4_re(enu, refPos.latitude(), refPos.longitude(), refPos.altitude())
         return cPos
-
-    # OVERLOAD OPERATOR >>
 
 
 def qHash(pos):

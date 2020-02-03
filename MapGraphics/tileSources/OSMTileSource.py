@@ -21,7 +21,7 @@ class OSMTileSource(MapTileSource):
         self.__pendingRequests = set()
         self.__pendingReplies = {}
         self.__tileType = tileType
-        # test funct fetchTile
+
         self.__instances = {}
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
@@ -81,7 +81,6 @@ class OSMTileSource(MapTileSource):
         reply = network.get(request)
         self.__pendingReplies[reply] = cacheID
 
-        # SIGNAL connect(reply,IGNAL(finished()),this,SLOT(handleNetworkRequestFinished()))
         reply.finished.connect(self.handleNetworkRequestFinished)
 
     def handleNetworkRequestFinished(self):
@@ -115,8 +114,6 @@ class OSMTileSource(MapTileSource):
             cacheControl = reply.rawHeader(QByteArray(b"Cache-Control"))
             maxAgeFinder = QRegExp("max-age=(\\d+)")
             if maxAgeFinder.indexIn(str(cacheControl)) != -1:
-                ok = False
-                # TODO toULongLong
                 if maxAgeFinder.cap(1).isdigit():
                     delta = int(maxAgeFinder.cap(1))
                     if isinstance(delta, int):

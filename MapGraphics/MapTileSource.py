@@ -27,10 +27,6 @@ class MapTileSource(QtCore.QObject):
         self.__cacheExpirationsLoaded = False
         self.setCacheMode(self.CacheMode.DiskAndMemCaching)
 
-        # self.tileRetrieved = QtCore.Signal(int, int, int)
-        # self.tileRequested = QtCore.Signal(int, int, int)
-        # self.allTilesInvalidated = QtCore.Signal()
-
         self.tileRequested.connect(self.startTileRequest)
         self.allTilesInvalidated.connect(self.clearTempCache)
 
@@ -59,11 +55,7 @@ class MapTileSource(QtCore.QObject):
 
     @staticmethod
     def createCacheID(x, y, z):
-        # TODO popals9 na kek
-        # if not isinstance(x, int):
-        #     print('popal9 na kek')
         toRet = str(x) + ',' + str(y) + ',' + str(z)
-        # print(toRet)
         return toRet
 
     def getFinishedTile(self, x, y, z):

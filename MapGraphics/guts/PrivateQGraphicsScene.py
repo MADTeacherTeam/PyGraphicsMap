@@ -63,4 +63,3 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
 
         self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
-

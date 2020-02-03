@@ -266,6 +266,7 @@ class MapGraphicsView(QWidget):
                 if tileIsThere:
                     continue
                 if freeTiles.empty():
+                    # TODO destructor call when it doesn't need
                     tileObject = MapTileGraphicsObject(tileSize)
                     tileObject.setTileSource(self.__tileSource)
                     self.__tileObjects.add(tileObject)
