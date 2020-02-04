@@ -22,9 +22,6 @@ class PrivateQGraphicsObject(QGraphicsObject):
         # self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
 
-    def __del__(self):
-        pass
-
     def boundingRect(self):
         toRet = QRectF(-1.0, -1.0, 2.0, 2.0)
         if self.__mgObj is None:

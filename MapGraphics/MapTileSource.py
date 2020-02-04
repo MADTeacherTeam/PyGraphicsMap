@@ -34,10 +34,10 @@ class MapTileSource(QtCore.QObject):
         self.__cacheMode = nMode
 
     def __del__(self):
-        self.__saveCacheExpirationsToDisk()
+        pass
 
-    def __saveCacheExpirationsToDisk(self):
-        if not self.__cacheExpirationsLoaded or not self.__cacheExpirationsFile:
+    def saveCacheExpirationsToDisk(self):
+        if (not self.__cacheExpirationsLoaded) or (not self.__cacheExpirationsFile):
             return
         fp = QtCore.QFile(self.__cacheExpirationsFile)
         if not fp.open(QtCore.QIODevice.Truncate | QtCore.QIODevice.WriteOnly):

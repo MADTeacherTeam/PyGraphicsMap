@@ -27,6 +27,8 @@ class MapGraphicsView(QWidget):
         QWidget.__init__(self, parent)
         self.__tileSource = None
         self.__dragMode = None
+        self.tileSourceThread = QThread()
+        self.tileSourceThread.start()
         self.__tileObjects = set()
         self.setScene(scene)
         self.__zoomLevel = 2
@@ -36,20 +38,13 @@ class MapGraphicsView(QWidget):
 
     def __del__(self):
         print("Destructing MapGraphicsView")
-        # for tileObject in self.__tileObjects:
-            # if self.__childScene:
-                # self.__childScene.removeItem(tileObject)
         self.__tileObjects.clear()
-        # if self.__tileSource:
-        #     tileSourceThread = self.__tileSource.thread()
-        #     self.__tileSource = 0
-        #     count = 0
-        #     maxCount = 100
-        #     while tileSourceThread and not tileSourceThread.wait(100):
-        #         QCoreApplication.processEvents(QEventLoop.ExcludeSocketNotifiers | QEventLoop.ExcludeUserInputEvents)
-        #         count += 1
-        #         if count == maxCount:
-        #             break
+
+    def stopViewThreads(self):
+        if self.__tileSource:
+            self.__tileSource.saveCacheExpirationsToDisk()
+        self.tileSourceThread.quit()
+        self.tileSourceThread.wait()
 
     def center(self):
         centerGeoPos = self.mapToScene(QPoint(int(self.width() / 2), int(self.height() / 2)))
@@ -126,8 +121,6 @@ class MapGraphicsView(QWidget):
     def setTileSource(self, tSource):
         self.__tileSource = tSource
         if self.__tileSource:
-            self.tileSourceThread = QThread()
-            self.tileSourceThread.start()
             self.__tileSource.moveToThread(self.tileSourceThread)
             self.__tileSource.destroyed.connect(self.tileSourceThread.quit)
             self.tileSourceThread.finished.connect(self.tileSourceThread.deleteLater)
@@ -191,7 +184,7 @@ class MapGraphicsView(QWidget):
         event.setAccepted(False)
 
     def handleChildMouseMove(self, event):
-        if self.__childView:
+        if self.__childView and self.__tileSource:
             centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                          int(self.__childView.height() / 2.0))
             if (abs(centerPointQGS.x() - self.__tempCenterPointQGS.x()) > 40) or (
