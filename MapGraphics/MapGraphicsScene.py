@@ -32,4 +32,5 @@ class MapGraphicsScene(QtCore.QObject):
         self.removeObject(object)
 
     def __del__(self):
+        print("del MapGragphics scene")
         self.__objects.clear()

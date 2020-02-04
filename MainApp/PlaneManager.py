@@ -1,6 +1,6 @@
 from opensky_api.opensky_api import OpenSkyApi
 from MainApp.PlaneObject import PlaneObject
-from PySide2.QtCore import QPointF, QTimer, QObject
+from PySide2.QtCore import QPointF, QTimer, QObject, QThread
 
 
 class PlaneManager(QObject):
@@ -12,14 +12,21 @@ class PlaneManager(QObject):
         self.api = OpenSkyApi('Fynduk', 'vYJ-MEJ-cLh-Cy3')
         self.__planeObjects = {}
         self.__planeCounter = 500
+        self.timerCreatePlanes = QTimer()
+
         # self.createPlanes()
+
+    def __del__(self):
+        for row in self.__planeObjects:
+            self.__planeObjects[row].__del__()
 
     def createPlanes(self):
         if self.__planeObjects:
             self.reposPlaneObjects()
         else:
             self.fillPlaneObjectDict()
-        QTimer().singleShot(5000, self.createPlanes)
+
+        self.timerCreatePlanes.singleShot(5000, self.createPlanes)
 
     def fillPlaneObjectDict(self):
         states = self.api.get_states()

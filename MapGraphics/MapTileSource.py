@@ -34,6 +34,7 @@ class MapTileSource(QtCore.QObject):
         self.__cacheMode = nMode
 
     def __del__(self):
+        print("del MapTileSource")
         self.__saveCacheExpirationsToDisk()
 
     def __saveCacheExpirationsToDisk(self):

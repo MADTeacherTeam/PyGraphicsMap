@@ -1,13 +1,14 @@
 import sys
 
 from PySide2 import QtWidgets
-from PySide2.QtCore import QObject, QThread,Signal
+from PySide2.QtCore import QObject, QThread, Signal
 
 from MainApp.MainWindow import Ui_MainWindow
 from MapGraphics.MapGraphicsScene import MapGraphicsScene
 from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 from MainApp.PlaneManager import PlaneManager
+import threading
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -23,22 +24,22 @@ class MyWindow(QtWidgets.QMainWindow):
 
         self.setCentralWidget(view)
         osmTiles = OSMTileSource(OSMTileSource.OSMTileType.OSMTiles)
-        self.sourceThread = QThread()
-        self.sourceThread.start()
-        osmTiles.moveToThread(self.sourceThread)
         view.setTileSource(osmTiles)
         view.setZoomLevel(4)
         view.centerOn2(-111.658752, 40.255456)
 
-        self.__thread_for_planes = QThread()
-        self.__thread_for_planes.setObjectName('Zapor keka')
-        self.flight = PlaneManager(scene)
-        self.__thread_for_planes.start()
-        self.flight.moveToThread(self.__thread_for_planes)
-        self.threadPlaneManager.connect(self.flight.createPlanes)
-        self.threadPlaneManager.emit()
+        # self.__thread_for_planes = QThread()
+        # self.__thread_for_planes.setObjectName('Zapor keka')
+        # self.flight = PlaneManager(scene)
+        # self.__thread_for_planes.start()
+        # self.flight.moveToThread(self.__thread_for_planes)
+        # self.threadPlaneManager.connect(self.flight.createPlanes)
+        # self.threadPlaneManager.emit()
 
     def closeApp(self):
+        # self.__thread_for_planes.quit()
+        # self.__thread_for_planes.wait()
+
         self.close()
 
 

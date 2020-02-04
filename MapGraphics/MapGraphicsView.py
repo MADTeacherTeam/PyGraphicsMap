@@ -37,10 +37,14 @@ class MapGraphicsView(QWidget):
     def __del__(self):
         print("Destructing MapGraphicsView")
         # for tileObject in self.__tileObjects:
-            # if self.__childScene:
-                # self.__childScene.removeItem(tileObject)
+        #     if self.__childScene:
+        #         self.__childScene.removeItem(tileObject)
+        #     tileObject.__del__()
+
         self.__tileObjects.clear()
-        # if self.__tileSource:
+
+        # if self.__tileSource is not None:
+        #     print(self.__tileSource)
         #     tileSourceThread = self.__tileSource.thread()
         #     self.__tileSource = 0
         #     count = 0

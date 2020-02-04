@@ -26,6 +26,7 @@ class OSMTileSource(MapTileSource):
         self.setCacheMode(MapTileSource.CacheMode.DiskAndMemCaching)
 
     def __del__(self):
+        super().__del__()
         print("Destructing OSMTileSource")
 
     def name(self):
