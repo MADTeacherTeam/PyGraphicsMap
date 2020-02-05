@@ -47,26 +47,22 @@ class LineObject(MapGraphicsObject):
     def setThickness(self, nThick):
         self.__thickness = max(0, min(5, nThick))
         self.redrawRequested.emit()
-        # SIGNAL self.redrawRequested()
 
     def setEndPointA(self, pos):
         self.__a = pos
         self.updatePositionFromEndPoints()
         self.redrawRequested.emit()
-        # SIGNAL self.redrawRequested()
 
     def setEndPointB(self, pos):
         self.__b = pos
         self.updatePositionFromEndPoints()
         self.redrawRequested.emit()
-        # SIGNAL self.redrawRequested()
 
     def setEndPoints(self, a, b):
         self.__a = a
         self.__b = b
         self.updatePositionFromEndPoints()
         self.redrawRequested.emit()
-        # SIGNAL self.redrawRequested()
 
     def updatePositionFromEndPoints(self):
         avgLon = (self.__a.longitude() + self.__b.longitude()) / 2

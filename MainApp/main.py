@@ -18,29 +18,34 @@ class MyWindow(QtWidgets.QMainWindow):
         super(MyWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.actionExit.triggered.connect(self.closeApp)
+        self.ui.actionExit.triggered.connect(lambda: self.close())
         scene = MapGraphicsScene(self)
-        view = MapGraphicsView(scene, self)
+        self.view = MapGraphicsView(scene, self)
 
-        self.setCentralWidget(view)
+        self.setCentralWidget(self.view)
         osmTiles = OSMTileSource(OSMTileSource.OSMTileType.OSMTiles)
-        view.setTileSource(osmTiles)
-        view.setZoomLevel(4)
-        view.centerOn2(-111.658752, 40.255456)
 
-        # self.__thread_for_planes = QThread()
-        # self.__thread_for_planes.setObjectName('Zapor keka')
-        # self.flight = PlaneManager(scene)
-        # self.__thread_for_planes.start()
-        # self.flight.moveToThread(self.__thread_for_planes)
-        # self.threadPlaneManager.connect(self.flight.createPlanes)
-        # self.threadPlaneManager.emit()
+        self.view.setTileSource(osmTiles)
+        self.view.setZoomLevel(4)
+        self.view.centerOn2(-111.658752, 40.255456)
 
-    def closeApp(self):
-        # self.__thread_for_planes.quit()
-        # self.__thread_for_planes.wait()
+        self.__thread_for_planes = QThread()
+        self.__thread_for_planes.setObjectName('Zapor keka')
+        self.flight = PlaneManager(scene)
+        self.__thread_for_planes.start()
+        self.flight.moveToThread(self.__thread_for_planes)
+        self.threadPlaneManager.connect(self.flight.createPlanes)
+        self.__thread_for_planes.finished.connect(self.flight.deleteLater)
+        self.threadPlaneManager.emit()
 
-        self.close()
+    def closeEvent(self, event):
+        self.__closeThreads()
+        super(QtWidgets.QMainWindow, self).closeEvent(event)
+
+    def __closeThreads(self):
+        self.__thread_for_planes.quit()
+        self.__thread_for_planes.wait()
+        self.view.stopViewThreads()
 
 
 if __name__ == '__main__':

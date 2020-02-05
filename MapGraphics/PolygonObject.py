@@ -20,9 +20,6 @@ class PolygonObject(MapGraphicsObject):
         self.__editCircles = []
         self.__addVertexCircles = []
 
-        # SIGNALS
-        # self.polygonChanged = Signal(QtGui.QPolygonF)
-
     def __del__(self):
         print(self + "destroying")
         for each in self.__editCircles:

@@ -28,6 +28,7 @@ class OSMTileSource(MapTileSource):
     def __del__(self):
         super().__del__()
         print("Destructing OSMTileSource")
+        MapTileSource.__del__(self)
 
     def name(self):
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:

@@ -16,7 +16,6 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tileZoom = 0
         self.__initialized = False
         self.__havePendingRequest = False
-        # self.__tileSource = MapTileSource()
         self.__tileSource = None
 
         self.setTileSize(tileSize)
