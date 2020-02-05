@@ -34,7 +34,13 @@ class MapGraphicsView(QWidget):
         self.__zoomLevel = 2
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
         self.__tempCenterPointQGS = None
-        QTimer.singleShot(1000, self.renderTiles)
+
+        # TODO changed timer
+        self.__timerRenderTiles = QTimer()
+        # self.__timerRenderTiles.setInterval(200)
+        self.__timerRenderTiles.timeout.connect(self.renderTiles)
+        self.__timerRenderTiles.start(200)
+        # QTimer.singleShot(1000, self.renderTiles)
 
     def __del__(self):
         print("Destructing MapGraphicsView")
@@ -113,7 +119,8 @@ class MapGraphicsView(QWidget):
 
         self.resetQGSSceneSize()
         self.setDragMode(self.dragMode())
-        self.renderTiles()
+        # TODO kek
+        # self.renderTiles()
 
     def tileSource(self):
         return self.__tileSource
@@ -126,7 +133,9 @@ class MapGraphicsView(QWidget):
             self.tileSourceThread.finished.connect(self.tileSourceThread.deleteLater)
         for tileObject in self.__tileObjects:
             tileObject.setTileSource(tSource)
-        self.renderTiles()
+
+        # TODO kek
+        # self.renderTiles()
 
     def zoomLevel(self):
         return self.__zoomLevel
@@ -163,7 +172,8 @@ class MapGraphicsView(QWidget):
             self.__childView.centerOn(mousePoint)
         else:
             self.centerOn(centerGeoPos)
-        self.renderTiles()
+        # TODO kek
+        # self.renderTiles()
         self.zoomLevelChanged.emit(nZoom)
 
     def zoomIn(self, zMode):
@@ -244,7 +254,8 @@ class MapGraphicsView(QWidget):
         tileSize = self.__tileSource.tileSize()
         tilesPerRow = sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))
         tilesPerCol = tilesPerRow
-        perSide = int(max(boundingRect.width() / tileSize, boundingRect.height() / tileSize) + 3)
+        # TODO div 2 delete
+        perSide = int(max(boundingRect.width() / tileSize , boundingRect.height() / tileSize ) + 3)
         xc = int(max(0, (centerPointQGS.x() / tileSize) - perSide / 2))
         yc = int(max(0, (centerPointQGS.y() / tileSize) - perSide / 2))
         xMax = int(min(tilesPerRow, xc + perSide))
@@ -259,7 +270,6 @@ class MapGraphicsView(QWidget):
                 if tileIsThere:
                     continue
                 if freeTiles.empty():
-                    # TODO destructor call when it doesn't need
                     tileObject = MapTileGraphicsObject(tileSize)
                     tileObject.setTileSource(self.__tileSource)
                     self.__tileObjects.add(tileObject)
@@ -272,10 +282,12 @@ class MapGraphicsView(QWidget):
                     tileObject.setVisible(True)
                 # print('from MapGraphicsView ' + str(x) + str(y) + str(self.zoomLevel()))
                 tileObject.setTile(x, y, self.zoomLevel())
+        print('delete ', len(self.__tileObjects))
         while freeTiles.qsize() > 2:
             tileObject = freeTiles.get()
             self.__tileObjects.remove(tileObject)
             # self.__childScene.removeItem(tileObject)
+        print('after delete', len(self.__tileObjects))
 
     def resetQGSSceneSize(self):
         if not self.__tileSource:

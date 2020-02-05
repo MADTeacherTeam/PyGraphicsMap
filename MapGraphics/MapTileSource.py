@@ -1,6 +1,7 @@
 from PySide2 import QtCore
 from PySide2.QtGui import QImage
 from enum import Enum
+import numpy as np
 
 MAPGRAPHICS_CACHE_FOLDER_NAME = ".MapGraphicsCache"
 DEFAULT_CACHE_DAYS = 7
@@ -44,11 +45,13 @@ class MapTileSource(QtCore.QObject):
             print("Failed to open cache expiration file for writing:")
             fp.errorString()
             return
-        stream = QtCore.QDataStream(fp)
-        for row in self.__cacheExpirations:
-            stream << row
-        # stream << self.__cacheExpirations
-        print("Cache expirations saved to" + self.__cacheExpirationsFile)
+        np.save(fp, self.__cacheExpirations)
+        # stream = QtCore.QDataStream(fp)
+        # for row in self.__cacheExpirations:
+        #     forStream = self.__cacheExpirations[row].toString()
+        #     stream << (row + ' ' + forStream + '\n')
+        # stream << QtCore.QByteArray(self.__cacheExpirations)
+        print("Cache expirations saved to " + self.__cacheExpirationsFile)
 
     def requestTile(self, x, y, z):
         self.tileRequested.emit(x, y, z)
@@ -167,7 +170,6 @@ class MapTileSource(QtCore.QObject):
 
     def _getTileExpirationTime(self, cacheID):
         self.__loadCacheExpirationsFromDisk()
-        expireTime = QtCore.QDateTime()
         if cacheID in self.__cacheExpirations:
             expireTime = self.__cacheExpirations.get(cacheID)
         else:
@@ -235,9 +237,10 @@ class MapTileSource(QtCore.QObject):
         if not fp.open(QtCore.QIODevice.ReadOnly):
             print("Failed to open cache expiration file for reading:" + fp.errorString())
             return
-        stream = QtCore.QDataStream(fp)
-        for row in self.__cacheExpirations:
-            stream >> row
+        self.__cacheExpirations = np.load(path, allow_pickle=True).item()
+        # stream = QtCore.QDataStream(fp)
+        # for row in self.__cacheExpirations:
+        #     stream >> row
         # stream >> self.__cacheExpirations
 
     def __getDiskCacheDirectory(self, x, y, z):

@@ -111,7 +111,7 @@ class OSMTileSource(MapTileSource):
         if not image.loadFromData(bytes):
             print("Failed to make QImage from network bytes")
             return
-        expireTime = QDateTime
+        expireTime = QDateTime()
         if reply.hasRawHeader(QByteArray(b"Cache-Control")):
             cacheControl = reply.rawHeader(QByteArray(b"Cache-Control"))
             maxAgeFinder = QRegExp("max-age=(\\d+)")
@@ -119,6 +119,6 @@ class OSMTileSource(MapTileSource):
                 if maxAgeFinder.cap(1).isdigit():
                     delta = int(maxAgeFinder.cap(1))
                     if isinstance(delta, int):
-                        QDateTime.currentDateTimeUtc().addSecs(delta)
+                        expireTime = QDateTime.currentDateTimeUtc().addSecs(delta)
 
         self._prepareNewlyReceivedTile(x[0], y[0], z[0], image, expireTime)
