@@ -15,6 +15,7 @@ class MapGraphicsScene(QtCore.QObject):
             return
         object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
         object.destroyed.connect(self.slot_handleObjectDestroyed)
+
         self.__objects.add(object)
         self.objectAdded.emit(object)
 

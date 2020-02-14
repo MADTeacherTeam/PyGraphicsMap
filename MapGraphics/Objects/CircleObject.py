@@ -1,6 +1,6 @@
 from PySide2.QtCore import QRectF, QPointF
 from PySide2.QtGui import QColor, QPainter, QKeySequence
-from .MapGraphicsObject import MapGraphicsObject
+from ..MapGraphicsObject import MapGraphicsObject
 
 
 class CircleObject(MapGraphicsObject):

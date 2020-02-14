@@ -1,7 +1,7 @@
 from PySide2.QtCore import QRectF, QPointF
 from PySide2.QtGui import QPainter
-from .guts.Conversions import Conversions
-from .MapGraphicsObject import MapGraphicsObject
+from ..guts.Conversions import Conversions
+from ..MapGraphicsObject import MapGraphicsObject
 
 
 class LineObject(MapGraphicsObject):

@@ -54,3 +54,4 @@ class PrivateQGraphicsView(QGraphicsView):
         self.hadWheelEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.wheelEvent(self, event)
+

@@ -3,11 +3,12 @@ import sys
 from PySide2 import QtWidgets
 from PySide2.QtCore import QObject, QThread, Signal
 
-from MainApp.MainWindow import Ui_MainWindow
+from MainApp.MainWindow_ui import Ui_MainWindow
 from MapGraphics.MapGraphicsScene import MapGraphicsScene
 from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 from MainApp.PlaneManager import PlaneManager
+from MapGraphics.guts.CompositeTileSourceConfigurationWidget import CompositeTileSourceConfigurationWidget
 import threading
 
 
@@ -29,6 +30,20 @@ class MyWindow(QtWidgets.QMainWindow):
         self.view.setZoomLevel(4)
         self.view.centerOn2(-111.658752, 40.255456)
 
+        # TODO creation of CTSC
+        # self.tileConfigWidget = CompositeTileSourceConfigurationWidget(self.ui.dockWidget)
+        # self.ui.dockWidget.setWidget(self.tileConfigWidget)
+        #
+        # self.tileConfigWidget.menu.addAction('Mark', self.view.setMarkFlag)
+        # self.tileConfigWidget.menu.addAction('None', self.view.setMarkFlag)
+        # self.tileConfigWidget.ui.addSourceButton.setMenu(self.tileConfigWidget.menu)
+        #
+        # self.tileConfigWidget.removeMenu.addAction('Delete Mark', self.view.setDeleteFlag)
+        # self.tileConfigWidget.removeMenu.addAction('None', self.view.setDeleteFlag)
+        # self.tileConfigWidget.ui.removeSourceButton.setMenu(self.tileConfigWidget.removeMenu)
+
+
+        # ----
         self.__thread_for_planes = QThread()
         self.__thread_for_planes.setObjectName('Zapor keka')
         self.flight = PlaneManager(scene)

@@ -13,6 +13,7 @@ from math import sqrt, inf
 class MapGraphicsView(QWidget):
     __metaclass__ = PrivateQGraphicsInfoSource
     zoomLevelChanged = Signal(int)
+    createMark = Signal(QPointF)
 
     class DragMode(Enum):
         NoDrag = 0
@@ -22,6 +23,10 @@ class MapGraphicsView(QWidget):
     class ZoomMode(Enum):
         CenterZoom = 0
         MouseZoom = 1
+
+    class ObjectCreationMode(Enum):
+        AddObjectMode = 0
+        RemoveObjectMode = 1
 
     def __init__(self, scene=None, parent=None):
         QWidget.__init__(self, parent)
@@ -35,12 +40,7 @@ class MapGraphicsView(QWidget):
         self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
         self.__tempCenterPointQGS = None
 
-        # TODO changed timer
-        self.__timerRenderTiles = QTimer()
-        # self.__timerRenderTiles.setInterval(200)
-        self.__timerRenderTiles.timeout.connect(self.renderTiles)
-        self.__timerRenderTiles.start(200)
-        # QTimer.singleShot(1000, self.renderTiles)
+        QTimer.singleShot(1000, self.renderTiles)
 
     def __del__(self):
         print("Destructing MapGraphicsView")
@@ -99,13 +99,13 @@ class MapGraphicsView(QWidget):
         childScene = PrivateQGraphicsScene(scene, self, self)
         self.zoomLevelChanged.connect(childScene.handleZoomLevelChanged)
         childView = PrivateQGraphicsView(self, childScene)
-        # childView.constr_2_arg(childScene, self)
         childView.hadMouseDoubleClickEvent.connect(self.handleChildMouseDoubleClick)
         childView.hadMouseMoveEvent.connect(self.handleChildMouseMove)
         childView.hadMousePressEvent.connect(self.handleChildMousePress)
         childView.hadMouseReleaseEvent.connect(self.handleChildMouseRelease)
         childView.hadWheelEvent.connect(self.handleChildViewScrollWheel)
         childView.hadContextMenuEvent.connect(self.handleChildViewContextMenu)
+
         #########################################################################################################
         # if self.layout()!=0:
         # delete layout
@@ -119,8 +119,7 @@ class MapGraphicsView(QWidget):
 
         self.resetQGSSceneSize()
         self.setDragMode(self.dragMode())
-        # TODO kek
-        # self.renderTiles()
+        self.renderTiles()
 
     def tileSource(self):
         return self.__tileSource
@@ -134,8 +133,7 @@ class MapGraphicsView(QWidget):
         for tileObject in self.__tileObjects:
             tileObject.setTileSource(tSource)
 
-        # TODO kek
-        # self.renderTiles()
+        self.renderTiles()
 
     def zoomLevel(self):
         return self.__zoomLevel
@@ -172,8 +170,7 @@ class MapGraphicsView(QWidget):
             self.__childView.centerOn(mousePoint)
         else:
             self.centerOn(centerGeoPos)
-        # TODO kek
-        # self.renderTiles()
+        self.renderTiles()
         self.zoomLevelChanged.emit(nZoom)
 
     def zoomIn(self, zMode):
@@ -233,10 +230,10 @@ class MapGraphicsView(QWidget):
                                                      int(self.__childView.height() / 2.0))
         self.__tempCenterPointQGS = centerPointQGS
         viewportPolygonQGV = QPolygon()
-        viewportPolygonQGV << QPoint(0, 0)\
-            << QPoint(0, self.__childView.height())\
-            << QPoint(self.__childView.width(), self.__childView.height())\
-            << QPoint(self.__childView.width(), 0)
+        viewportPolygonQGV << QPoint(0, 0) \
+        << QPoint(0, self.__childView.height()) \
+        << QPoint(self.__childView.width(), self.__childView.height()) \
+        << QPoint(self.__childView.width(), 0)
         viewportPolygonQGS = self.__childView.mapToScene(viewportPolygonQGV)
         boundingRect = viewportPolygonQGS.boundingRect()
         exaggeratedBoundingRect = boundingRect
@@ -255,7 +252,7 @@ class MapGraphicsView(QWidget):
         tilesPerRow = sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))
         tilesPerCol = tilesPerRow
         # TODO div 2 delete
-        perSide = int(max(boundingRect.width() / tileSize , boundingRect.height() / tileSize ) + 3)
+        perSide = int(max(boundingRect.width() / tileSize / 2, boundingRect.height() / tileSize / 2) + 3)
         xc = int(max(0, (centerPointQGS.x() / tileSize) - perSide / 2))
         yc = int(max(0, (centerPointQGS.y() / tileSize) - perSide / 2))
         xMax = int(min(tilesPerRow, xc + perSide))
@@ -282,12 +279,12 @@ class MapGraphicsView(QWidget):
                     tileObject.setVisible(True)
                 # print('from MapGraphicsView ' + str(x) + str(y) + str(self.zoomLevel()))
                 tileObject.setTile(x, y, self.zoomLevel())
-        print('delete ', len(self.__tileObjects))
+        # print('delete ', len(self.__tileObjects))
         while freeTiles.qsize() > 2:
             tileObject = freeTiles.get()
             self.__tileObjects.remove(tileObject)
             # self.__childScene.removeItem(tileObject)
-        print('after delete', len(self.__tileObjects))
+        # print('after delete', len(self.__tileObjects))
 
     def resetQGSSceneSize(self):
         if not self.__tileSource:
