@@ -7,5 +7,4 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         super().__init__(parent)
         self.ui = Ui_CompositeTileSourceConfigurationWidget()
         self.ui.setupUi(self)
-        self.menu = QMenu(self.ui.addSourceButton)
-        self.removeMenu = QMenu(self.ui.removeSourceButton)
+

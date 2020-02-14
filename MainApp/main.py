@@ -31,8 +31,8 @@ class MyWindow(QtWidgets.QMainWindow):
         self.view.centerOn2(-111.658752, 40.255456)
 
         # TODO creation of CTSC
-        # self.tileConfigWidget = CompositeTileSourceConfigurationWidget(self.ui.dockWidget)
-        # self.ui.dockWidget.setWidget(self.tileConfigWidget)
+        self.tileConfigWidget = CompositeTileSourceConfigurationWidget(self.ui.dockWidget)
+        self.ui.dockWidget.setWidget(self.tileConfigWidget)
         #
         # self.tileConfigWidget.menu.addAction('Mark', self.view.setMarkFlag)
         # self.tileConfigWidget.menu.addAction('None', self.view.setMarkFlag)
