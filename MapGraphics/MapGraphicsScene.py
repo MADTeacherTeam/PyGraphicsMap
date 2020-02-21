@@ -2,6 +2,8 @@ from PySide2 import QtCore
 from .MapGraphicsObject import MapGraphicsObject
 from enum import Enum
 from .Objects.MarkObject import MarkObject
+from .Objects.CircleObject import CircleObject
+from .Objects.RouteObject import RouteObject
 # from MapGraphics.MapGraphicsView import MapGraphicsView
 
 
@@ -25,6 +27,14 @@ class MapGraphicsScene(QtCore.QObject):
         self.tempObj = None
 
     def addObject(self, object):
+        if isinstance(object, RouteObject):
+            self.__objects.add(object)
+            self.objectAdded.emit(object)
+
+            self.tempObj = None
+            self.createObject()
+            return
+
         if object == 0:
             return
         object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
@@ -63,6 +73,12 @@ class MapGraphicsScene(QtCore.QObject):
     def createObject(self):
         if self.__creationMode == MapGraphicsScene.ObjectCreationMode.MarkCreation:
             self.tempObj = MarkObject()
+        # elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteCreation:
+        #     if self.tempObj is None:
+        #         self.tempObj = []
+        #     elif len(self.tempObj) == 2:
+        #         self.tempObj = RouteObject(self.tempObj[0], self.tempObj[1])
+        #         self.addObject(self.tempObj)
         else:
             self.tempObj = None
         pass

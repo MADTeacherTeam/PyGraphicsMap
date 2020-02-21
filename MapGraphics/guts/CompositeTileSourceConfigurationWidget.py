@@ -13,6 +13,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         self.ui = Ui_CompositeTileSourceConfigurationWidget()
         self.ui.setupUi(self)
         self.ui.addMark_button.clicked.connect(self.addMarkButtonClicked)
+        self.ui.addRoute_button.clicked.connect(self.addRouteButtonClicked)
         # self.creationMode.connect(self.__scene.setCreationMode)
 
     def addMarkButtonClicked(self):
@@ -29,7 +30,14 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         pass
 
     def addRouteButtonClicked(self):
-        pass
+        if self.ui.addRoute_button.isChecked():
+            self.ui.removeRoute_button.setChecked(False)
+            # self.creationMode.emit(MapGraphicsScene.ObjectCreationMode.MarkCreation)
+            self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.RouteCreation)
+            self.__scene.createObject()
+        else:
+            self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
+            self.__scene.tempObj = None
 
     def removeRouteButtonClicked(self):
         pass

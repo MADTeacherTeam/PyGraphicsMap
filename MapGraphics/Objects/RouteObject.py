@@ -1,5 +1,5 @@
 from ..MapGraphicsObject import MapGraphicsObject
-from PySide2.QtCore import QPointF,QLineF
+from PySide2.QtCore import QPointF, QLineF
 from .LineObject import LineObject
 from ..Position import Position
 from requests import get
@@ -21,11 +21,18 @@ class RouteObject(MapGraphicsObject):
         self.getWay()
         self.setRoad()
 
+    def __del__(self):
+        self.__lines.clear()
+
     def getWay(self):
         response = get('http://router.project-osrm.org/route/v1/driving/%s,%s;%s,%s?overview=full&geometries=geojson' \
-                   % (self.__posBegin.x(), self.__posBegin.y(), self.__posEnd.x(), self.__posEnd.y()))
+                       % (self.__posBegin.x(), self.__posBegin.y(), self.__posEnd.x(), self.__posEnd.y()))
         content = loads((response.content))
-        self.__linePoints = content['routes'][0]['geometry']["coordinates"]
+        try:
+            self.__linePoints = content['routes'][0]['geometry']["coordinates"]
+        except Exception:
+            print('Exception')
+            self.getWay()
 
     def setRoad(self):
         cnt = 0
@@ -33,15 +40,20 @@ class RouteObject(MapGraphicsObject):
         for coord in self.__linePoints:
             if lastPoint == None:
                 cnt += 1
-                lastPoint = Position(coord[0],coord[1],0.0)
+                lastPoint = QPointF(coord[0], coord[1])
                 continue
-            currentPoint = Position(coord[0],coord[1],0.0)
-            line=LineObject(lastPoint,currentPoint,2)
+            currentPoint = QPointF(coord[0], coord[1])
+            line = QLineF(lastPoint, currentPoint)
+            # self.newObjectGenerated.emit(line)
             self.__lines.append(line)
             lastPoint = currentPoint
-            cnt+=1
-            if cnt==200:
+            cnt += 1
+            if cnt == 200:
                 break
 
     def ListLine(self):
         return self.__lines
+
+    def paint(self, painter, option, widget=0):
+        for each in self.__lines:
+            painter.drawLine(each)

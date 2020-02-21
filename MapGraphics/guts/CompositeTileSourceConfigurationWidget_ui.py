@@ -56,6 +56,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.removeMark_button = QPushButton(self.formLayoutWidget)
         self.removeMark_button.setObjectName(u"removeMark_button")
         icon1 = QIcon()
+        self.removeMark_button.setCheckable(True)
         icon1.addFile(u"../images/editdelete.png", QSize(), QIcon.Normal, QIcon.Off)
         self.removeMark_button.setIcon(icon1)
 
@@ -99,12 +100,14 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.addRoute_button = QPushButton(self.formLayoutWidget_2)
         self.addRoute_button.setObjectName(u"addRoute_button")
         self.addRoute_button.setIcon(icon)
+        self.addRoute_button.setCheckable(True)
 
         self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.addRoute_button)
 
         self.removeRoute_button = QPushButton(self.formLayoutWidget_2)
         self.removeRoute_button.setObjectName(u"removeRoute_button")
         self.removeRoute_button.setIcon(icon1)
+        self.removeRoute_button.setCheckable(True)
 
         self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.removeRoute_button)
 

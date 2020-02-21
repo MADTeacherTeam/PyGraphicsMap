@@ -92,7 +92,7 @@ class PolygonObject(MapGraphicsObject):
     def constructEditCircle(self):
         toRet = CircleObject(8)
         toRet.posChanged.connect(self.handleEditCirclePosChanged)
-        toRet.destroyed().connect(self.__handleEditCircleDestroyed)
+        toRet.destroyed.connect(self.__handleEditCircleDestroyed)
         self.newObjectGenerated.emit(toRet)
         return toRet
 
