@@ -4,7 +4,7 @@ from PySide2.QtCore import QRectF
 
 
 class MarkObject(MapGraphicsObject):
-    def __init__(self, pos, img=0, rot=180, parent=None):
+    def __init__(self, img=0, rot=180, parent=None):
         # TODO zoomLevelChanged marks dont change pos
         super().__init__(True, parent)
         imageList = ['../images/mark0.png', '../images/mark1.png', '../images/mark2.png']
@@ -15,7 +15,7 @@ class MarkObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, True)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
-        self.setMark(pos, self.__sizeInMeters, rot)
+        # self.setMark(self.pos(), self.__sizeInMeters, rot)
 
     def __del__(self):
         print('Delete MarkObject')
@@ -26,14 +26,14 @@ class MarkObject(MapGraphicsObject):
     def paint(self, painter, option, widget=0):
         painter.drawImage(self.__sizeInMeters, self.__image)
 
-    def setMark(self, pos, sizeInMeters, rotation=None):
-        width = sizeInMeters.width()
-        height = sizeInMeters.height()
+    def setMark(self, rotation=180):
+        width = self.__sizeInMeters.width()
+        height = self.__sizeInMeters.height()
         self.__sizeInMeters = QRectF(-0.5 * width,
                                      -0.5 * height,
                                      width, height)
         self.redrawRequested.emit()
-        self.setPos(pos)
+        # self.setPos(pos)
         if rotation:
             self.setRotation(rotation)
 

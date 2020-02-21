@@ -46,6 +46,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
 
         self.addMark_button = QPushButton(self.formLayoutWidget)
         self.addMark_button.setObjectName(u"addMark_button")
+        self.addMark_button.setCheckable(True)
         icon = QIcon()
         icon.addFile(u"../images/edit_add.png", QSize(), QIcon.Normal, QIcon.Off)
         self.addMark_button.setIcon(icon)
@@ -95,17 +96,17 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
 
         self.formLayout_2.setItem(0, QFormLayout.FieldRole, self.verticalSpacer_3)
 
-        self.setRoad_button_2 = QPushButton(self.formLayoutWidget_2)
-        self.setRoad_button_2.setObjectName(u"setRoad_button_2")
-        self.setRoad_button_2.setIcon(icon)
+        self.addRoute_button = QPushButton(self.formLayoutWidget_2)
+        self.addRoute_button.setObjectName(u"addRoute_button")
+        self.addRoute_button.setIcon(icon)
 
-        self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.setRoad_button_2)
+        self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.addRoute_button)
 
-        self.removeRoad_button_2 = QPushButton(self.formLayoutWidget_2)
-        self.removeRoad_button_2.setObjectName(u"removeRoad_button_2")
-        self.removeRoad_button_2.setIcon(icon1)
+        self.removeRoute_button = QPushButton(self.formLayoutWidget_2)
+        self.removeRoute_button.setObjectName(u"removeRoute_button")
+        self.removeRoute_button.setIcon(icon1)
 
-        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.removeRoad_button_2)
+        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.removeRoute_button)
 
         self.test_button_3 = QPushButton(self.formLayoutWidget_2)
         self.test_button_3.setObjectName(u"test_button_3")
@@ -142,8 +143,8 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.changeColor_button.setText("")
         self.test_button.setText("")
         self.toolBox.setItemText(self.toolBox.indexOf(self.markPage), QCoreApplication.translate("CompositeTileSourceConfigurationWidget", u"Marks", None))
-        self.setRoad_button_2.setText("")
-        self.removeRoad_button_2.setText("")
+        self.addRoute_button.setText("")
+        self.removeRoute_button.setText("")
         self.test_button_3.setText("")
         self.test_button_2.setText("")
         self.toolBox.setItemText(self.toolBox.indexOf(self.routePage), QCoreApplication.translate("CompositeTileSourceConfigurationWidget", u"Routes", None))

@@ -16,10 +16,6 @@ class PlaneManager(QObject):
 
         # self.createPlanes()
 
-    def __del__(self):
-        for row in self.__planeObjects:
-            self.__planeObjects[row].__del__()
-
     def createPlanes(self):
         if self.__planeObjects:
             self.reposPlaneObjects()

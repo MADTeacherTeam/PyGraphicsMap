@@ -9,7 +9,7 @@ from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 from MainApp.PlaneManager import PlaneManager
 from MapGraphics.guts.CompositeTileSourceConfigurationWidget import CompositeTileSourceConfigurationWidget
-import threading
+from MapGraphics.ObjectManager import ObjectManager
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -31,7 +31,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.view.centerOn2(-111.658752, 40.255456)
 
         # TODO creation of CTSC
-        self.tileConfigWidget = CompositeTileSourceConfigurationWidget(self.ui.dockWidget)
+        self.tileConfigWidget = CompositeTileSourceConfigurationWidget(scene, self.ui.dockWidget)
         self.ui.dockWidget.setWidget(self.tileConfigWidget)
         #
         # self.tileConfigWidget.menu.addAction('Mark', self.view.setMarkFlag)

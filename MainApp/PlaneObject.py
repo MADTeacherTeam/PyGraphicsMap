@@ -15,9 +15,6 @@ class PlaneObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
         self.setPlane(pos, self.__sizeInMeters, rot)
 
-    def __del__(self):
-        print('Plane Object del')
-
     def boundingRect(self):
         return self.__sizeInMeters
 

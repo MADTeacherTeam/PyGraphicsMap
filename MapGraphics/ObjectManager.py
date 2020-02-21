@@ -4,11 +4,12 @@ import random
 
 
 class ObjectManager(QObject):
-    deleteFromScene = Signal(object)
 
     def __init__(self, scene):
         super().__init__()
         self.__scene = scene
+        self.__scene.sendObjectToManager.connect(self.createObject)
+        self.__scene.sendObjectToRemove.connect(self.removeObject)
         self.__objectsDict = {}
 
     def addObject(self, object, type: str):
@@ -17,7 +18,9 @@ class ObjectManager(QObject):
         else:
             self.__objectsDict[type] = [object]
 
-    def delObject(self, object):
+        self.__scene.addObject(object)
+
+    def removeObject(self, object):
         # TODO maybe do type
         print(self.__objectsDict)
         deleteFlag = False
@@ -29,12 +32,12 @@ class ObjectManager(QObject):
                     break
             if deleteFlag:
                 break
-        self.deleteFromScene.emit(object)
+        self.__scene.removeObject(object)
 
-    def createObject(self, point:QPointF):
-        rand = random.randint(0, 2)
-        mark = MarkObject(point, rand)
-        self.addObject(mark, 'Mark')
-        self.__scene.addObject(mark)
+    def createObject(self, point:QPointF, type):
+        if type == 'MarkObject':
+            rand = random.randint(0, 2)
+            mark = MarkObject(point, rand)
+            self.addObject(mark, 'MarkObject')
 
 

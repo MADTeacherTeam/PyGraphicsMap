@@ -8,12 +8,12 @@ from .guts.PrivateQGraphicsView import PrivateQGraphicsView
 from enum import Enum
 from queue import Queue
 from math import sqrt, inf
+from MapGraphics.Objects.MarkObject import MarkObject
 
 
 class MapGraphicsView(QWidget):
     __metaclass__ = PrivateQGraphicsInfoSource
     zoomLevelChanged = Signal(int)
-    createMark = Signal(QPointF)
 
     class DragMode(Enum):
         NoDrag = 0
@@ -24,14 +24,13 @@ class MapGraphicsView(QWidget):
         CenterZoom = 0
         MouseZoom = 1
 
-    class ObjectCreationMode(Enum):
-        AddObjectMode = 0
-        RemoveObjectMode = 1
-
     def __init__(self, scene=None, parent=None):
         QWidget.__init__(self, parent)
         self.__tileSource = None
         self.__dragMode = None
+
+        self.blockFlag = False
+
         self.tileSourceThread = QThread()
         self.tileSourceThread.start()
         self.__tileObjects = set()
@@ -41,6 +40,8 @@ class MapGraphicsView(QWidget):
         self.__tempCenterPointQGS = None
 
         QTimer.singleShot(1000, self.renderTiles)
+
+        self.__scene.creationModeChanged.connect(self.setDragModeByScene)
 
     def __del__(self):
         print("Destructing MapGraphicsView")
@@ -92,6 +93,15 @@ class MapGraphicsView(QWidget):
             return
         self.__childView.setDragMode(qgvDragMode)
 
+    def objectCreationMode(self):
+        return self.__objectCreationMode
+
+    def setDragModeByScene(self, mode):
+        if mode == self.__scene.ObjectCreationMode.MarkCreation:
+            self.setDragMode(MapGraphicsView.DragMode.NoDrag)
+        else:
+            self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
+
     def scene(self):
         return self.__scene
 
@@ -115,6 +125,8 @@ class MapGraphicsView(QWidget):
 
         self.__childView = childView
         self.__childScene = childScene
+        # TODO new signal
+        self.__childScene.changed.connect(self.setBlockFlag)
         self.__scene = scene
 
         self.resetQGSSceneSize()
@@ -202,7 +214,18 @@ class MapGraphicsView(QWidget):
     def handleChildMousePress(self, event):
         event.setAccepted(False)
 
+    def setBlockFlag(self):
+        self.blockFlag = True
+
     def handleChildMouseRelease(self, event):
+        if self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.MarkCreation:
+            if not self.blockFlag:
+                mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
+                self.__scene.tempObj.setPos(mousePoint)
+                self.__scene.tempObj.setMark()
+                self.__scene.addObject(self.__scene.tempObj)
+            # self.requestObjectCreation.emit()
+        self.blockFlag = False
         event.setAccepted(False)
 
     def handleChildViewContextMenu(self, event):

@@ -1,14 +1,28 @@
 from PySide2 import QtCore
 from .MapGraphicsObject import MapGraphicsObject
+from enum import Enum
+from .Objects.MarkObject import MarkObject
+# from MapGraphics.MapGraphicsView import MapGraphicsView
 
 
 class MapGraphicsScene(QtCore.QObject):
     objectAdded = QtCore.Signal(MapGraphicsObject)
     objectRemoved = QtCore.Signal(MapGraphicsObject)
 
+    creationModeChanged = QtCore.Signal(object)
+
+    class ObjectCreationMode(Enum):
+        NoCreation = 0
+        MarkCreation = 1
+        RouteCreation = 2
+        MarkRemove = 3
+        RouteRemove = 4
+
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
         self.__objects = set()
+        self.__creationMode = MapGraphicsScene.ObjectCreationMode.NoCreation
+        self.tempObj = None
 
     def addObject(self, object):
         if object == 0:
@@ -18,6 +32,9 @@ class MapGraphicsScene(QtCore.QObject):
 
         self.__objects.add(object)
         self.objectAdded.emit(object)
+
+        self.tempObj = None
+        self.createObject()
 
     def removeObject(self, object):
         if object in self.__objects:
@@ -35,3 +52,17 @@ class MapGraphicsScene(QtCore.QObject):
     def __del__(self):
         print("del MapGragphics scene")
         self.__objects.clear()
+
+    def setCreationMode(self, mode):
+        self.__creationMode = mode
+        self.creationModeChanged.emit(self.__creationMode)
+
+    def getCreationMode(self):
+        return self.__creationMode
+
+    def createObject(self):
+        if self.__creationMode == MapGraphicsScene.ObjectCreationMode.MarkCreation:
+            self.tempObj = MarkObject()
+        else:
+            self.tempObj = None
+        pass
