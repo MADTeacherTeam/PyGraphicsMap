@@ -53,14 +53,14 @@ class MyWindow(QtWidgets.QMainWindow):
         # self.__thread_for_planes.finished.connect(self.flight.deleteLater)
         # self.threadPlaneManager.emit()
 
-    def closeEvent(self, event):
-        self.__closeThreads()
-        super(QtWidgets.QMainWindow, self).closeEvent(event)
+    # def closeEvent(self, event):
+    #     self.__closeThreads()
+    #     super(QtWidgets.QMainWindow, self).closeEvent(event)
 
-    def __closeThreads(self):
-        self.__thread_for_planes.quit()
-        self.__thread_for_planes.wait()
-        self.view.stopViewThreads()
+    # def __closeThreads(self):
+    #     self.__thread_for_planes.quit()
+    #     self.__thread_for_planes.wait()
+    #     self.view.stopViewThreads()
 
 
 if __name__ == '__main__':

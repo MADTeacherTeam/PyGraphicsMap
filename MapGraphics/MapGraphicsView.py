@@ -206,7 +206,7 @@ class MapGraphicsView(QWidget):
             mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
             self.__scene.tempObj.setPos(mousePoint)
             self.__scene.tempObj.setMark()
-            self.__scene.objectAdded.emit(self.__scene.tempObj)
+            # self.__scene.objectAdded.emit(self.__scene.tempObj)
         if self.__childView and self.__tileSource:
             centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                          int(self.__childView.height() / 2.0))
