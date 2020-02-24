@@ -18,6 +18,7 @@ class PrivateQGraphicsView(QGraphicsView):
             super(PrivateQGraphicsView, self).__init__(scene, parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setMouseTracking(True)
 
     def mouseDoubleClickEvent(self, event):
         event.setAccepted(False)

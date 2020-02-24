@@ -13,9 +13,9 @@ class PolygonObject(MapGraphicsObject):
         MapGraphicsObject.__init__(self, parent)
         self.__geoPoly = None
         self.__fillColor = fillColor
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable, False)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
         self.setGeoPoly(geoPoly)
         self.__editCircles = []
         self.__addVertexCircles = []

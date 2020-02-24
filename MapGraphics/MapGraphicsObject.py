@@ -18,6 +18,8 @@ class MapGraphicsObject(QtCore.QObject):
     redrawRequested = QtCore.Signal()
     keyFocusRequested = QtCore.Signal()
 
+    removeRequested = QtCore.Signal(object)
+
     class MapGraphicsObjectFlag(Enum):
         ObjectIsMovable = 1
         ObjectIsSelectable = 2
@@ -185,6 +187,7 @@ class MapGraphicsObject(QtCore.QObject):
         event.ignore()
 
     def mousePressEvent(self, event):
+        self.removeRequested.emit(self)
         if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value or self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value:
             event.accept()
             if self.__flags & MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value:

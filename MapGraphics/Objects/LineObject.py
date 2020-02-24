@@ -10,6 +10,9 @@ class LineObject(MapGraphicsObject):
         self.__a = endA
         self.__b = endB
         self.__thickness = max(0, min(5, thickness))
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
         self.updatePositionFromEndPoints()
 
     def boundingRect(self):

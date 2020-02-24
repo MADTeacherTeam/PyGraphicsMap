@@ -64,16 +64,21 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
 
         self.changeColor_button = QPushButton(self.formLayoutWidget)
         self.changeColor_button.setObjectName(u"changeColor_button")
+        self.changeColor_button.setCheckable(True)
         icon2 = QIcon()
         icon2.addFile(u"../images/palette.png", QSize(), QIcon.Normal, QIcon.Off)
         self.changeColor_button.setIcon(icon2)
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.changeColor_button)
 
-        self.test_button = QPushButton(self.formLayoutWidget)
-        self.test_button.setObjectName(u"test_button")
+        self.moveMark_button = QPushButton(self.formLayoutWidget)
+        self.moveMark_button.setObjectName(u"moveMark_button")
+        self.moveMark_button.setCheckable(True)
+        icon3 = QIcon()
+        icon3.addFile(u"../images/drag.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.moveMark_button.setIcon(icon3)
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.test_button)
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.moveMark_button)
 
         self.verticalSpacer_2 = QSpacerItem(20, 80, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -144,7 +149,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.addMark_button.setText("")
         self.removeMark_button.setText("")
         self.changeColor_button.setText("")
-        self.test_button.setText("")
+        self.moveMark_button.setText("")
         self.toolBox.setItemText(self.toolBox.indexOf(self.markPage), QCoreApplication.translate("CompositeTileSourceConfigurationWidget", u"Marks", None))
         self.addRoute_button.setText("")
         self.removeRoute_button.setText("")

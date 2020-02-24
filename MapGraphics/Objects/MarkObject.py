@@ -1,6 +1,7 @@
 from ..MapGraphicsObject import MapGraphicsObject
 from PySide2.QtGui import QImage
 from PySide2.QtCore import QRectF
+from copy import deepcopy
 
 
 class MarkObject(MapGraphicsObject):
@@ -12,7 +13,7 @@ class MarkObject(MapGraphicsObject):
         self.__sizeInMeters = QRectF(self.__image.width() / 2, self.__image.height() / 2,
                                      self.__image.width() / 15, self.__image.height() / 15)
 
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, True)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
         # self.setMark(self.pos(), self.__sizeInMeters, rot)

@@ -5,6 +5,7 @@ from .Objects.MarkObject import MarkObject
 from .Objects.CircleObject import CircleObject
 from .Objects.RouteObject import RouteObject
 # from MapGraphics.MapGraphicsView import MapGraphicsView
+import copy
 
 
 class MapGraphicsScene(QtCore.QObject):
@@ -22,33 +23,41 @@ class MapGraphicsScene(QtCore.QObject):
 
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
-        self.__objects = set()
+        self.__objects = {}
         self.__creationMode = MapGraphicsScene.ObjectCreationMode.NoCreation
         self.tempObj = None
 
     def addObject(self, object):
-        if isinstance(object, RouteObject):
-            self.__objects.add(object)
-            self.objectAdded.emit(object)
+        # if isinstance(object, RouteObject):
+        #     self.__objects.add(object)
+        #     self.objectAdded.emit(object)
+        #
+        #     self.tempObj = None
+        #     self.createObject()
+        #     return
 
-            self.tempObj = None
-            self.createObject()
-            return
-
+        # object = type(object)()
         if object == 0:
             return
+
         object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
         object.destroyed.connect(self.slot_handleObjectDestroyed)
+        object.removeRequested.connect(self.slot_handleObjectDestroyed)
 
-        self.__objects.add(object)
+        if object.__class__.__name__ in self.__objects.keys():
+            self.__objects[object.__class__.__name__].append(object)
+        else:
+            self.__objects[object.__class__.__name__] = [object]
+
+        # self.__objects[object.__class__.__name__] = object
         self.objectAdded.emit(object)
 
         self.tempObj = None
         self.createObject()
 
     def removeObject(self, object):
-        if object in self.__objects:
-            self.__objects.remove(object)
+        if object in self.__objects[object.__class__.__name__]:
+            self.__objects[object.__class__.__name__].remove(object)
             print('remove Object')
             self.objectRemoved.emit(object)
 
@@ -76,9 +85,18 @@ class MapGraphicsScene(QtCore.QObject):
         # elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteCreation:
         #     if self.tempObj is None:
         #         self.tempObj = []
-        #     elif len(self.tempObj) == 2:
-        #         self.tempObj = RouteObject(self.tempObj[0], self.tempObj[1])
+        #     elif len(self.tempObj) >= 2:
+        #         self.tempObj = RouteObject(self.tempObj[-2], self.tempObj[-1])
         #         self.addObject(self.tempObj)
         else:
             self.tempObj = None
-        pass
+
+    def deleteObject(self, object):
+        if self.__creationMode == MapGraphicsScene.ObjectCreationMode.MarkRemove:
+            if isinstance(object, MarkObject):
+                self.removeObject(object)
+
+    def setObjectMovable(self, type, flag=True):
+        for obj in self.__objects[type]:
+            obj.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, flag)
+

@@ -8,9 +8,9 @@ class CircleObject(MapGraphicsObject):
         super().__init__(sizeIsZoomInvariant, parent)
         self.__fillColor = fillColor
         self.__radius = max(radius, 0.01)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value)
-        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
+        self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
 
     def __del__(self):
         print('del circle object')
@@ -29,7 +29,6 @@ class CircleObject(MapGraphicsObject):
     def setRadius(self, radius):
         self.__radius = radius
         self.redrawRequested.emit()
-        # SIGNAL redrawRequested
 
     def keyReleaseEvent(self, event):
         if event.matches(QKeySequence.Delete):

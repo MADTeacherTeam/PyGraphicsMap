@@ -28,9 +28,6 @@ class MapGraphicsView(QWidget):
         QWidget.__init__(self, parent)
         self.__tileSource = None
         self.__dragMode = None
-
-        self.blockFlag = False
-
         self.tileSourceThread = QThread()
         self.tileSourceThread.start()
         self.__tileObjects = set()
@@ -101,6 +98,8 @@ class MapGraphicsView(QWidget):
             self.setDragMode(MapGraphicsView.DragMode.NoDrag)
         elif mode == self.__scene.ObjectCreationMode.RouteCreation:
             self.setDragMode(MapGraphicsView.DragMode.NoDrag)
+        elif mode == self.__scene.ObjectCreationMode.MarkRemove:
+            self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
         else:
             self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
 
@@ -127,8 +126,6 @@ class MapGraphicsView(QWidget):
 
         self.__childView = childView
         self.__childScene = childScene
-        # TODO new signal
-        self.__childScene.changed.connect(self.setBlockFlag)
         self.__scene = scene
 
         self.resetQGSSceneSize()
@@ -205,6 +202,11 @@ class MapGraphicsView(QWidget):
         event.setAccepted(False)
 
     def handleChildMouseMove(self, event):
+        if self.__scene.tempObj:
+            mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
+            self.__scene.tempObj.setPos(mousePoint)
+            self.__scene.tempObj.setMark()
+            self.__scene.objectAdded.emit(self.__scene.tempObj)
         if self.__childView and self.__tileSource:
             centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                          int(self.__childView.height() / 2.0))
@@ -216,22 +218,17 @@ class MapGraphicsView(QWidget):
     def handleChildMousePress(self, event):
         event.setAccepted(False)
 
-    def setBlockFlag(self):
-        self.blockFlag = True
-
     def handleChildMouseRelease(self, event):
         if self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.MarkCreation:
-            if not self.blockFlag:
-                mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
-                self.__scene.tempObj.setPos(mousePoint)
-                self.__scene.tempObj.setMark()
-                self.__scene.addObject(self.__scene.tempObj)
-            # self.requestObjectCreation.emit()
+            mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
+            self.__scene.tempObj.setPos(mousePoint)
+            self.__scene.tempObj.setMark()
+            self.__scene.addObject(self.__scene.tempObj)
+        # self.requestObjectCreation.emit()
         # elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
         #     mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
         #     self.__scene.tempObj.append(mousePoint)
         #     self.__scene.createObject()
-        self.blockFlag = False
         event.setAccepted(False)
 
     def handleChildViewContextMenu(self, event):
