@@ -20,6 +20,11 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         self.ui.addRoute_button.clicked.connect(self.addRouteButtonClicked)
         # self.creationMode.connect(self.__scene.setCreationMode)
 
+        self.ui.toolBox.currentChanged.connect(self.clearToolBoxButtons)
+
+    def clearToolBoxButtons(self, index):
+        print(index)
+
     def addMarkButtonClicked(self):
         if self.ui.addMark_button.isChecked():
             self.ui.moveMark_button.setChecked(False)
@@ -30,13 +35,10 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.createObject()
         else:
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
-            self.__scene.tempObj.setVisible(False)
-            self.__scene.tempObj = None
+            self.__scene.clearTempObject()
 
     def removeMarkButtonClicked(self):
-        if self.__scene.tempObj:
-            self.__scene.tempObj.setVisible(False)
-            self.__scene.tempObj = None
+        self.__scene.clearTempObject()
         if self.ui.removeMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.moveMark_button.setChecked(False)
@@ -53,9 +55,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def moveMarkButtonClicked(self):
         from MapGraphics.Objects.MarkObject import MarkObject
-        if self.__scene.tempObj:
-            self.__scene.tempObj.setVisible(False)
-            self.__scene.tempObj = None
+        self.__scene.clearTempObject()
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
@@ -73,8 +73,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.createObject()
         else:
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
-            self.__scene.tempObj.setVisible(False)
-            self.__scene.tempObj = None
+            self.__scene.clearTempObject()
 
     def removeRouteButtonClicked(self):
         pass

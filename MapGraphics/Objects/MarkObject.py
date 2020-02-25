@@ -19,7 +19,8 @@ class MarkObject(MapGraphicsObject):
         # self.setMark(self.pos(), self.__sizeInMeters, rot)
 
     def __del__(self):
-        print('Delete MarkObject')
+        # print('Delete MarkObject')
+        pass
 
     def __copy__(self):
         newObject = type(self)()

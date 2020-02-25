@@ -13,12 +13,12 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.setMapGraphicsScene(mgScene)
 
         self.selectionChanged.connect(self.handleSelectionChanged)
+        self.counter = 0
 
     def handleMGObjectAdded(self, added):
         qgObj = PrivateQGraphicsObject(added, self.__infoSource)
         self.addItem(qgObj)
         self.__mgToqg[added] = qgObj
-        print(self.__mgToqg)
 
     def handleMGObjectRemoved(self, removed):
         if not self.__mgToqg.get(removed):
@@ -32,7 +32,6 @@ class PrivateQGraphicsScene(QGraphicsScene):
             return
         qgObj.deleteLater()
         self.removeItem(qgObj)
-        # print(self.__mgToqg)
 
     def handleZoomLevelChanged(self):
         for obj in self.__mgToqg:
@@ -63,6 +62,5 @@ class PrivateQGraphicsScene(QGraphicsScene):
             return
 
         self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
-
         self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
 

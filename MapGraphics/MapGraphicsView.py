@@ -90,9 +90,6 @@ class MapGraphicsView(QWidget):
             return
         self.__childView.setDragMode(qgvDragMode)
 
-    def objectCreationMode(self):
-        return self.__objectCreationMode
-
     def setDragModeByScene(self, mode):
         if mode == self.__scene.ObjectCreationMode.MarkCreation:
             self.setDragMode(MapGraphicsView.DragMode.NoDrag)
@@ -224,6 +221,7 @@ class MapGraphicsView(QWidget):
             self.__scene.tempObj.setPos(mousePoint)
             self.__scene.tempObj.setMark()
             self.__scene.addObject(self.__scene.tempObj)
+            self.__scene.createObject()
         # self.requestObjectCreation.emit()
         # elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
         #     mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
