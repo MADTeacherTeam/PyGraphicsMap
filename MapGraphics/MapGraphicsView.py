@@ -200,9 +200,10 @@ class MapGraphicsView(QWidget):
 
     def handleChildMouseMove(self, event):
         if self.__scene.tempObj:
-            mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
-            self.__scene.tempObj.setPos(mousePoint)
-            self.__scene.tempObj.setMark()
+            if self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.MarkCreation:
+                mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
+                self.__scene.tempObj.setPos(mousePoint)
+                self.__scene.tempObj.setMark()
             # self.__scene.objectAdded.emit(self.__scene.tempObj)
         if self.__childView and self.__tileSource:
             centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
@@ -221,12 +222,29 @@ class MapGraphicsView(QWidget):
             self.__scene.tempObj.setPos(mousePoint)
             self.__scene.tempObj.setMark()
             self.__scene.addObject(self.__scene.tempObj)
+            self.__scene.clearTempObject()
             self.__scene.createObject()
         # self.requestObjectCreation.emit()
-        # elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
-        #     mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
-        #     self.__scene.tempObj.append(mousePoint)
-        #     self.__scene.createObject()
+        elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
+            mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
+            if not self.__scene.tempObj.posBegin():
+                self.__scene.tempObj.setPosBegin(mousePoint)
+                self.__scene.addObject(self.__scene.tempObj.posBegin())
+            else:
+                self.__scene.tempObj.setPosEnd(mousePoint)
+                self.__scene.addObject(self.__scene.tempObj.posEnd())
+                # self.__scene.tempObj.getWay()
+                # self.__scene.tempObj.setRoad()
+                # self.__scene.addObject(self.__scene.tempObj.posBegin())
+                # self.__scene.addObject(self.__scene.tempObj.posEnd())
+                self.__scene.addObject(self.__scene.tempObj)
+                self.__scene.clearTempObject()
+                route = self.__scene.getObjects()['RouteObject'][-1]
+                route.getWay()
+                route.setRoad()
+                for line in route.lines():
+                    self.__scene.addObject(line)
+                self.__scene.createObject(route.posEnd())
         event.setAccepted(False)
 
     def handleChildViewContextMenu(self, event):

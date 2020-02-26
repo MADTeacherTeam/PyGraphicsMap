@@ -8,8 +8,8 @@ class MarkObject(MapGraphicsObject):
     def __init__(self, img=0, rot=180, parent=None):
         # TODO zoomLevelChanged marks dont change pos
         super().__init__(True, parent)
-        imageList = ['../images/mark0.png', '../images/mark1.png', '../images/mark2.png']
-        self.__image = QImage(imageList[img])
+        self.imageList = ['../images/mark0.png', '../images/mark1.png', '../images/mark2.png']
+        self.__image = QImage(self.imageList[img])
         self.__sizeInMeters = QRectF(self.__image.width() / 2, self.__image.height() / 2,
                                      self.__image.width() / 15, self.__image.height() / 15)
 
@@ -24,9 +24,16 @@ class MarkObject(MapGraphicsObject):
 
     def __copy__(self):
         newObject = type(self)()
+        newObject.__image = self.__image
         newObject.setPos(self.pos())
         newObject.setMark()
         return newObject
+
+    def changeImage(self, img=0):
+        self.__image = QImage(self.imageList[img])
+        self.__sizeInMeters = QRectF(self.__image.width() / 2, self.__image.height() / 2,
+                                     self.__image.width() / 15, self.__image.height() / 15)
+        self.redrawRequested.emit()
 
     def boundingRect(self):
         return self.__sizeInMeters

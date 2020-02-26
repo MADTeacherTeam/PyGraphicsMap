@@ -28,14 +28,6 @@ class MapGraphicsScene(QtCore.QObject):
         self.tempObj = None
 
     def addObject(self, object):
-        # if isinstance(object, RouteObject):
-        #     self.__objects.add(object)
-        #     self.objectAdded.emit(object)
-        #
-        #     self.tempObj = None
-        #     self.createObject()
-        #     return
-
         # TODO change this
         if self.tempObj:
             object = copy.copy(object)
@@ -51,11 +43,9 @@ class MapGraphicsScene(QtCore.QObject):
             self.__objects[object.__class__.__name__].append(object)
         else:
             self.__objects[object.__class__.__name__] = [object]
-
-        # self.__objects[object.__class__.__name__] = object
         self.objectAdded.emit(object)
 
-        self.clearTempObject()
+        # self.clearTempObject()
         # self.createObject()
 
     def removeObject(self, object):
@@ -82,16 +72,16 @@ class MapGraphicsScene(QtCore.QObject):
     def getCreationMode(self):
         return self.__creationMode
 
-    def createObject(self):
+    def getObjects(self):
+        return self.__objects
+
+    def createObject(self, obj=None):
         if self.__creationMode == MapGraphicsScene.ObjectCreationMode.MarkCreation:
             self.tempObj = MarkObject()
             self.objectAdded.emit(self.tempObj)
-        # elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteCreation:
-        #     if self.tempObj is None:
-        #         self.tempObj = []
-        #     elif len(self.tempObj) >= 2:
-        #         self.tempObj = RouteObject(self.tempObj[-2], self.tempObj[-1])
-        #         self.addObject(self.tempObj)
+        elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteCreation:
+            self.tempObj = RouteObject(obj)
+            self.objectAdded.emit(self.tempObj)
         else:
             self.clearTempObject()
 
@@ -101,7 +91,14 @@ class MapGraphicsScene(QtCore.QObject):
                 # object.setVisible(False)
                 self.removeObject(object)
         elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteRemove:
-            pass
+            for route in self.__objects[RouteObject.__name__]:
+                if route.checkObject(object):
+                    for line in route.lines():
+                        self.removeObject(line)
+                    self.removeObject(route.posBegin())
+                    self.removeObject(route.posEnd())
+                    self.removeObject(route)
+                    break
 
     def setObjectMovable(self, type, flag=True):
         for obj in self.__objects[type]:
@@ -111,4 +108,3 @@ class MapGraphicsScene(QtCore.QObject):
         if self.tempObj:
             self.objectRemoved.emit(self.tempObj)
             self.tempObj = None
-

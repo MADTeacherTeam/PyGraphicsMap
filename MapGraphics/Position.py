@@ -40,6 +40,8 @@ class Position():
         self.__altitude = other.__altitude
 
     def __eq__(self, other):
+        if other is None:
+            return False
         return self.__lonLat == other.__lonLat and self.__altitude == other.__altitude
 
     def __ne__(self, other):

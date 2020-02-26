@@ -15,6 +15,10 @@ class LineObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
         self.updatePositionFromEndPoints()
 
+    def __copy__(self):
+        newObject = type(self)(self.__a, self.__b, self.__thickness)
+        return newObject
+
     def boundingRect(self):
         avgLat = (self.__a.latitude() + self.__b.latitude()) / 2
         lonPerMeter = Conversions.degreesLonPerMeter(avgLat)

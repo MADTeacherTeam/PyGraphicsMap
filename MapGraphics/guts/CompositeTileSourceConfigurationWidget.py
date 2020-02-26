@@ -1,11 +1,10 @@
 from MapGraphics.guts.CompositeTileSourceConfigurationWidget_ui import Ui_CompositeTileSourceConfigurationWidget
-from PySide2.QtWidgets import QWidget, QMenu
+from PySide2.QtWidgets import QWidget, QMenu, QColorDialog
 from PySide2.QtCore import Signal
 from MapGraphics.MapGraphicsScene import MapGraphicsScene
 
 
 class CompositeTileSourceConfigurationWidget(QWidget):
-    # creationMode = Signal(MapGraphicsScene.ObjectCreationMode)
 
     def __init__(self, scene:MapGraphicsScene, parent=0):
         super().__init__(parent)
@@ -18,19 +17,19 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         self.ui.moveMark_button.clicked.connect(self.moveMarkButtonClicked)
 
         self.ui.addRoute_button.clicked.connect(self.addRouteButtonClicked)
-        # self.creationMode.connect(self.__scene.setCreationMode)
+        self.ui.removeRoute_button.clicked.connect(self.removeRouteButtonClicked)
 
         self.ui.toolBox.currentChanged.connect(self.clearToolBoxButtons)
 
     def clearToolBoxButtons(self, index):
-        print(index)
+        self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
+        self.__scene.clearTempObject()
 
     def addMarkButtonClicked(self):
         if self.ui.addMark_button.isChecked():
             self.ui.moveMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
-            self.ui.changeColor_button.setChecked(False)
-            # self.creationMode.emit(MapGraphicsScene.ObjectCreationMode.MarkCreation)
+            # self.ui.changeColor_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.MarkCreation)
             self.__scene.createObject()
         else:
@@ -42,15 +41,23 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.ui.removeMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.moveMark_button.setChecked(False)
-            self.ui.changeColor_button.setChecked(False)
+            # self.ui.changeColor_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.MarkRemove)
         pass
 
     def changeColorButtonClicked(self):
-        if self.ui.changeColor_button.isChecked():
-            self.ui.addMark_button.setChecked(False)
-            self.ui.moveMark_button.setChecked(False)
-            self.ui.removeMark_button.setChecked(False)
+        # if self.ui.changeColor_button.isChecked():
+            # self.ui.addMark_button.setChecked(False)
+            # self.ui.moveMark_button.setChecked(False)
+            # self.ui.removeMark_button.setChecked(False)
+            # color = QColorDialog.getColor()
+        from MapGraphics.Objects.MarkObject import MarkObject
+        if isinstance(self.__scene.tempObj, MarkObject):
+            import random
+            self.__scene.tempObj.changeImage(random.randint(0, 2))
+            # if not color:
+            #     self.ui.changeColor_button.setChecked(False)
+            #     return
         pass
 
     def moveMarkButtonClicked(self):
@@ -59,7 +66,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
-            self.ui.changeColor_button.setChecked(False)
+            # self.ui.changeColor_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
             self.__scene.setObjectMovable(MarkObject.__name__)
         else:
@@ -68,7 +75,6 @@ class CompositeTileSourceConfigurationWidget(QWidget):
     def addRouteButtonClicked(self):
         if self.ui.addRoute_button.isChecked():
             self.ui.removeRoute_button.setChecked(False)
-            # self.creationMode.emit(MapGraphicsScene.ObjectCreationMode.MarkCreation)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.RouteCreation)
             self.__scene.createObject()
         else:
@@ -76,6 +82,10 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.clearTempObject()
 
     def removeRouteButtonClicked(self):
-        pass
+        self.__scene.clearTempObject()
+        if self.ui.removeRoute_button.isChecked():
+            self.ui.addRoute_button.setChecked(False)
+            self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.RouteRemove)
+
 
 

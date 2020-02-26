@@ -27,21 +27,12 @@ class MyWindow(QtWidgets.QMainWindow):
         osmTiles = OSMTileSource(OSMTileSource.OSMTileType.OSMTiles)
 
         self.view.setTileSource(osmTiles)
-        self.view.setZoomLevel(4)
+        self.view.setZoomLevel(14)
         self.view.centerOn2(-111.658752, 40.255456)
 
         # TODO creation of CTSC
         self.tileConfigWidget = CompositeTileSourceConfigurationWidget(scene, self.ui.dockWidget)
         self.ui.dockWidget.setWidget(self.tileConfigWidget)
-        #
-        # self.tileConfigWidget.menu.addAction('Mark', self.view.setMarkFlag)
-        # self.tileConfigWidget.menu.addAction('None', self.view.setMarkFlag)
-        # self.tileConfigWidget.ui.addSourceButton.setMenu(self.tileConfigWidget.menu)
-        #
-        # self.tileConfigWidget.removeMenu.addAction('Delete Mark', self.view.setDeleteFlag)
-        # self.tileConfigWidget.removeMenu.addAction('None', self.view.setDeleteFlag)
-        # self.tileConfigWidget.ui.removeSourceButton.setMenu(self.tileConfigWidget.removeMenu)
-
 
         # ----
         self.__thread_for_planes = QThread()

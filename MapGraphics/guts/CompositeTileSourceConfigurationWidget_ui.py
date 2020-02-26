@@ -64,7 +64,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
 
         self.changeColor_button = QPushButton(self.formLayoutWidget)
         self.changeColor_button.setObjectName(u"changeColor_button")
-        self.changeColor_button.setCheckable(True)
+        # self.changeColor_button.setCheckable(True)
         icon2 = QIcon()
         icon2.addFile(u"../images/palette.png", QSize(), QIcon.Normal, QIcon.Off)
         self.changeColor_button.setIcon(icon2)

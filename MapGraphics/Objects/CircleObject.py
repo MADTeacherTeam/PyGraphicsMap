@@ -15,6 +15,12 @@ class CircleObject(MapGraphicsObject):
     def __del__(self):
         print('del circle object')
 
+    def __copy__(self):
+        # newObj = type(self)(self.__radius)
+        # newObj.setPos(self.pos())
+        # newObj.redrawRequested()
+        return self
+
     def boundingRect(self):
         return QRectF(-1 * self.__radius, -1 * self.__radius, 2 * self.__radius, 2 * self.__radius)
 
