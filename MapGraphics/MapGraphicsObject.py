@@ -40,7 +40,7 @@ class MapGraphicsObject(QtCore.QObject):
         self.__flags = MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value
         self.setParent(parent)
 
-        QtCore.QTimer().singleShot(1, self.slot_setConstructed)
+        QtCore.QTimer().singleShot(1, self.setConstructed)
 
     def enabled(self):
         return self.__enabled
@@ -201,7 +201,7 @@ class MapGraphicsObject(QtCore.QObject):
     def wheelEvent(self, event):
         event.ignore()
 
-    def slot_setConstructed(self):
+    def setConstructed(self):
         self.__constructed = True
 
     def pos(self):

@@ -9,7 +9,6 @@ from MapGraphics.MapGraphicsView import MapGraphicsView
 from MapGraphics.tileSources.OSMTileSource import OSMTileSource
 from MainApp.PlaneManager import PlaneManager
 from MapGraphics.guts.CompositeTileSourceConfigurationWidget import CompositeTileSourceConfigurationWidget
-from MapGraphics.ObjectManager import ObjectManager
 
 
 class MyWindow(QtWidgets.QMainWindow):

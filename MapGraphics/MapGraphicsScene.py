@@ -29,13 +29,13 @@ class MapGraphicsScene(QtCore.QObject):
 
     def addObject(self, object):
         # TODO change this
-        if self.tempObj:
-            object = copy.copy(object)
+        # if self.tempObj:
+        #     object = copy.copy(object)
         if object == 0:
             return
 
-        object.newObjectGenerated.connect(self.slot_handleNewObjectGenerated)
-        # object.destroyed.connect(self.slot_handleObjectDestroyed)
+        object.newObjectGenerated.connect(self.handleNewObjectGenerated)
+        # object.destroyed.connect(self.handleObjectDestroyed)
 
         object.removeRequested.connect(self.deleteObject)
 
@@ -54,11 +54,11 @@ class MapGraphicsScene(QtCore.QObject):
             print('remove Object')
             self.objectRemoved.emit(object)
 
-    def slot_handleNewObjectGenerated(self, newObject):
+    def handleNewObjectGenerated(self, newObject):
         print('handleNewObjectGenerated')
         self.addObject(newObject)
 
-    def slot_handleObjectDestroyed(self, object):
+    def handleObjectDestroyed(self, object):
         self.removeObject(object)
 
     def __del__(self):
@@ -81,6 +81,7 @@ class MapGraphicsScene(QtCore.QObject):
             self.objectAdded.emit(self.tempObj)
         elif self.__creationMode == MapGraphicsScene.ObjectCreationMode.RouteCreation:
             self.tempObj = RouteObject(obj)
+            self.tempObj.newObjectGenerated.connect(self.handleNewObjectGenerated)
             self.objectAdded.emit(self.tempObj)
         else:
             self.clearTempObject()
@@ -104,7 +105,8 @@ class MapGraphicsScene(QtCore.QObject):
         for obj in self.__objects[type]:
             obj.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, flag)
 
-    def clearTempObject(self):
+    def clearTempObject(self, fromWidget=False):
         if self.tempObj:
-            self.objectRemoved.emit(self.tempObj)
+            if fromWidget:
+                self.objectRemoved.emit(self.tempObj)
             self.tempObj = None

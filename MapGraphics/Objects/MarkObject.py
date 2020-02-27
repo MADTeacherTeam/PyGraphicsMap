@@ -22,13 +22,6 @@ class MarkObject(MapGraphicsObject):
         # print('Delete MarkObject')
         pass
 
-    def __copy__(self):
-        newObject = type(self)()
-        newObject.__image = self.__image
-        newObject.setPos(self.pos())
-        newObject.setMark()
-        return newObject
-
     def changeImage(self, img=0):
         self.__image = QImage(self.imageList[img])
         self.__sizeInMeters = QRectF(self.__image.width() / 2, self.__image.height() / 2,

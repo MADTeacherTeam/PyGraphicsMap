@@ -23,7 +23,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def clearToolBoxButtons(self, index):
         self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
-        self.__scene.clearTempObject()
+        self.__scene.clearTempObject(True)
 
     def addMarkButtonClicked(self):
         if self.ui.addMark_button.isChecked():
@@ -34,10 +34,10 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.createObject()
         else:
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
-            self.__scene.clearTempObject()
+            self.__scene.clearTempObject(True)
 
     def removeMarkButtonClicked(self):
-        self.__scene.clearTempObject()
+        self.__scene.clearTempObject(True)
         if self.ui.removeMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.moveMark_button.setChecked(False)
@@ -62,7 +62,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def moveMarkButtonClicked(self):
         from MapGraphics.Objects.MarkObject import MarkObject
-        self.__scene.clearTempObject()
+        self.__scene.clearTempObjectTrue()
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
@@ -79,10 +79,10 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.createObject()
         else:
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
-            self.__scene.clearTempObject()
+            self.__scene.clearTempObject(True)
 
     def removeRouteButtonClicked(self):
-        self.__scene.clearTempObject()
+        self.__scene.clearTempObject(True)
         if self.ui.removeRoute_button.isChecked():
             self.ui.addRoute_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.RouteRemove)

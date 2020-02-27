@@ -1,4 +1,4 @@
-from opensky_api import OpenSkyApi
+from opensky_api.opensky_api import OpenSkyApi
 from MainApp.PlaneObject import PlaneObject
 from PySide2.QtCore import QPointF, QTimer, QObject, QThread
 

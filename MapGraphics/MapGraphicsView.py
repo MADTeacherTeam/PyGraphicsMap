@@ -224,7 +224,6 @@ class MapGraphicsView(QWidget):
             self.__scene.addObject(self.__scene.tempObj)
             self.__scene.clearTempObject()
             self.__scene.createObject()
-        # self.requestObjectCreation.emit()
         elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
             mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
             if not self.__scene.tempObj.posBegin():
@@ -233,18 +232,13 @@ class MapGraphicsView(QWidget):
             else:
                 self.__scene.tempObj.setPosEnd(mousePoint)
                 self.__scene.addObject(self.__scene.tempObj.posEnd())
-                # self.__scene.tempObj.getWay()
-                # self.__scene.tempObj.setRoad()
-                # self.__scene.addObject(self.__scene.tempObj.posBegin())
-                # self.__scene.addObject(self.__scene.tempObj.posEnd())
+                self.__scene.tempObj.getWay()
+                posEnd = self.__scene.tempObj.posEnd()
+                # for line in self.__scene.tempObj.lines():
+                #     self.__scene.addObject(line)
                 self.__scene.addObject(self.__scene.tempObj)
                 self.__scene.clearTempObject()
-                route = self.__scene.getObjects()['RouteObject'][-1]
-                route.getWay()
-                route.setRoad()
-                for line in route.lines():
-                    self.__scene.addObject(line)
-                self.__scene.createObject(route.posEnd())
+                self.__scene.createObject(posEnd)
         event.setAccepted(False)
 
     def handleChildViewContextMenu(self, event):
@@ -252,7 +246,8 @@ class MapGraphicsView(QWidget):
 
     def handleChildViewScrollWheel(self, event):
         event.setAccepted(False)
-        self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
+        if self.__scene.getCreationMode == self.__scene.ObjectCreationMode.NoCreation:
+            self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
         if event.delta() > 0:
             self.zoomIn(MapGraphicsView.ZoomMode.MouseZoom)
         else:
