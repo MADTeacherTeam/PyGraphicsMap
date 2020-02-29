@@ -16,9 +16,10 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.counter = 0
 
     def handleMGObjectAdded(self, added):
-        qgObj = PrivateQGraphicsObject(added, self.__infoSource)
-        self.addItem(qgObj)
-        self.__mgToqg[added] = qgObj
+        if added not in self.__mgToqg.keys():
+            qgObj = PrivateQGraphicsObject(added, self.__infoSource)
+            self.addItem(qgObj)
+            self.__mgToqg[added] = qgObj
 
     def handleMGObjectRemoved(self, removed):
         if not self.__mgToqg.get(removed):
@@ -63,4 +64,3 @@ class PrivateQGraphicsScene(QGraphicsScene):
 
         self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
         self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
-
