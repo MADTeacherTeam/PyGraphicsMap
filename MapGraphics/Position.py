@@ -1,6 +1,6 @@
 from PySide2 import QtCore, QtGui
 import math
-from PyGraphicsMap.MapGraphics.guts.Conversions import Conversions
+from MapGraphics.guts.Conversions import Conversions
 
 
 class Position():
