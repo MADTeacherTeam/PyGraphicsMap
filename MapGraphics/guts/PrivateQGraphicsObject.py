@@ -218,6 +218,8 @@ class PrivateQGraphicsObject(QGraphicsObject):
 
     # public slot
     def handleZoomLevelChanged(self):
+        if self.__mgObj.__class__.__name__ == 'RouteObject':
+            self.__mgObj.setZoomLevel(self.__infoSource.zoomLevel())
         self.handlePosChanged()
 
     # private slots

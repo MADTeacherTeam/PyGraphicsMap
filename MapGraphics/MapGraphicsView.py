@@ -227,18 +227,25 @@ class MapGraphicsView(QWidget):
         elif self.__scene.getCreationMode() == self.__scene.ObjectCreationMode.RouteCreation:
             mousePoint = self.mapToScene(self.__childView.mapFromGlobal(QCursor.pos()))
             if not self.__scene.tempObj.posBegin():
+
                 self.__scene.tempObj.setPosBegin(mousePoint)
                 self.__scene.addObject(self.__scene.tempObj.posBegin())
             else:
+
                 self.__scene.tempObj.setPosEnd(mousePoint)
+                self.__scene.tempObj.setZoomLevel(self.zoomLevel())
                 self.__scene.addObject(self.__scene.tempObj.posEnd())
-                self.__scene.tempObj.getWay()
                 posEnd = self.__scene.tempObj.posEnd()
-                # for line in self.__scene.tempObj.lines():
-                #     self.__scene.addObject(line)
+                # TODO: new connect
+                # self.__scene.tempObj.getMovementObject.connect(self.__scene.linkRouteAndObject)
                 self.__scene.addObject(self.__scene.tempObj)
+                self.__scene.tempObj.getWay()
+
+                # for line in self.__scene.tempObj.lines():
+                #     line.getMovementObject.connect(self.__scene.linkRouteAndObject)
                 self.__scene.clearTempObject()
                 self.__scene.createObject(posEnd)
+
         event.setAccepted(False)
 
     def handleChildViewContextMenu(self, event):

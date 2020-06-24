@@ -62,7 +62,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def moveMarkButtonClicked(self):
         from MapGraphics.Objects.MarkObject import MarkObject
-        self.__scene.clearTempObjectTrue()
+        self.__scene.clearTempObject(True)
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)

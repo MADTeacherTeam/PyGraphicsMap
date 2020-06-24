@@ -1,7 +1,8 @@
+from enum import Enum
+
+import numpy as np
 from PySide2 import QtCore
 from PySide2.QtGui import QImage
-from enum import Enum
-import numpy as np
 
 MAPGRAPHICS_CACHE_FOLDER_NAME = ".MapGraphicsCache"
 DEFAULT_CACHE_DAYS = 7
@@ -22,6 +23,7 @@ class MapTileSource(QtCore.QObject):
         super(MapTileSource, self).__init__()
         self.__cacheExpirationsFile = ""
         self.__tempCacheLock = QtCore.QMutex()
+        # self.__tempCacheLock = None
         self.__tempCache = {}
         self.__memoryCache = {}
         self.__cacheExpirations = {}
@@ -171,8 +173,8 @@ class MapTileSource(QtCore.QObject):
         if cacheID in self.__cacheExpirations:
             expireTime = self.__cacheExpirations.get(cacheID)
         else:
-            print(
-                "Tile " + str(cacheID) + " has unknown expire time. Resetting to default of " + str(DEFAULT_CACHE_DAYS)  + " days.")
+            # print(
+            #     "Tile " + str(cacheID) + " has unknown expire time. Resetting to default of " + str(DEFAULT_CACHE_DAYS)  + " days.")
             expireTime = QtCore.QDateTime.currentDateTimeUtc().addDays(DEFAULT_CACHE_DAYS)
             self.__cacheExpirations[cacheID] = expireTime
         return expireTime
