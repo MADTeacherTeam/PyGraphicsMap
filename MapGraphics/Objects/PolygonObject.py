@@ -7,6 +7,7 @@ from MapGraphics.Objects.CircleObject import CircleObject
 
 
 class PolygonObject(MapGraphicsObject):
+    """class in reserve"""
     polygonChanged = Signal(QtGui.QPolygonF)
 
     def __init__(self, geoPoly, fillColor, parent):
@@ -27,6 +28,7 @@ class PolygonObject(MapGraphicsObject):
         self.__editCircles.clear()
 
     def boundingRect(self):
+        """return bounding rectangle"""
         latLonRect = self.__geoPoly.boundingRect()
         latLonCenter = latLonRect.center()
         latLonCenterPos = Position(latLonCenter, 0.0)
@@ -40,6 +42,7 @@ class PolygonObject(MapGraphicsObject):
         return self.__geoPoly.containsPoint(geoPos, QtCore.Qt.OddEvenFill)
 
     def paint(self, painter, option, widget=None):
+        """override Paint"""
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         enuPoly = QtGui.QPolygonF()
         latLonCenterPos = Position(self.__geoPoly.boundingRect().center(), 0)
@@ -58,7 +61,7 @@ class PolygonObject(MapGraphicsObject):
                 current = self.__geoPoly.at(i)
                 next = self.__geoPoly.at((i + 1) % self.__geoPoly.size())
                 avg = QtCore.QPointF((current.x() + next.x()) / 2, (current.y() + next.y() / 2))
-                betweener = self.__constructAddVertexCircle()
+                betweener = self.constructAddVertexCircle()
                 betweener.setPos(avg)
                 self.__addVertexCircles.append(betweener)
 
@@ -67,11 +70,11 @@ class PolygonObject(MapGraphicsObject):
             diff = nPos - self.pos()
             for circle in self.__editCircles:
                 circle.setPos(circle.pos() + diff)
-            self.__fixAddVertexCirclePos()
+            self.fixAddVertexCirclePos()
         self.setPos(nPos)
         self.posChanged.emit()
 
-    def __fixAddVertexCirclePos(self):
+    def fixAddVertexCirclePos(self):
         for i in range(self.__geoPoly.size()):
             current = self.__geoPoly.at(i)
             next = self.__geoPoly.at((i + 1) % self.__geoPoly.size())
@@ -79,12 +82,13 @@ class PolygonObject(MapGraphicsObject):
             self.__addVertexCircles.at(i).setPos(avg)
 
     def pos(self):
+        """return position"""
         return self.__pos
 
-    def __constructAddVertexCircle(self):
+    def constructAddVertexCircle(self):
         toRet = CircleObject(3, True, QtGui.QColor(100, 100, 100, 255))
         toRet.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable, False)
-        toRet.selectedChanged.connect(self.__handleAddVertexCircleSelected)
+        toRet.selectedChanged.connect(self.handleAddVertexCircleSelected)
         self.newObjectGenerated.emit(toRet)
         toRet.setToolTip("Single-click (don't drag!) to add vertex.")
         return toRet
@@ -92,13 +96,13 @@ class PolygonObject(MapGraphicsObject):
     def constructEditCircle(self):
         toRet = CircleObject(8)
         toRet.posChanged.connect(self.handleEditCirclePosChanged)
-        toRet.destroyed.connect(self.__handleEditCircleDestroyed)
+        toRet.destroyed.connect(self.handleEditCircleDestroyed)
         self.newObjectGenerated.emit(toRet)
         return toRet
 
     def destroyEditCircle(self, obj):
         obj.posChanged.disconnect(self.handleEditCirclePosChanged)
-        obj.destroyed.disconnect(self.__handleEditCircleDestroyed)
+        obj.destroyed.disconnect(self.handleEditCircleDestroyed)
         obj.deleteLater()
 
     def setGeoPoly(self, newPoly):
@@ -108,7 +112,7 @@ class PolygonObject(MapGraphicsObject):
         for obj in self.__editCircles:
             self.destroyEditCircle(obj)
         for obj in self.__addVertexCircles:
-            self.__destroyAddVertexCircle(obj)
+            self.destroyAddVertexCircle(obj)
         self.__editCircles.clear()
         self.__addVertexCircles.clear()
         self.setPos(newPoly.boundingRect().center())
@@ -147,10 +151,10 @@ class PolygonObject(MapGraphicsObject):
         newPos = circle.pos()
         self.__geoPoly.replace(index, newPos)
         self.setPos(self.__geoPoly.boundingRect().center())
-        self.__fixAddVertexCirclePos()
+        self.fixAddVertexCirclePos()
         self.polygonChanged.emit(self.geoPoly())
 
-    def __handleAddVertexCircleSelected(self):
+    def handleAddVertexCircleSelected(self):
         sender = self.sender()
         if sender == 0:
             return
@@ -170,16 +174,16 @@ class PolygonObject(MapGraphicsObject):
         editCircle.setPos(geoPos)
         self.__editCircles.insert(index, editCircle)
         editCircle.setSelected(True)
-        addVertexCircle = self.__constructAddVertexCircle()
+        addVertexCircle = self.constructAddVertexCircle()
         current = self.__geoPoly.at(index - 1)
         next = self.__geoPoly.at(index)
         avg = QtCore.QPointF((current.x() + next.x()) / 2.0, (current.y() + next.y()) / 2.0)
         addVertexCircle.setPos(avg)
         self.__addVertexCircles.insert(index, addVertexCircle)
-        self.__fixAddVertexCirclePos()
+        self.fixAddVertexCirclePos()
         self.polygonChanged.emit(self.geoPoly())
 
-    def __handleEditCircleDestroyed(self):
+    def handleEditCircleDestroyed(self):
         sender = self.sender()
         if sender == 0:
             print("Can't process desyroyed edit circle. Sender is null")
@@ -192,11 +196,11 @@ class PolygonObject(MapGraphicsObject):
         self.__geoPoly.remove(index)
         self.__editCircles.remove(circle)
         self.__addVertexCircles.pop(index).deleteLater()
-        self.__fixAddVertexCirclePos()
+        self.fixAddVertexCirclePos()
         self.redrawRequested.emit()
         self.setPos(self.__geoPoly.boundingRect().center())
 
-    def __destroyAddVertexCircle(self, obj):
+    def destroyAddVertexCircle(self, obj):
         obj.selectedChanged.disconnect()
         obj.deleteLater()
 

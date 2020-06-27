@@ -16,6 +16,7 @@ class LineObject(MapGraphicsObject):
         self.updatePositionFromEndPoints()
 
     def boundingRect(self):
+        """return bounding rectangle"""
         avgLat = (self.__a.latitude() + self.__b.latitude()) / 2
         lonPerMeter = Conversions.degreesLonPerMeter(avgLat)
         latPerMeter = Conversions.degreesLatPerMeter(avgLat)
@@ -30,6 +31,7 @@ class LineObject(MapGraphicsObject):
         return toRet
 
     def paint(self, painter, option, widget=None):
+        """override Paint"""
         painter.setRenderHint(QPainter.Antialiasing, True)
         pen = painter.pen()
         pen.setWidthF(self.__thickness)
@@ -45,6 +47,7 @@ class LineObject(MapGraphicsObject):
         painter.drawLine(metersA, metersB)
 
     def thickness(self):
+        """return thickness"""
         return self.__thickness
 
     def setThickness(self, nThick):

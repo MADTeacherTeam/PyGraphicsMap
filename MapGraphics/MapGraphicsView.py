@@ -51,23 +51,28 @@ class MapGraphicsView(QWidget):
         self.tileSourceThread.wait()
 
     def center(self):
+        """return coordinates of center"""
         centerGeoPos = self.mapToScene(QPoint(int(self.width() / 2), int(self.height() / 2)))
         return centerGeoPos
 
     def centerOn(self, pos):
+        """change center to pos"""
         if not self.__tileSource:
             return
         qgsPos = self.__tileSource.ll2qgs(pos, self.zoomLevel())
         self.__childView.centerOn(qgsPos)
 
     def centerOn2(self, longitude, latitude):
+        """change center to longitude, latitude"""
         self.centerOn(QPointF(longitude, latitude))
 
     def centerOn1(self, item):
+        """change center to MapGraphicsObject"""
         if item:
             self.centerOn(item.pos())
 
     def mapToScene(self, viewPos):
+        """convert maps coordinates to scene coordinates"""
         if not self.__tileSource:
             print("No tile source --- Transformation cannot work")
             return QPointF(0, 0)
@@ -76,6 +81,7 @@ class MapGraphicsView(QWidget):
         return self.__tileSource.qgs2ll(qgsScenePos, zoom)
 
     def dragMode(self):
+        """return dragMode"""
         return self.__dragMode
 
     def setDragMode(self, mode):
@@ -101,6 +107,7 @@ class MapGraphicsView(QWidget):
             self.setDragMode(MapGraphicsView.DragMode.ScrollHandDrag)
 
     def scene(self):
+        """return scene"""
         return self.__scene
 
     def setScene(self, scene):
@@ -130,6 +137,7 @@ class MapGraphicsView(QWidget):
         self.renderTiles()
 
     def tileSource(self):
+        """return tileSource"""
         return self.__tileSource
 
     def setTileSource(self, tSource):
@@ -144,6 +152,7 @@ class MapGraphicsView(QWidget):
         self.renderTiles()
 
     def zoomLevel(self):
+        """return zoomLevel"""
         return self.__zoomLevel
 
     def setZoomLevel(self, nZoom, zMode=ZoomMode.CenterZoom):
@@ -270,6 +279,7 @@ class MapGraphicsView(QWidget):
         self.doTileLayout()
 
     def doTileLayout(self):
+        """display tiles that are in the viewport"""
         centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                      int(self.__childView.height() / 2.0))
         self.__tempCenterPointQGS = centerPointQGS

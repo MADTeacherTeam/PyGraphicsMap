@@ -48,15 +48,19 @@ class Position():
         return not (self == other)
 
     def longitude(self):
+        """return longitude"""
         return self.__lonLat.x()
 
     def latitude(self):
+        """return latitude"""
         return self.__lonLat.y()
 
     def altitude(self):
+        """return altitude"""
         return self.__altitude
 
     def lonLat(self):
+        """return QPointF(longitude,latitude)"""
         return self.__lonLat
 
     def setLongitude(self, longitude):
@@ -69,10 +73,12 @@ class Position():
         self.__altitude = altitude
 
     def flatDistanceEstimate(self, other):
+        """estimate distance offset"""
         offsetMeters = self.flatOffsetMeters(other)
         return offsetMeters.length()
 
     def flatOffsetMeters(self, dest):
+        """calculating the offset"""
         avgLat = (self.latitude() + dest.latitude()) / 2.0
         lonPerMeter = Conversions.degreesLonPerMeter(avgLat)
         latPerMeter = Conversions.degreesLatPerMeter(avgLat)
@@ -81,6 +87,7 @@ class Position():
         return QtGui.QVector2D(lonDiffMeters, latDiffMeters)
 
     def flatOffsetToPosition(self, offset):
+        """calculating the offset relative to the position"""
         lonPerMeter = Conversions.degreesLonPerMeter(self.latitude())
         latPerMeter = Conversions.degreesLatPerMeter(self.latitude())
         obj = Position()
@@ -92,19 +99,23 @@ class Position():
         return abs(offsetMeters.x()) + abs(offsetMeters.y())
 
     def angleTo(self, dest):
+        """calculation of the angle of inclination"""
         offsetMeters = self.flatOffsetMeters(dest)
         return math.atan2(offsetMeters.y(), offsetMeters.x())
 
     @staticmethod
     def Position2ENU(refPos, pos):
+        """convert Position(refPos), Position(pos) to QVector3D(enu)"""
         return Conversions.lla2enu_6(pos.latitude(), pos.longitude(), pos.altitude(), refPos.latitude(),
                                      refPos.longitude(), refPos.altitude())
 
     @staticmethod
     def fromENU(refPos, enu):
+        """convert Position(refPos), QVector3D(enu) to Position"""
         cPos = Conversions.enu2lla_4_re(enu, refPos.latitude(), refPos.longitude(), refPos.altitude())
         return cPos
 
 
 def qHash(pos):
+    """return summer of latitude, longitude, altitude"""
     return pos.lonLat().x() + pos.lonLat().y() + pos.altitude()

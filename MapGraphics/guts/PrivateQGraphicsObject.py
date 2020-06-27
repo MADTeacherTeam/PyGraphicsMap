@@ -23,6 +23,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
 
     def boundingRect(self):
+        """Handle bounding rectangle each object"""
         toRet = QRectF(-1.0, -1.0, 2.0, 2.0)
         if self.__mgObj is None:
             print("Warning:" + "could not get bounding rect as MapGraphicsObject is null")
@@ -63,6 +64,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         return toRet
 
     def contains(self, point):
+        """Checking for finding a point in the object area"""
         if self.__mgObj is None:
             return False
 
@@ -77,6 +79,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         return self.__mgObj.contains(geoPoint)
 
     def paint(self, painter, option, widget=None):
+        """override paint"""
         if self.__mgObj is None:
             print("could not paint as our MapGraphicsObject is null")
             return
@@ -107,6 +110,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
         self.__mgObj.setSelected(self.isSelected())
 
     def contextMenuEvent(self, event):
+        """override contextMenuEvent"""
         if self.__mgObj is None:
             return
 
@@ -123,6 +127,7 @@ class PrivateQGraphicsObject(QGraphicsObject):
             QGraphicsObject.contextMenuEvent(self, event)
 
     def itemChange(self, change, value):
+        """handle position change"""
         if self.__mgObj is None:
             return value
 
@@ -216,13 +221,11 @@ class PrivateQGraphicsObject(QGraphicsObject):
         if not event.isAccepted():
             QGraphicsObject.wheelEvent(self, event)
 
-    # public slot
     def handleZoomLevelChanged(self):
         if self.__mgObj.__class__.__name__ == 'RouteObject':
             self.__mgObj.setZoomLevel(self.__infoSource.zoomLevel())
         self.handlePosChanged()
 
-    # private slots
     def handleEnabledChanged(self):
         self.setEnabled(self.__mgObj.enabled())
 

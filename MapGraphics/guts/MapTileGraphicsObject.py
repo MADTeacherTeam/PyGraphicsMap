@@ -26,6 +26,7 @@ class MapTileGraphicsObject(QGraphicsObject):
             self.__tile = 0
 
     def boundingRect(self):
+        """return bounding rectangle"""
         size = self.tileSize()
         return QRectF(-1 * size / 2.0,
                       -1 * size / 2.0,
@@ -33,6 +34,7 @@ class MapTileGraphicsObject(QGraphicsObject):
                       size)
 
     def paint(self, painter, option, widget=None):
+        """override Paint"""
         if self.__tile != 0:
             painter.drawPixmap(self.boundingRect().toRect(), self.__tile)
         else:
@@ -44,6 +46,7 @@ class MapTileGraphicsObject(QGraphicsObject):
             painter.drawText(self.boundingRect(), string, QTextOption(Qt.AlignCenter))
 
     def tileSize(self):
+        """return tileSize"""
         return self.__tileSize
 
     def setTileSize(self, tileSize):
@@ -52,9 +55,11 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tileSize = tileSize
 
     def setTile(self, x, y, z, force=False):
+        """set Tile about x,y,z"""
+        #retun if tile is already displaying
         if self.__tileX == x and self.__tileY == y and self.__tileZoom == z and not force and self.__initialized:
             return
-
+        #delete old Tile
         if self.__tile != 0:
             self.__tile = 0
 
@@ -77,6 +82,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tileSource.requestTile(x, y, z)
 
     def tileSource(self):
+        """return tileSource"""
         return self.__tileSource
 
     def setTileSource(self, nSource):
@@ -104,6 +110,7 @@ class MapTileGraphicsObject(QGraphicsObject):
 
     # slots
     def handleTileRetrieved(self, x, y, z):
+        """handle Tile by coordinates"""
         if not self.__havePendingRequest:
             return
         elif self.__tileX != x or self.__tileY != y or self.__tileZoom != z:
@@ -138,6 +145,7 @@ class MapTileGraphicsObject(QGraphicsObject):
         #                     SLOT(handleTileRetrieved(quint32, quint32, quint8)));
 
     def handleTileInvalidation(self):
+        """call Tile invalidation"""
         if self.__initialized:
             return
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)

@@ -26,6 +26,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         self.__scene.clearTempObject(True)
 
     def addMarkButtonClicked(self):
+        """clicked button add Mark"""
         if self.ui.addMark_button.isChecked():
             self.ui.moveMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
@@ -37,6 +38,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.clearTempObject(True)
 
     def removeMarkButtonClicked(self):
+        """clicked button remove Mark"""
         self.__scene.clearTempObject(True)
         if self.ui.removeMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
@@ -46,6 +48,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         pass
 
     def changeColorButtonClicked(self):
+        """clicked button change color of Mark"""
         # if self.ui.changeColor_button.isChecked():
             # self.ui.addMark_button.setChecked(False)
             # self.ui.moveMark_button.setChecked(False)
@@ -61,6 +64,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         pass
 
     def moveMarkButtonClicked(self):
+        """clicked button move Mark"""
         from MapGraphics.Objects.MarkObject import MarkObject
         self.__scene.clearTempObject(True)
         if self.ui.moveMark_button.isChecked():
@@ -73,6 +77,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.setObjectMovable(MarkObject.__name__, False)
 
     def addRouteButtonClicked(self):
+        """clicked button add Route"""
         if self.ui.addRoute_button.isChecked():
             self.ui.removeRoute_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.RouteCreation)
@@ -82,6 +87,7 @@ class CompositeTileSourceConfigurationWidget(QWidget):
             self.__scene.clearTempObject(True)
 
     def removeRouteButtonClicked(self):
+        """clicked button remove Route"""
         self.__scene.clearTempObject(True)
         if self.ui.removeRoute_button.isChecked():
             self.ui.addRoute_button.setChecked(False)

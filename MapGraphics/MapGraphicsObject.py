@@ -43,36 +43,46 @@ class MapGraphicsObject(QtCore.QObject):
         QtCore.QTimer().singleShot(1, self.setConstructed)
 
     def enabled(self):
+        """return enabled"""
         return self.__enabled
 
     def opacity(self):
+        """return opacity"""
         return self.__opacity
 
     def rotation(self):
+        """return rotation"""
         return self.__rotation
 
     def visible(self):
+        """return visible"""
         return self.__visible
 
     def zValue(self):
+        """return valued of z"""
         return self.__zValue
 
     def isSelected(self):
+        """return whether the object is selected"""
         return self.__selected
 
     def toolTip(self):
+        """return toolTip"""
         return self.__toolTip
 
     def flags(self):
+        """return flags"""
         return self.__flags
 
     def sizeIsZoomInvariant(self):
+        """return Is size zoom invariant"""
         return self.__sizeIsZoomInvariant
 
     def boundingRect(self):
         pass
 
     def contains(self, geoPos):
+        """checking position inside the area"""
         geoRect = self.boundingRect()
         return geoRect.contains(geoPos)
 
@@ -172,6 +182,7 @@ class MapGraphicsObject(QtCore.QObject):
         event.ignore()
 
     def itemChange(self, change, value):
+        """return value of change"""
         return value
 
     def keyPressEvent(self, event):
@@ -205,4 +216,5 @@ class MapGraphicsObject(QtCore.QObject):
         self.__constructed = True
 
     def pos(self):
+        """return position"""
         return self.__pos

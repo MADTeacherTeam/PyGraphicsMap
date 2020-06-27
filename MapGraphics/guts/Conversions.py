@@ -12,6 +12,7 @@ rad2deg = 180.0 / pi
 class Conversions:
     @staticmethod
     def lla2xyz_3(wlat, wlon, walt):
+        """convert latitude, longitude, altitude to QVector3D(XYZ)"""
         toRet = QtGui.QVector3D()
 
         if wlat < -90.0 or wlat > 90.0 or wlon < -180.0 or wlon > 180.0:
@@ -30,16 +31,19 @@ class Conversions:
 
     @staticmethod
     def lla2xyz(lla):
+        """convert QVector3D(latitude, longitude, altitude) to  QVector3D(XYZ)"""
         return Conversions.lla2xyz_3(lla.latitude(),
                                      lla.longitude(),
                                      lla.altitude())
 
     @staticmethod
     def xyz2lla(v):
+        """convert QVector3D(XYZ) to QVector3D(latitude, longitude, altitude)"""
         return Conversions.xyz2lla_3(v.x(), v.y(), v.z())
 
     @staticmethod
     def xyz2lla_3(x, y, z):
+        """convert X, Y, Z to Position"""
         # пока так
         from MapGraphics.Position import Position
         toRet = Position()
@@ -87,6 +91,7 @@ class Conversions:
 
     @staticmethod
     def xyz2enu_4_re(xyz, reflat, reflon, refalt):
+        """convert QVector3D(XYZ), reflat, reflon, refalt to QVector3d(enu)"""
         refxyz = Conversions.lla2xyz_3(reflat, reflon, refalt)
         diffxyz = xyz - refxyz
 
@@ -104,6 +109,7 @@ class Conversions:
 
     @staticmethod
     def xyz2enu_2(xyz, refLLA):
+        """convert QVector3D(XYZ), Position to QVector3d(enu)"""
         return Conversions.xyz2enu_4_LLA(xyz,
                                          refLLA.latitude(),
                                          refLLA.longitude(),
@@ -111,6 +117,7 @@ class Conversions:
 
     @staticmethod
     def xyz2enu_6(x, y, z, reflat, reflon, refalt):
+        """convert X, Y, Z, reflat, reflon, refalt to to QVector3d(enu)"""
         return Conversions.xyz2enu_4_re(QtGui.QVector3D(x, y, z),
                                         reflat,
                                         reflon,
@@ -118,6 +125,7 @@ class Conversions:
 
     @staticmethod
     def xyz2enu_4_LLA(x, y, z, refLLA):
+        """"convert X, Y, Z, Position to QVector3d(enu)"""
         return Conversions.xyz2enu_4_LLA(QtGui.QVector3D(x, y, z),
                                          refLLA.latitude(),
                                          refLLA.longitude(),
@@ -125,6 +133,7 @@ class Conversions:
 
     @staticmethod
     def enu2xyz_4_re(enu, reflat, reflon, refalt):
+        """convert enu, reflat, reflon, refalt to QVector3D(XYZ)"""
         R1 = Conversions.rot(90.0 + reflon, 3)
         R2 = Conversions.rot(90.0 - reflat, 1)
         R = R2 * R1
@@ -147,6 +156,7 @@ class Conversions:
 
     @staticmethod
     def enu2xyz_2(enu, refLLA):
+        """convert enu, Position to QVector3D(XYZ)"""
         return Conversions.enu2xyz_4_re(enu,
                                         refLLA.latitude(),
                                         refLLA.longitude(),
@@ -154,6 +164,7 @@ class Conversions:
 
     @staticmethod
     def enu2xyz_4_LLA(east, north, up, refLLA):
+        """covert east, north, up, Position to QVector3D(XYZ)"""
         return Conversions.enu2xyz_4_LLA(QtGui.QVector3D(east, north, up),
                                          refLLA.latitude(),
                                          refLLA.longitude(),
@@ -161,11 +172,13 @@ class Conversions:
 
     @staticmethod
     def enu2lla_4_re(enu, reflat, reflon, refalt):
+        """convert enu, reflat, reflon, refalt to Position"""
         xyz = Conversions.enu2xyz_4_re(enu, reflat, reflon, refalt)
         return Conversions.xyz2lla(xyz)
 
     @staticmethod
     def enu2lla_2(enu, refLLA):
+        """convert enu, Position to Position"""
         return Conversions.enu2lla_4_LLA(enu,
                                          refLLA.latitude(),
                                          refLLA.longitude(),
@@ -173,6 +186,7 @@ class Conversions:
 
     @staticmethod
     def enu2lla_6(east, north, up, reflat, reflon, refalt):
+        """convert east, north, up, reflat, reflon, refalt to Posiition"""
         return Conversions.enu2lla_4_re(QtGui.QVector3D(east, north, up),
                                         reflat,
                                         reflon,
@@ -180,6 +194,7 @@ class Conversions:
 
     @staticmethod
     def enu2lla_4_LLA(east, north, up, refLLA):
+        """convert east, north, up,Position to Position"""
         return Conversions.enu2lla_4_re(QtGui.QVector3D(east, north, up),
                                          refLLA.latitude(),
                                          refLLA.longitude(),
@@ -187,6 +202,7 @@ class Conversions:
 
     @staticmethod
     def lla2enu_6(lat, lon, alt, reflat, reflon, refalt):
+        """convert lat, lon, alt, reflat, reflon, refalt to QVector3D(enu)"""
         xyz = Conversions.lla2xyz_3(lat, lon, alt)
         enu = Conversions.xyz2enu_4_re(xyz, reflat, reflon, refalt)
 
@@ -194,6 +210,7 @@ class Conversions:
 
     @staticmethod
     def lla2enu_4_LLA(lat, lon, alt, refLLA):
+        """convert lat, lon, alt, Position to QVector3D(enu)"""
         return Conversions.lla2enu_6(lat, lon, alt,
                                      refLLA.latitude(),
                                      refLLA.longitude(),
@@ -201,6 +218,7 @@ class Conversions:
 
     @staticmethod
     def lla2enu_4_re(lla, reflat, reflon, refalt):
+        """convert Position, reflat, reflon, refalt to QVector3D(enu)"""
         return Conversions.lla2enu_6(lla.latitude(),
                                      lla.longitude(),
                                      lla.altitude(),
@@ -210,6 +228,7 @@ class Conversions:
 
     @staticmethod
     def lla2enu_2(lla, refLLA):
+        """convert Position(lla), Position(refLLA) to QVector3D(enu)"""
         return Conversions.lla2enu_6(lla.latitude(),
                                      lla.longitude(),
                                      lla.altitude(),
@@ -219,18 +238,21 @@ class Conversions:
 
     @staticmethod
     def degreesLatPerMeter(latitude):
+        """convert Latitude degrees to metres"""
         latRad = latitude * (pi / 180.0)
         meters = 111132.954 - 559.822 * math.cos(2.0 * latRad) + 1.175 * math.cos(4.0 * latRad)
         return 1.0 / meters
 
     @staticmethod
     def degreesLonPerMeter(latitude):
+        """convert Longitude degrees to metres"""
         latRad = latitude * (pi / 180.0)
         meters = (pi * A_EARTH * math.cos(latRad)) / (180.0 * math.sqrt(1.0 - NAV_E2 * pow(math.sin(latRad), 2.0)))
         return 1.0 / meters
 
     @staticmethod
     def rot(angle, axis):
+        """convert angle, axis to QTransform"""
         toRet = QtGui.QTransform()
 
         cang = math.cos(angle * deg2rad)
@@ -246,29 +268,3 @@ class Conversions:
             print("Wrong axis")
 
         return toRet
-
-    @staticmethod
-    def test():
-        from MapGraphics.Position import Position
-        byu1 = Position(QtCore.QPointF(-111.649253, 40.249707), 1423)
-        del Position
-        xyz = Conversions.lla2xyz(byu1)
-        byu2 = Conversions.xyz2lla(xyz)
-
-        if QtCore.qAbs(byu2.longitude() - byu1.longitude()) > 0.001 or QtCore.qAbs(
-                byu2.latitude() - byu1.latitude()) > 0.001 or QtCore.qAbs(byu2.altitude() - byu1.altitude()) > 1.0:
-            print("Failed LLA -> XYZ -> LLA")
-        else:
-            print("Passed LLA -> XYZ -> LLA")
-
-        enu1 = QtGui.QVector3D(5, 5, 0)
-        byu3 = Conversions.enu2lla_2(enu1, byu1)
-        enu3 = Conversions.lla2enu_2(byu3, byu1)
-
-        if (enu3 - enu1).length() > 0.3:
-            print("Failed LLA -> ENU -> LLA -> ENU")
-        else:
-            print("Passed LLA -> ENU -> LLA -> ENU")
-
-        print(str(Conversions.degreesLatPerMeter(15.0)))
-        print(str(Conversions.degreesLonPerMeter(15.0)))
