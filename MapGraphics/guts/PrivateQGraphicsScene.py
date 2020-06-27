@@ -3,7 +3,7 @@ from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
-
+    """This class contains PrivateQGraphicsObjects for handling ZoomLevel changes and selections."""
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.__mgScene = None
@@ -13,15 +13,17 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.setMapGraphicsScene(mgScene)
 
         self.selectionChanged.connect(self.handleSelectionChanged)
-        self.counter = 0
+        # self.counter = 0
 
     def handleMGObjectAdded(self, added):
+        """Add new PrivateQGraphicsObject to dict"""
         if added not in self.__mgToqg.keys():
             qgObj = PrivateQGraphicsObject(added, self.__infoSource)
             self.addItem(qgObj)
             self.__mgToqg[added] = qgObj
 
     def handleMGObjectRemoved(self, removed):
+        """Remove PrivateQGraphicsObject from dict"""
         if not self.__mgToqg.get(removed):
             print("There is no QGraphicsObject in the scene for")
             return
@@ -35,10 +37,12 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.removeItem(qgObj)
 
     def handleZoomLevelChanged(self):
+        """If zoom level changed, this method calls handleZoomLevelChanged of each obj in scene"""
         for obj in self.__mgToqg:
             self.__mgToqg[obj].handleZoomLevelChanged()
 
     def handleSelectionChanged(self):
+        """If item/items selected we set flag of select"""
         selectedList = self.selectedItems()
         selected = []
         for item in selectedList:
@@ -56,6 +60,8 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.__oldSelections = newSelections
 
     def setMapGraphicsScene(self, mgScene):
+        """Install MapGraphicsScene and connect (SIGNAL: objectAdded, SLOT: handleMGObjectAdded),
+         (SIGNAL: objectRemoved, SLOT: handleMGObjectRemoved)"""
         self.__mgScene = mgScene
 
         if self.__mgScene is None:

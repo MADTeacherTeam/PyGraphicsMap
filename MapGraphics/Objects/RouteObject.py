@@ -11,6 +11,7 @@ from ..Position import Position
 
 
 class RouteObject(MapGraphicsObject):
+    """Implementation of routes on map"""
     getMovementObject = Signal(object)
 
     def __init__(self, posBegin=None, posEnd=None, parent=None):
@@ -20,31 +21,30 @@ class RouteObject(MapGraphicsObject):
         self.__posEnd = posEnd
         self.__delta = 0.00005
         self.__linePoints = []
-
         self.points = []
         self.__drawPoints = []
         self.__route = None
         self.__zoomLvl = None
         self.boundRect = None
-        self.__firstBuilding = None
-        self.__secondBuilding = None
         # self.setZValue(3.0)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
 
-
     def boundingRect(self):
+        """Returns bounds of current item"""
         if self.boundRect is not None:
             return self.boundRect
         else:
             return QRectF(-1.0, -1.0, 2.0, 2.0)
 
     def setPosBegin(self, pos):
+        """Set pos begin of the route"""
         self.__posBegin = CircleObject(3)
         self.__posBegin.setPos(pos)
 
     def setPosEnd(self, pos):
+        """Set pos end of the route"""
         self.__posEnd = CircleObject(3)
         self.__posEnd.setPos(pos)
         self.boundRect = QRectF(self.__posBegin.pos(), self.__posEnd.pos())
@@ -56,6 +56,7 @@ class RouteObject(MapGraphicsObject):
         return self.__posEnd
 
     def getWay(self, i=1):
+        """Request to OSM server to get route between two points."""
         try:
             response = get(
                 'http://router.project-osrm.org/route/v1/driving/%s,%s;%s,%s?overview=full&geometries=geojson' \
@@ -74,6 +75,9 @@ class RouteObject(MapGraphicsObject):
             self.getWay(i)
 
     def setRoad(self, flag=False):
+        """If we need to remove extra points call with flag=True
+        Count average longtitude and latitude
+        Then calls render function updateRoute()"""
         if flag:
             self.__linePoints = self.simplify_points(self.__linePoints, self.__delta)
         avgLon1 = (self.__posBegin.pos().x() + self.__posEnd.pos().x()) / 2
@@ -86,6 +90,7 @@ class RouteObject(MapGraphicsObject):
         self.__zoomLvl = nZValue
 
     def ll2qgs(self, ll):
+        """Converts longtitude and latitude to QGraphicsScene coords"""
         PI = 3.14159265358979323846
         deg2rad = PI / 180.0
         tilesOnOneEdge = pow(2, self.__zoomLvl)
@@ -95,6 +100,7 @@ class RouteObject(MapGraphicsObject):
         return QPointF(int(x), int(y))
 
     def paint(self, painter, option, widget=0):
+        """Render the route item on map with pen and antialiasing"""
         painter.setRenderHint(QPainter.Antialiasing, True)
         pen = painter.pen()
         pen.setWidthF(6)
@@ -107,6 +113,7 @@ class RouteObject(MapGraphicsObject):
         painter.drawPath(self.__route)
 
     def updateRoute(self):
+        """Recount points of road relatively zoomLevel and position"""
         self.__route = QPainterPath()
         qgsPos = self.ll2qgs(self.pos())
         lastPoint = Position(self.__linePoints[0][0], self.__linePoints[0][1], 0.0)
@@ -137,6 +144,7 @@ class RouteObject(MapGraphicsObject):
         return self.__linePoints
 
     def simplify_points(self, pts, tolerance):
+        """Remove extra points by Ramer–Douglas–Peucker algorithm"""
         import math
         anchor = 0
         floater = len(pts) - 1
@@ -191,6 +199,7 @@ class RouteObject(MapGraphicsObject):
         return [pts[i] for i in keep]
 
     def mousePressEvent(self, event):
+        """Handling mouse press to bounds of route"""
         for i in range(1, len(self.__drawPoints)):
             rectOfPoint = QRectF(QPointF(self.__drawPoints[i - 1].x(), self.__drawPoints[i - 1].y()),
                                  QPointF(self.__drawPoints[i].x(), self.__drawPoints[i].y())).normalized()
