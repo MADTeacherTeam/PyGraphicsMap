@@ -4,6 +4,7 @@ from ..MapGraphicsObject import MapGraphicsObject
 
 
 class CircleObject(MapGraphicsObject):
+    """Class which responsible for circle on map"""
     def __init__(self, radius, sizeIsZoomInvariant=True, fillColor=QColor(0, 1, 1, 0), parent=None):
         super().__init__(sizeIsZoomInvariant, parent)
         self.__fillColor = fillColor
@@ -16,9 +17,11 @@ class CircleObject(MapGraphicsObject):
         print('del circle object')
 
     def boundingRect(self):
+        """Returns bounds of current item"""
         return QRectF(-1 * self.__radius, -1 * self.__radius, 2 * self.__radius, 2 * self.__radius)
 
     def paint(self, painter, option, widget=None):
+        """Install brush, renderHint and form of rendered item"""
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setBrush(self.__fillColor)
         painter.drawEllipse(QPointF(0, 0), self.__radius, self.__radius)

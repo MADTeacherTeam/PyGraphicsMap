@@ -16,6 +16,7 @@ class MapTileSource(QtCore.QObject):
     allTilesInvalidated = QtCore.Signal()
 
     class CacheMode(Enum):
+        """NoCaching does not cache tiles at all. DiskAndMemCaching caches tiles on disk and in RAM"""
         NoCaching = 1
         DiskAndMemCaching = 2
 
@@ -40,6 +41,7 @@ class MapTileSource(QtCore.QObject):
         pass
 
     def saveCacheExpirationsToDisk(self):
+        """Save expiration to cache directory"""
         if (not self.__cacheExpirationsLoaded) or (not self.__cacheExpirationsFile):
             return
         fp = QtCore.QFile(self.__cacheExpirationsFile)
@@ -48,11 +50,6 @@ class MapTileSource(QtCore.QObject):
             fp.errorString()
             return
         np.save(fp, self.__cacheExpirations)
-        # stream = QtCore.QDataStream(fp)
-        # for row in self.__cacheExpirations:
-        #     forStream = self.__cacheExpirations[row].toString()
-        #     stream << (row + ' ' + forStream + '\n')
-        # stream << QtCore.QByteArray(self.__cacheExpirations)
         print("Cache expirations saved to " + self.__cacheExpirationsFile)
 
     def requestTile(self, x, y, z):
@@ -64,6 +61,7 @@ class MapTileSource(QtCore.QObject):
         return toRet
 
     def getFinishedTile(self, x, y, z):
+        """Get finally retrieved image tile"""
         cacheID = self.createCacheID(x, y, z)
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         if not (cacheID in self.__tempCache):
@@ -89,6 +87,7 @@ class MapTileSource(QtCore.QObject):
         self.__tempCache.clear()
 
     def _fromMemCache(self, cacheID):
+        """Get tile from memory"""
         toRet = 0
         if cacheID in self.__memoryCache:
             expireTime = self._getTileExpirationTime(cacheID)
@@ -102,6 +101,7 @@ class MapTileSource(QtCore.QObject):
         return toRet
 
     def _fromDiskCache(self, cacheID):
+        """Get tile from disk cache"""
         x = [1]
         y = [1]
         z = [1]
@@ -143,8 +143,6 @@ class MapTileSource(QtCore.QObject):
             return
         lock = QtCore.QMutexLocker(self.__tempCacheLock)
         self.__tempCache[self.createCacheID(x, y, z)] = image
-        # for row in self.__tempCache:
-        #     print(row)
         lock.unlock()
         self.tileRetrieved.emit(x, y, z)
 
@@ -238,10 +236,6 @@ class MapTileSource(QtCore.QObject):
             print("Failed to open cache expiration file for reading:" + fp.errorString())
             return
         self.__cacheExpirations = np.load(path, allow_pickle=True).item()
-        # stream = QtCore.QDataStream(fp)
-        # for row in self.__cacheExpirations:
-        #     stream >> row
-        # stream >> self.__cacheExpirations
 
     def __getDiskCacheDirectory(self, x, y, z):
         pathString = QtCore.QDir.homePath() + "/" + MAPGRAPHICS_CACHE_FOLDER_NAME + "/" + self.name() + "/" + str(

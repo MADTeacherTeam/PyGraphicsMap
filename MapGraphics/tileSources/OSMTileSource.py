@@ -31,12 +31,14 @@ class OSMTileSource(MapTileSource):
         MapTileSource.__del__(self)
 
     def name(self):
+        """Return name of map graphics cache directory"""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
             return "OpenStreetMap Tiles"
         else:
             return "Unknown Tiles"
 
     def ll2qgs(self, ll, zoomLevel):
+        """Converts longitude and latitude to QGraphicsScene coords"""
         tilesOnOneEdge = pow(2, zoomLevel)
         tileSize = self.tileSize()
         x = (ll.x() + 180) * (tilesOnOneEdge * tileSize) / 360
@@ -44,6 +46,7 @@ class OSMTileSource(MapTileSource):
         return QPointF(int(x), int(y))
 
     def qgs2ll(self, qgs, zoomLevel):
+        """Converts QGraphicsScene coords to longitude and latitude"""
         tilesOnOneEdge = pow(2, zoomLevel)
         tileSize = self.tileSize()
         longitude = (qgs.x() * (360 / (tilesOnOneEdge * tileSize))) - 180
@@ -69,6 +72,7 @@ class OSMTileSource(MapTileSource):
             return "jpg"
 
     def fetchTile(self, x, y, z):
+        """Request OSM server to get tile of x,y,z pos"""
         network, self.__instances = MapGraphicsNetwork.getInstance(self.__instances)
         host = ""
         if self.__tileType == OSMTileSource.OSMTileType.OSMTiles:
@@ -86,6 +90,7 @@ class OSMTileSource(MapTileSource):
         reply.finished.connect(self.handleNetworkRequestFinished)
 
     def handleNetworkRequestFinished(self):
+        """After request finished, we need to set expireTime of tile"""
         sender = self.sender()
         reply = sender
         if not isinstance(reply, QNetworkReply):

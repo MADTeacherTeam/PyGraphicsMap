@@ -10,6 +10,7 @@ DEFAULT_USER_AGENT = QtCore.QByteArray(b'MapGraphic')
 class MapGraphicsNetwork:
     @staticmethod
     def getInstance(instances):
+        """Write thread and MapGraphicsNetwork to current instances"""
         __instances = instances
         __mutex = QtCore.QMutex()
         lock = QtCore.QMutexLocker(__mutex)
@@ -22,6 +23,7 @@ class MapGraphicsNetwork:
         self.__manager = 0
 
     def get(self, request):
+        """Get new request by QNetworkAccessManager, return: QNetworkReply"""
         request.setRawHeader(QtCore.QByteArray(b"User-Agent"), QtCore.QByteArray(self.__userAgent))
         toRet = self.__manager.get(request)
         return toRet
