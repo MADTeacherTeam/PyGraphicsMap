@@ -137,7 +137,7 @@ dmypy.json
 .idea/vcs.xml
 .idea/modules.xml
 .idea/misc.xml
-.idea/GraphicsMapTransport.iml
+.idea/PyGraphicsMap.iml
 .idea/inspectionProfiles
 
 # Generated files
