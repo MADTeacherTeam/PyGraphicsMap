@@ -111,6 +111,25 @@ class RouteObject(MapGraphicsObject):
 
         self.updateRoute()
         painter.drawPath(self.__route)
+        #
+        # pen = painter.pen()
+        # pen.setWidthF(3)
+        # color = QColor('red')
+        # pen.setColor(color)
+        # painter.setPen(pen)
+        #
+        # painter.drawRect(self.boundRect)
+        #
+        # for i in range(1, len(self.__drawPoints)):
+        #     rectOfPoint = QRectF(QPointF(self.__drawPoints[i-1].x(), self.__drawPoints[i-1].y()),
+        #                          QPointF(self.__drawPoints[i].x(), self.__drawPoints[i].y())).normalized()
+        #     center = rectOfPoint.center()
+        #     rectOfPoint.setSize((rectOfPoint.size()*(-self.__zoomLvl+19)))
+        #     rectOfPoint.moveCenter(center)
+        #     painter.drawRect(rectOfPoint)
+        # painter.drawEllipse(QPointF(self.__drawPoints[i].x(), self.__drawPoints[i].y()), 1, 1)
+        #
+        # painter.drawEllipse(QPointF(0, 0), 1, 1)
 
     def updateRoute(self):
         """Recount points of road relatively zoomLevel and position"""
