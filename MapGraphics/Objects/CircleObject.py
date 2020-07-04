@@ -1,10 +1,12 @@
 from PySide2.QtCore import QRectF, QPointF
 from PySide2.QtGui import QColor, QPainter, QKeySequence
+
 from ..MapGraphicsObject import MapGraphicsObject
 
 
 class CircleObject(MapGraphicsObject):
     """Class which responsible for circle on map"""
+
     def __init__(self, radius, sizeIsZoomInvariant=True, fillColor=QColor(0, 1, 1, 0), parent=None):
         super().__init__(sizeIsZoomInvariant, parent)
         self.__fillColor = fillColor
@@ -12,9 +14,6 @@ class CircleObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
-
-    def __del__(self):
-        print('del circle object')
 
     def boundingRect(self):
         """Returns bounds of current item"""

@@ -1,4 +1,3 @@
-from MapGraphics.MapTileSource import MapTileSource
 from abc import ABC, abstractmethod
 
 

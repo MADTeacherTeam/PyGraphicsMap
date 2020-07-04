@@ -1,5 +1,6 @@
-from PySide2 import QtCore
 from enum import Enum
+
+from PySide2 import QtCore
 from numpy import invert
 
 

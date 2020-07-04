@@ -1,6 +1,6 @@
+from PySide2.QtCore import Signal, Qt
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from PySide2.QtCore import Signal, Qt
 
 
 class PrivateQGraphicsView(QGraphicsView):
@@ -55,4 +55,3 @@ class PrivateQGraphicsView(QGraphicsView):
         self.hadWheelEvent.emit(event)
         if not event.isAccepted():
             QGraphicsView.wheelEvent(self, event)
-

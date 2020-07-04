@@ -1,14 +1,15 @@
-from PySide2.QtCore import QTimer, qDebug, QCoreApplication, QPoint, QPointF, qWarning, Signal, QThread, QEventLoop
+from enum import Enum
+from math import sqrt, inf
+from queue import Queue
+
+from PySide2.QtCore import QTimer, QPoint, QPointF, Signal, QThread
+from PySide2.QtGui import QCursor, QPolygon
 from PySide2.QtWidgets import QWidget, QGraphicsView, QVBoxLayout
-from PySide2.QtGui import QCursor, QPolygonF, QPolygon
+
 from .guts.MapTileGraphicsObject import MapTileGraphicsObject
 from .guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
 from .guts.PrivateQGraphicsScene import PrivateQGraphicsScene
 from .guts.PrivateQGraphicsView import PrivateQGraphicsView
-from enum import Enum
-from queue import Queue
-from math import sqrt, inf
-from MapGraphics.Objects.MarkObject import MarkObject
 
 
 class MapGraphicsView(QWidget):
@@ -41,7 +42,6 @@ class MapGraphicsView(QWidget):
         self.__scene.creationModeChanged.connect(self.setDragModeByScene)
 
     def __del__(self):
-        print("Destructing MapGraphicsView")
         self.__tileObjects.clear()
 
     def stopViewThreads(self):
@@ -121,9 +121,6 @@ class MapGraphicsView(QWidget):
         childView.hadWheelEvent.connect(self.handleChildViewScrollWheel)
         childView.hadContextMenuEvent.connect(self.handleChildViewContextMenu)
 
-        #########################################################################################################
-        # if self.layout()!=0:
-        # delete layout
         self.setLayout(QVBoxLayout(self))
         self.layout().addWidget(childView)
         childView.setResizeAnchor(QGraphicsView.AnchorViewCenter)
@@ -245,13 +242,10 @@ class MapGraphicsView(QWidget):
                 self.__scene.tempObj.setZoomLevel(self.zoomLevel())
                 self.__scene.addObject(self.__scene.tempObj.posEnd())
                 posEnd = self.__scene.tempObj.posEnd()
-                # TODO: new connect
-                # self.__scene.tempObj.getMovementObject.connect(self.__scene.linkRouteAndObject)
+
                 self.__scene.addObject(self.__scene.tempObj)
                 self.__scene.tempObj.getWay()
 
-                # for line in self.__scene.tempObj.lines():
-                #     line.getMovementObject.connect(self.__scene.linkRouteAndObject)
                 self.__scene.clearTempObject()
                 self.__scene.createObject(posEnd)
 
@@ -305,7 +299,6 @@ class MapGraphicsView(QWidget):
         tileSize = self.__tileSource.tileSize()
         tilesPerRow = sqrt(self.__tileSource.tilesOnZoomLevel(self.zoomLevel()))
         tilesPerCol = tilesPerRow
-        # TODO div 2 delete
         perSide = int(max(boundingRect.width() / tileSize / 2, boundingRect.height() / tileSize / 2) + 3)
         xc = int(max(0, (centerPointQGS.x() / tileSize) - perSide / 2))
         yc = int(max(0, (centerPointQGS.y() / tileSize) - perSide / 2))
@@ -331,14 +324,10 @@ class MapGraphicsView(QWidget):
                     tileObject.setPos(scenePos)
                 if not tileObject.isVisible():
                     tileObject.setVisible(True)
-                # print('from MapGraphicsView ' + str(x) + str(y) + str(self.zoomLevel()))
                 tileObject.setTile(x, y, self.zoomLevel())
-        # print('delete ', len(self.__tileObjects))
         while freeTiles.qsize() > 2:
             tileObject = freeTiles.get()
             self.__tileObjects.remove(tileObject)
-            # self.__childScene.removeItem(tileObject)
-        # print('after delete', len(self.__tileObjects))
 
     def resetQGSSceneSize(self):
         if not self.__tileSource:

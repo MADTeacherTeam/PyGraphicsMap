@@ -1,5 +1,7 @@
-from PySide2 import QtCore, QtGui
 import math
+
+from PySide2 import QtCore, QtGui
+
 from MapGraphics.guts.Conversions import Conversions
 
 

@@ -1,9 +1,10 @@
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import Signal
+
+from MapGraphics.Objects.CircleObject import CircleObject
 from ..MapGraphicsObject import MapGraphicsObject
 from ..Position import Position
 from ..guts.Conversions import Conversions
-from MapGraphics.Objects.CircleObject import CircleObject
 
 
 class PolygonObject(MapGraphicsObject):
@@ -22,7 +23,6 @@ class PolygonObject(MapGraphicsObject):
         self.__addVertexCircles = []
 
     def __del__(self):
-        print(self + "destroying")
         for each in self.__editCircles:
             self.destroyEditCircle(each)
         self.__editCircles.clear()

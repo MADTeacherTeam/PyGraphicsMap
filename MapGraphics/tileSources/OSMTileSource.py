@@ -1,10 +1,12 @@
-from ..MapTileSource import MapTileSource
+import math
 from enum import Enum
-from PySide2.QtCore import qDebug, QPointF, QUrl, QObject, qWarning, QDateTime, QRegExp, Slot, QByteArray
+
+from PySide2.QtCore import QPointF, QUrl, QDateTime, QRegExp, QByteArray
 from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkRequest, QNetworkReply
-import math
+
 from MapGraphics.guts.MapGraphicsNetwork import MapGraphicsNetwork
+from ..MapTileSource import MapTileSource
 
 PI = 3.14159265358979323846
 deg2rad = PI / 180.0
@@ -27,7 +29,6 @@ class OSMTileSource(MapTileSource):
 
     def __del__(self):
         super().__del__()
-        print("Destructing OSMTileSource")
         MapTileSource.__del__(self)
 
     def name(self):

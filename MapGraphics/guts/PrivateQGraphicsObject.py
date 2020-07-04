@@ -1,9 +1,8 @@
-from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from PySide2.QtCore import Signal, qWarning, QRectF, QPointF
+from PySide2.QtCore import QRectF, QPointF
+from PySide2.QtWidgets import *
 
 from MapGraphics.MapGraphicsObject import MapGraphicsObject
-from MapGraphics.guts.PrivateQGraphicsInfoSource import PrivateQGraphicsInfoSource
 from MapGraphics.Position import Position
 from MapGraphics.guts.Conversions import Conversions
 
@@ -338,7 +337,6 @@ class PrivateQGraphicsObject(QGraphicsObject):
         event.setScenePos(geoPos)
 
     def unconvertSceneMouseEventCoorindates(self, event):
-        qgsScenePos = QPointF()
         if self.__unconvertedSceneMouseCoordinates.get(event):
             qgsScenePos = self.__unconvertedSceneMouseCoordinates.get(event)
         else:

@@ -10,7 +10,6 @@ MAX_DISK_CACHE_READ_ATTEMPTS = 100000
 
 
 class MapTileSource(QtCore.QObject):
-    # SIGNALS
     tileRetrieved = QtCore.Signal(int, int, int)
     tileRequested = QtCore.Signal(int, int, int)
     allTilesInvalidated = QtCore.Signal()
@@ -24,7 +23,6 @@ class MapTileSource(QtCore.QObject):
         super(MapTileSource, self).__init__()
         self.__cacheExpirationsFile = ""
         self.__tempCacheLock = QtCore.QMutex()
-        # self.__tempCacheLock = None
         self.__tempCache = {}
         self.__memoryCache = {}
         self.__cacheExpirations = {}
@@ -151,7 +149,6 @@ class MapTileSource(QtCore.QObject):
 
     @staticmethod
     def _cacheID2xyz(string, x, y, z):
-        # All var is list for link,x,y,z=x[0],y[0],z[0]
         list = string.split(',')
         if len(list) != 3:
             print("Bad cacheID" + string + "cannot convert")
@@ -171,8 +168,6 @@ class MapTileSource(QtCore.QObject):
         if cacheID in self.__cacheExpirations:
             expireTime = self.__cacheExpirations.get(cacheID)
         else:
-            # print(
-            #     "Tile " + str(cacheID) + " has unknown expire time. Resetting to default of " + str(DEFAULT_CACHE_DAYS)  + " days.")
             expireTime = QtCore.QDateTime.currentDateTimeUtc().addDays(DEFAULT_CACHE_DAYS)
             self.__cacheExpirations[cacheID] = expireTime
         return expireTime
@@ -210,7 +205,7 @@ class MapTileSource(QtCore.QObject):
         format = None
         quality = 100
         if not toCache.save(filePath, format, quality):
-            print("Failed to put") #  + self.name() + str(x[0]) + str(y[0]) + str(z[0]) + "into disk cache"
+            print("Failed to put")  # + self.name() + str(x[0]) + str(y[0]) + str(z[0]) + "into disk cache"
 
     def name(self):
         pass

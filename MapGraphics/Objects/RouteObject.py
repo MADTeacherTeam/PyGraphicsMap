@@ -1,8 +1,8 @@
 import math
 from json import loads
 
-from PySide2.QtCore import QPointF, QRectF, QTimer, Signal, QSizeF, QLineF
-from PySide2.QtGui import QPainterPath, QPainter, QColor, Qt, QPolygonF, QTransform
+from PySide2.QtCore import QPointF, QRectF, Signal
+from PySide2.QtGui import QPainterPath, QPainter, QColor
 from requests import get
 
 from .CircleObject import CircleObject
@@ -16,7 +16,6 @@ class RouteObject(MapGraphicsObject):
 
     def __init__(self, posBegin=None, posEnd=None, parent=None):
         super().__init__(True, parent)
-        # print('create route object')
         self.__posBegin = posBegin
         self.__posEnd = posEnd
         self.__delta = 0.00005
@@ -71,7 +70,6 @@ class RouteObject(MapGraphicsObject):
             i += 1
             if i >= 15:
                 return
-            # QTimer().singleShot(3000, self.getWay)
             self.getWay(i)
 
     def setRoad(self, flag=False):
@@ -111,7 +109,7 @@ class RouteObject(MapGraphicsObject):
 
         self.updateRoute()
         painter.drawPath(self.__route)
-        #
+        # uncomm it if you want to draw bounding rect of lines and route
         # pen = painter.pen()
         # pen.setWidthF(3)
         # color = QColor('red')
@@ -157,7 +155,6 @@ class RouteObject(MapGraphicsObject):
             self.__drawPoints.append(endPoint)
 
         self.boundRect = self.__route.controlPointRect()
-        # self.redrawRequested.emit()
 
     def linePoints(self):
         return self.__linePoints

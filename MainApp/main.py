@@ -29,18 +29,16 @@ class MyWindow(QtWidgets.QMainWindow):
         self.view.setZoomLevel(14)
         self.view.centerOn2(-111.658752, 40.255456)
 
-        # TODO creation of CTSC
         self.tileConfigWidget = CompositeTileSourceConfigurationWidget(scene, self.ui.dockWidget)
         self.ui.dockWidget.setWidget(self.tileConfigWidget)
 
         # ----
-        self.__thread_for_planes = QThread()
-        self.__thread_for_planes.setObjectName('Zapor keka')
-        self.flight = PlaneManager(scene)
-        self.__thread_for_planes.start()
-        self.flight.moveToThread(self.__thread_for_planes)
+        # self.__thread_for_planes = QThread()
+        # self.flight = PlaneManager(scene)
+        # self.__thread_for_planes.start()
+        # self.flight.moveToThread(self.__thread_for_planes)
         # self.threadPlaneManager.connect(self.flight.createPlanes)
-        self.__thread_for_planes.finished.connect(self.flight.deleteLater)
+        # self.__thread_for_planes.finished.connect(self.flight.deleteLater)
         # self.threadPlaneManager.emit()
 
     def closeEvent(self, event):
@@ -48,8 +46,8 @@ class MyWindow(QtWidgets.QMainWindow):
         super(QtWidgets.QMainWindow, self).closeEvent(event)
 
     def __closeThreads(self):
-        self.__thread_for_planes.quit()
-        self.__thread_for_planes.wait()
+        # self.__thread_for_planes.quit()
+        # self.__thread_for_planes.wait()
         self.view.stopViewThreads()
 
 

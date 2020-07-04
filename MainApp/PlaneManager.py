@@ -9,7 +9,7 @@ class PlaneManager(QObject):
     def __init__(self, scene):
         super().__init__()
         self.__scene = scene
-        self.api = OpenSkyApi('Fynduk', 'vYJ-MEJ-cLh-Cy3')
+        self.api = OpenSkyApi('login', 'password')
         self.__planeObjects = {}
         self.__planeCounter = 500
         self.timerCreatePlanes = QTimer()
@@ -32,7 +32,6 @@ class PlaneManager(QObject):
         i = 0
         for plane in states.states:
             if plane.longitude and plane.latitude:
-                # print("(%r, %r, %r)" % (plane.latitude, plane.longitude, plane.icao24))
                 if plane.heading:
                     self.__planeObjects[plane.icao24] = PlaneObject(
                         QPointF(float(plane.longitude), float(plane.latitude)), plane.heading)
@@ -52,7 +51,6 @@ class PlaneManager(QObject):
         for plane in states.states:
             if self.__planeObjects.__contains__(plane.icao24):
                 if plane.longitude and plane.latitude:
-                    # print("(%r, %r, %r)" % (plane.latitude, plane.longitude, plane.icao24))
                     self.__planeObjects[plane.icao24].setPos(QPointF(float(plane.longitude), float(plane.latitude)))
                     if plane.heading:
                         self.__planeObjects[plane.icao24].setRotation(plane.heading)

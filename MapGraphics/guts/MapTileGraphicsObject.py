@@ -1,7 +1,6 @@
+from PySide2.QtCore import Signal, QRectF
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from PySide2.QtCore import Signal, QRectF, qWarning
-from MapGraphics.MapTileSource import MapTileSource
 
 
 class MapTileGraphicsObject(QGraphicsObject):
@@ -38,7 +37,6 @@ class MapTileGraphicsObject(QGraphicsObject):
         if self.__tile != 0:
             painter.drawPixmap(self.boundingRect().toRect(), self.__tile)
         else:
-            string = None
             if self.__tileSource is None:
                 string = " No tile source defined"
             else:
@@ -56,10 +54,10 @@ class MapTileGraphicsObject(QGraphicsObject):
 
     def setTile(self, x, y, z, force=False):
         """set Tile about x,y,z"""
-        #retun if tile is already displaying
+        # return if tile is already displaying
         if self.__tileX == x and self.__tileY == y and self.__tileZoom == z and not force and self.__initialized:
             return
-        #delete old Tile
+        # delete old Tile
         if self.__tile != 0:
             self.__tile = 0
 
@@ -72,11 +70,6 @@ class MapTileGraphicsObject(QGraphicsObject):
             return
 
         self.__tileSource.tileRetrieved.connect(self.handleTileRetrieved)
-        # self.tileRetrieved.connect(self.handleTileRetrieved)
-        # connect(_tileSource.data(),
-        #         SIGNAL(tileRetrieved(quint32, quint32, quint8)),
-        #         this,
-        #         SLOT(handleTileRetrieved(quint32, quint32, quint8)))
 
         self.__havePendingRequest = True
         self.__tileSource.requestTile(x, y, z)
@@ -86,21 +79,6 @@ class MapTileGraphicsObject(QGraphicsObject):
         return self.__tileSource
 
     def setTileSource(self, nSource):
-        if not self.__tileSource is None:
-            # self.tileRetrieved.disconnect(self.handleTileRetrieved)
-            # self.tileRetrieved.disconnect(self.handleTileInvalidation)
-            pass
-
-            # QObject::disconnect(_tileSource.data(),
-            #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
-            #                     this,
-            #                     SLOT(handleTileRetrieved(quint32, quint32, quint8)))
-            # QObject::disconnect(_tileSource.data(),
-            #                     SIGNAL(allTilesInvalidated()),
-            #                     this,
-            #                     SLOT(handleTileInvalidation()))
-
-        oldSource = self.__tileSource
         self.__tileSource = nSource
 
         if not self.__tileSource is None:
@@ -108,7 +86,6 @@ class MapTileGraphicsObject(QGraphicsObject):
 
         self.handleTileInvalidation()
 
-    # slots
     def handleTileRetrieved(self, x, y, z):
         """handle Tile by coordinates"""
         if not self.__havePendingRequest:
@@ -137,12 +114,6 @@ class MapTileGraphicsObject(QGraphicsObject):
 
         self.__tile = tile
         self.update()
-
-        # self.tileRetrieved.disconnect(self.handleTileRetrieved)
-        # QObject::disconnect(_tileSource.data(),
-        #                     SIGNAL(tileRetrieved(quint32, quint32, quint8)),
-        #                     this,
-        #                     SLOT(handleTileRetrieved(quint32, quint32, quint8)));
 
     def handleTileInvalidation(self):
         """call Tile invalidation"""

@@ -30,7 +30,6 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.ui.addMark_button.isChecked():
             self.ui.moveMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
-            # self.ui.changeColor_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.MarkCreation)
             self.__scene.createObject()
         else:
@@ -49,19 +48,10 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def changeColorButtonClicked(self):
         """clicked button change color of Mark"""
-        # if self.ui.changeColor_button.isChecked():
-            # self.ui.addMark_button.setChecked(False)
-            # self.ui.moveMark_button.setChecked(False)
-            # self.ui.removeMark_button.setChecked(False)
-            # color = QColorDialog.getColor()
         from MapGraphics.Objects.MarkObject import MarkObject
         if isinstance(self.__scene.tempObj, MarkObject):
             import random
             self.__scene.tempObj.changeImage(random.randint(0, 2))
-            # if not color:
-            #     self.ui.changeColor_button.setChecked(False)
-            #     return
-        pass
 
     def moveMarkButtonClicked(self):
         """clicked button move Mark"""
@@ -70,7 +60,6 @@ class CompositeTileSourceConfigurationWidget(QWidget):
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)
             self.ui.removeMark_button.setChecked(False)
-            # self.ui.changeColor_button.setChecked(False)
             self.__scene.setCreationMode(MapGraphicsScene.ObjectCreationMode.NoCreation)
             self.__scene.setObjectMovable(MarkObject.__name__)
         else:

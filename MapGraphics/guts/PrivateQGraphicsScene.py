@@ -1,9 +1,11 @@
 from PySide2.QtWidgets import *
+
 from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):
     """This class contains PrivateQGraphicsObjects for handling ZoomLevel changes and selections."""
+
     def __init__(self, mgScene, infoSource, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.__mgScene = None
@@ -13,7 +15,6 @@ class PrivateQGraphicsScene(QGraphicsScene):
         self.setMapGraphicsScene(mgScene)
 
         self.selectionChanged.connect(self.handleSelectionChanged)
-        # self.counter = 0
 
     def handleMGObjectAdded(self, added):
         """Add new PrivateQGraphicsObject to dict"""
@@ -70,4 +71,3 @@ class PrivateQGraphicsScene(QGraphicsScene):
 
         self.__mgScene.objectAdded.connect(self.handleMGObjectAdded)
         self.__mgScene.objectRemoved.connect(self.handleMGObjectRemoved)
-

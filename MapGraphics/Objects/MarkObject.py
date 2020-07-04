@@ -1,11 +1,12 @@
-from ..MapGraphicsObject import MapGraphicsObject
-from PySide2.QtGui import QImage
 from PySide2.QtCore import QRectF
-from copy import deepcopy
+from PySide2.QtGui import QImage
+
+from ..MapGraphicsObject import MapGraphicsObject
 
 
 class MarkObject(MapGraphicsObject):
     """Implementation of colored marks on map"""
+
     def __init__(self, img=0, rot=180, parent=None):
         # TODO zoomLevelChanged marks dont change pos
         super().__init__(True, parent)
@@ -17,11 +18,6 @@ class MarkObject(MapGraphicsObject):
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsMovable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsSelectable.value, False)
         self.setFlag(MapGraphicsObject.MapGraphicsObjectFlag.ObjectIsFocusable.value, False)
-        # self.setMark(self.pos(), self.__sizeInMeters, rot)
-
-    def __del__(self):
-        # print('Delete MarkObject')
-        pass
 
     def changeImage(self, img=0):
         """Change color of mark by taking new image"""
@@ -46,7 +42,7 @@ class MarkObject(MapGraphicsObject):
                                      -0.5 * height,
                                      width, height)
         self.redrawRequested.emit()
-        # self.setPos(pos)
+
         if rotation:
             self.setRotation(rotation)
 
