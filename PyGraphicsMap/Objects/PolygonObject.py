@@ -1,7 +1,7 @@
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import Signal
 
-from MapGraphics.Objects.CircleObject import CircleObject
+from PyGraphicsMap.Objects.CircleObject import CircleObject
 from ..MapGraphicsObject import MapGraphicsObject
 from ..Position import Position
 from ..guts.Conversions import Conversions

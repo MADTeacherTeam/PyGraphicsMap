@@ -2,7 +2,7 @@ import math
 
 from PySide2 import QtCore, QtGui
 
-from MapGraphics.guts.Conversions import Conversions
+from PyGraphicsMap.guts.Conversions import Conversions
 
 
 class Position():

@@ -1,7 +1,7 @@
-from MapGraphics.guts.CompositeTileSourceConfigurationWidget_ui import Ui_CompositeTileSourceConfigurationWidget
+from PyGraphicsMap.guts.CompositeTileSourceConfigurationWidget_ui import Ui_CompositeTileSourceConfigurationWidget
 from PySide2.QtWidgets import QWidget, QMenu, QColorDialog
 from PySide2.QtCore import Signal
-from MapGraphics.MapGraphicsScene import MapGraphicsScene
+from PyGraphicsMap.MapGraphicsScene import MapGraphicsScene
 
 
 class CompositeTileSourceConfigurationWidget(QWidget):
@@ -48,14 +48,14 @@ class CompositeTileSourceConfigurationWidget(QWidget):
 
     def changeColorButtonClicked(self):
         """clicked button change color of Mark"""
-        from MapGraphics.Objects.MarkObject import MarkObject
+        from PyGraphicsMap.Objects.MarkObject import MarkObject
         if isinstance(self.__scene.tempObj, MarkObject):
             import random
             self.__scene.tempObj.changeImage(random.randint(0, 2))
 
     def moveMarkButtonClicked(self):
         """clicked button move Mark"""
-        from MapGraphics.Objects.MarkObject import MarkObject
+        from PyGraphicsMap.Objects.MarkObject import MarkObject
         self.__scene.clearTempObject(True)
         if self.ui.moveMark_button.isChecked():
             self.ui.addMark_button.setChecked(False)

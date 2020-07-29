@@ -48,7 +48,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.addMark_button.setObjectName(u"addMark_button")
         self.addMark_button.setCheckable(True)
         icon = QIcon()
-        icon.addFile(u"../images/edit_add.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"../PyGraphicsMap/images/edit_add.png", QSize(), QIcon.Normal, QIcon.Off)
         self.addMark_button.setIcon(icon)
 
         self.formLayout.setWidget(1, QFormLayout.LabelRole, self.addMark_button)
@@ -57,7 +57,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.removeMark_button.setObjectName(u"removeMark_button")
         icon1 = QIcon()
         self.removeMark_button.setCheckable(True)
-        icon1.addFile(u"../images/editdelete.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u"../PyGraphicsMap/images/editdelete.png", QSize(), QIcon.Normal, QIcon.Off)
         self.removeMark_button.setIcon(icon1)
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.removeMark_button)
@@ -66,7 +66,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.changeColor_button.setObjectName(u"changeColor_button")
         # self.changeColor_button.setCheckable(True)
         icon2 = QIcon()
-        icon2.addFile(u"../images/palette.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u"../PyGraphicsMap/images/palette.png", QSize(), QIcon.Normal, QIcon.Off)
         self.changeColor_button.setIcon(icon2)
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.changeColor_button)
@@ -75,7 +75,7 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
         self.moveMark_button.setObjectName(u"moveMark_button")
         self.moveMark_button.setCheckable(True)
         icon3 = QIcon()
-        icon3.addFile(u"../images/drag.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(u"../PyGraphicsMap/images/drag.png", QSize(), QIcon.Normal, QIcon.Off)
         self.moveMark_button.setIcon(icon3)
 
         self.formLayout.setWidget(2, QFormLayout.FieldRole, self.moveMark_button)
@@ -124,6 +124,8 @@ class Ui_CompositeTileSourceConfigurationWidget(object):
 
         self.test_button_2 = QPushButton(self.formLayoutWidget_2)
         self.test_button_2.setObjectName(u"test_button_2")
+        # TODO: change visible
+        self.test_button_2.setVisible(False)
 
         self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.test_button_2)
 

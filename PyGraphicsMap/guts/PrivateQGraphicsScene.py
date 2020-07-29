@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import *
 
-from MapGraphics.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
+from PyGraphicsMap.guts.PrivateQGraphicsObject import PrivateQGraphicsObject
 
 
 class PrivateQGraphicsScene(QGraphicsScene):

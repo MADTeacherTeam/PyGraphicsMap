@@ -1,4 +1,4 @@
-from MapGraphics.MapGraphicsObject import MapGraphicsObject
+from PyGraphicsMap.MapGraphicsObject import MapGraphicsObject
 from PySide2.QtGui import QImage
 from PySide2.QtCore import QRectF
 
@@ -6,7 +6,7 @@ from PySide2.QtCore import QRectF
 class PlaneObject(MapGraphicsObject):
     def __init__(self, pos, rot=None, parent=None):
         super().__init__(True, parent)
-        self.__image = QImage('../images/planeImage.png')
+        self.__image = QImage('images/planeImage.png')
         self.__sizeInMeters = QRectF(self.__image.width() / 2, self.__image.height() / 2,
                                      self.__image.width() / 15, self.__image.height() / 15)
 

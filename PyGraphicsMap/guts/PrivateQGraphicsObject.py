@@ -2,9 +2,9 @@ from PySide2.QtWidgets import *
 from PySide2.QtCore import QRectF, QPointF
 from PySide2.QtWidgets import *
 
-from MapGraphics.MapGraphicsObject import MapGraphicsObject
-from MapGraphics.Position import Position
-from MapGraphics.guts.Conversions import Conversions
+from PyGraphicsMap.MapGraphicsObject import MapGraphicsObject
+from PyGraphicsMap.Position import Position
+from PyGraphicsMap.guts.Conversions import Conversions
 
 
 class PrivateQGraphicsObject(QGraphicsObject):

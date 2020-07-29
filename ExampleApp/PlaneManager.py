@@ -1,5 +1,5 @@
 from opensky_api.opensky_api import OpenSkyApi
-from MainApp.PlaneObject import PlaneObject
+from ExampleApp.PlaneObject import PlaneObject
 from PySide2.QtCore import QPointF, QTimer, QObject, QThread
 
 
@@ -9,7 +9,7 @@ class PlaneManager(QObject):
     def __init__(self, scene):
         super().__init__()
         self.__scene = scene
-        self.api = OpenSkyApi('login', 'password')
+        self.api = OpenSkyApi('login', 'password')  # enter your login and password of opensky
         self.__planeObjects = {}
         self.__planeCounter = 500
         self.timerCreatePlanes = QTimer()

@@ -51,12 +51,13 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"TestApp", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"PyGraphicsMap", None))
+        MainWindow.setWindowIcon(QIcon("../PyGraphicsMap/images/map.png"))
         self.actionExit.setText(QCoreApplication.translate("MainWindow", u"E&xit", None))
 #if QT_CONFIG(shortcut)
         self.actionExit.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+X", None))
 #endif // QT_CONFIG(shortcut)
-        self.dockWidget.setWindowTitle(QCoreApplication.translate("MainWindow", u"Layers", None))
+        self.dockWidget.setWindowTitle(QCoreApplication.translate("MainWindow", u"Objects", None))
         self.menuWindow.setTitle(QCoreApplication.translate("MainWindow", u"&Window", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"&File", None))
     # retranslateUi

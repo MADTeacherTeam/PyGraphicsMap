@@ -5,7 +5,7 @@ from PySide2.QtCore import QPointF, QUrl, QDateTime, QRegExp, QByteArray
 from PySide2.QtGui import QImage
 from PySide2.QtNetwork import QNetworkRequest, QNetworkReply
 
-from MapGraphics.guts.MapGraphicsNetwork import MapGraphicsNetwork
+from PyGraphicsMap.guts.MapGraphicsNetwork import MapGraphicsNetwork
 from ..MapTileSource import MapTileSource
 
 PI = 3.14159265358979323846

@@ -45,7 +45,7 @@ class Conversions:
     def xyz2lla_3(x, y, z):
         """convert X, Y, Z to Position"""
         # пока так
-        from MapGraphics.Position import Position
+        from PyGraphicsMap.Position import Position
         toRet = Position()
         del Position
         toRet.setAltitude(0.0)

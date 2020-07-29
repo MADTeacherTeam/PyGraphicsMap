@@ -7,6 +7,7 @@ from .Objects.CircleObject import CircleObject
 from .Objects.LineObject import LineObject
 from .Objects.MarkObject import MarkObject
 from .Objects.RouteObject import RouteObject
+from ExampleApp.PlaneObject import PlaneObject
 
 
 class MapGraphicsScene(QtCore.QObject):
@@ -28,7 +29,8 @@ class MapGraphicsScene(QtCore.QObject):
         self.__objects = {CircleObject.__name__: [],
                           LineObject.__name__: [],
                           MarkObject.__name__: [],
-                          RouteObject.__name__: []}
+                          RouteObject.__name__: [], PlaneObject.__name__: []}
+        # PlaneObject.__name__: []  - add this to dict if you want to use planes
         self.__creationMode = MapGraphicsScene.ObjectCreationMode.NoCreation
         self.tempObj = None
 
