@@ -131,7 +131,7 @@ class MapGraphicsView(QWidget):
 
         self.resetQGSSceneSize()
         self.setDragMode(self.dragMode())
-        self.renderTiles()
+        # self.renderTiles()
 
     def tileSource(self):
         """return tileSource"""
@@ -146,7 +146,8 @@ class MapGraphicsView(QWidget):
         for tileObject in self.__tileObjects:
             tileObject.setTileSource(tSource)
 
-        self.renderTiles()
+        if self.__tempCenterPointQGS is not None:
+            self.renderTiles()
 
     def zoomLevel(self):
         """return zoomLevel"""
@@ -184,7 +185,8 @@ class MapGraphicsView(QWidget):
             self.__childView.centerOn(mousePoint)
         else:
             self.centerOn(centerGeoPos)
-        self.renderTiles()
+        if self.__tempCenterPointQGS is not None:
+            self.renderTiles()
         self.zoomLevelChanged.emit(nZoom)
 
     def zoomIn(self, zMode):
@@ -214,6 +216,8 @@ class MapGraphicsView(QWidget):
         if self.__childView and self.__tileSource:
             centerPointQGS = self.__childView.mapToScene(int(self.__childView.width() / 2.0),
                                                          int(self.__childView.height() / 2.0))
+            if self.__tempCenterPointQGS is None:
+                return
             if (abs(centerPointQGS.x() - self.__tempCenterPointQGS.x()) > 40) or (
                     abs(centerPointQGS.y() - self.__tempCenterPointQGS.y()) > 40):
                 self.renderTiles()

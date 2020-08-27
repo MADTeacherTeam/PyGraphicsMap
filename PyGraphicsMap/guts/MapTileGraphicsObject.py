@@ -79,9 +79,13 @@ class MapTileGraphicsObject(QGraphicsObject):
         return self.__tileSource
 
     def setTileSource(self, nSource):
+        if self.__tileSource is not None:
+            self.__tileSource.tileRetrieved.disconnect(self.handleTileRetrieved)
+            self.__tileSource.allTilesInvalidated.disconnect(self.handleTileInvalidation)
+
         self.__tileSource = nSource
 
-        if not self.__tileSource is None:
+        if self.__tileSource is not None:
             self.__tileSource.allTilesInvalidated.connect(self.handleTileInvalidation)
 
         self.handleTileInvalidation()
@@ -115,8 +119,10 @@ class MapTileGraphicsObject(QGraphicsObject):
         self.__tile = tile
         self.update()
 
+        self.__tileSource.tileRetrieved.disconnect(self.handleTileRetrieved)
+
     def handleTileInvalidation(self):
         """call Tile invalidation"""
-        if self.__initialized:
+        if not self.__initialized:
             return
         self.setTile(self.__tileX, self.__tileY, self.__tileZoom, True)
