@@ -23,7 +23,7 @@ If you want to use example you need to uncomment lines 36-42 in [main.py](https:
     self.__thread_for_planes.finished.connect(self.flight.deleteLater)
     self.threadPlaneManager.emit()
 ```
-[example](https://github.com/Fynduk/PyGraphicsMap/img/example.png)
+![example](https://github.com/Fynduk/PyGraphicsMap/blob/master/img/example.png)
 
 License
 ----
