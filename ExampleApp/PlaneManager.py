@@ -9,7 +9,7 @@ class PlaneManager(QObject):
     def __init__(self, scene):
         super().__init__()
         self.__scene = scene
-        self.api = OpenSkyApi('login', 'password')  # enter your login and password of opensky
+        self.api = OpenSkyApi()
         self.__planeObjects = {}
         self.__planeCounter = 500
         self.timerCreatePlanes = QTimer()
